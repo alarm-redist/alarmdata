@@ -2,3 +2,6 @@
 
 export(alarm_50state_map)
 export(alarm_50state_plans)
+importFrom(cli,cli_abort)
+importFrom(cli,cli_inform)
+importFrom(cli,cli_warn)

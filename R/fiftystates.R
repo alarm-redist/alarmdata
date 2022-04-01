@@ -1,7 +1,9 @@
 #' Download maps and plans from the 50-State Simulation Project
 #'
-#' These functions will download [redist_map] and [redist_plans] objects for the
-#' 50-State Simulation Project from the ALARM Project's Dataverse.
+#' These functions will download [redist_map][redist::redist_map] and
+#' [redist_plans][redist::redist_plans] objects for the 50-State Simulation
+#' Project from the ALARM Project's Dataverse. `alarm_50state_doc()` will
+#' download documentation for a particular state and show it in a browser.
 #'
 #' Every decade following the Census, states and municipalities must redraw
 #' districts for Congress, state houses, city councils, and more. The goal of
@@ -21,17 +23,102 @@
 #' and redistricting criteria.
 #'
 #' @template state
+#' @param year The redistricting cycle to download. Currently only "2020" is available.
+#' @param stats if `TRUE` (the default), download summary statistics for each plan.
 #'
 #'
 #' @name alarm_50state
 NULL
 
+DV_DOI = "doi:10.7910/DVN/SLCD3E"
+DV_SERVER = "dataverse.harvard.edu"
+
 #' @rdname alarm_50state
 #' @export
-alarm_50state_map = function(state) {
+alarm_50state_map = function(state, year=2020) {
+    fname = paste0(get_slug(state, year=year), "_map.rds")
+    raw = dv_download_handle(fname, "Map", state)
+
+    comp_fmt = id_compression(raw)
+    if (is.na(comp_fmt))
+        cli_abort(c("Map file has unknown compression format.",
+                    ">"="Please file an issue at {.url https://github.com/alarm-redist/fifty-states/issues}",
+                    ">"="Provide filename {.val {fname}}"))
+    # magic so that we don't have to write to disk first
+    readRDS(gzcon(rawConnection(memDecompress(raw, type=comp_fmt))))
 }
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_plans = function(state) {
+alarm_50state_plans = function(state, stats=TRUE, year=2020) {
+    slug = get_slug(state, year=year)
+    fname_plans = paste0(slug, "_plans.rds")
+
+    raw_plans = dv_download_handle(fname_plans, "Plans", state)
+    comp_fmt = id_compression(raw_plans)
+    if (is.na(comp_fmt))
+        cli_abort(c("Plans file has unknown compression format.",
+                    ">"="Please file an issue at {.url https://github.com/alarm-redist/fifty-states/issues}",
+                    ">"="Provide filename {.val {fname_plans}}"))
+    # magic so that we don't have to write to disk first
+    plans = readRDS(gzcon(rawConnection(memDecompress(raw_plans, type=comp_fmt))))
+
+    if (isTRUE(stats)) {
+        fname_stats = paste0(slug, "_stats.tab")
+        raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
+
+    }
+}
+
+
+#' @rdname alarm_50state
+#' @export
+alarm_50state_doc = function(state, stats=TRUE, year=2020) {
+    slug = get_slug(state, year=year)
+    fname = paste0(slug, "_doc.html")
+
+    raw = dv_download_handle(fname, "Documentation", state)
+    tmp_html = tempfile(slug, fileext=".html")
+    writeBin(raw, tmp_html)
+
+    if (requireNamespace("rstudioapi", quietly=TRUE) && rstudioapi::isAvailable()) {
+        rstudioapi::viewer(tmp_html)
+    } else {
+        browseURL(tmp_html)
+    }
+}
+
+dv_download_handle = function(fname, type="File", state="") {
+    tryCatch({
+        raw = dataverse::get_file_by_name(fname, DV_DOI, server=DV_SERVER)
+    }, error=function(e) {
+        if (e$message == "File not found")
+            cli::cli_abort("{type} not found for {.val {state}}.")
+        else
+            e
+    })
+    raw
+}
+
+
+get_slug = function(state, type="cd", year=2020) {
+    abbr = censable::match_abb(state)
+    if (length(abbr) == 0)
+        cli::cli_abort("State {.val {state}} not found.", call=parent.frame())
+    paste0(abbr, "_", type, "_", as.integer(year))
+}
+
+id_compression = function(raw) {
+    gz_raw = c(0x1f, 0x8b, 0x08)
+    xz_raw = c(0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x00)
+    bz_raw = c(0x42, 0x5a, 0x68)
+    if (all(raw[1:6] == xz_raw)) {
+        "xz"
+    } else if (all(raw[1:3] == gz_raw)) {
+        "gzip"
+    } else if (all(raw[1:3] == bz_raw)) {
+        "bzip2"
+    } else {
+        NA
+    }
 }

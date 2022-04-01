@@ -6,16 +6,19 @@
 \alias{alarm_50state_plans}
 \title{Download maps and plans from the 50-State Simulation Project}
 \usage{
-alarm_50state_map(state)
+alarm_50state_map(state, year = 2020)
 
-alarm_50state_plans(state)
+alarm_50state_plans(state, year = 2020)
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code}
+
+\item{year}{The redistricting cycle to download. Currently only "2020" is available.}
 }
 \description{
-These functions will download \link{redist_map} and \link{redist_plans} objects for the
-50-State Simulation Project from the ALARM Project's Dataverse.
+These functions will download \link[redist:redist_map]{redist_map} and
+\link[redist:redist_plans]{redist_plans} objects for the 50-State Simulation
+Project from the ALARM Project's Dataverse.
 }
 \details{
 Every decade following the Census, states and municipalities must redraw

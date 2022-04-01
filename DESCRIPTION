@@ -20,6 +20,8 @@ Imports:
     censable,
     geomander,
     httr
+Suggests:
+    rstudioapi
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
