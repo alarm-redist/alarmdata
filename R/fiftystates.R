@@ -26,6 +26,16 @@
 #' @param year The redistricting cycle to download. Currently only "2020" is available.
 #' @param stats if `TRUE` (the default), download summary statistics for each plan.
 #'
+#' @returns For `alarm_50state_map()`, a [redist_map][redist::redist_map]. For
+#'   `alarm_50state_plans()`, a [redist_plans][redist::redist_plans]. For
+#'   `alarm_50state_doc()`, nothing (but load an HTML file into the viewer or web
+#'   browser).
+#'
+#' @examples \dontrun{
+#' alarm_50state_map("WA")
+#' alarm_50state_plans("WA", stats=FALSE)
+#' alarm_50state_doc("WA")
+#' }
 #'
 #' @name alarm_50state
 NULL
@@ -78,7 +88,7 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_doc = function(state, stats=TRUE, year=2020) {
+alarm_50state_doc = function(state, year=2020) {
     slug = get_slug(state, year=year)
     fname = paste0(slug, "_doc.html")
 
