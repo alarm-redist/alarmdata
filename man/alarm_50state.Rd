@@ -11,7 +11,7 @@ alarm_50state_map(state, year = 2020)
 
 alarm_50state_plans(state, stats = TRUE, year = 2020)
 
-alarm_50state_doc(state, stats = TRUE, year = 2020)
+alarm_50state_doc(state, year = 2020)
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code}
@@ -19,6 +19,12 @@ alarm_50state_doc(state, stats = TRUE, year = 2020)
 \item{year}{The redistricting cycle to download. Currently only "2020" is available.}
 
 \item{stats}{if \code{TRUE} (the default), download summary statistics for each plan.}
+}
+\value{
+For \code{alarm_50state_map()}, a \link[redist:redist_map]{redist_map}. For
+\code{alarm_50state_plans()}, a \link[redist:redist_plans]{redist_plans}. For
+\code{alarm_50state_doc()}, nothing (but load an HTML file into the viewer or web
+browser).
 }
 \description{
 These functions will download \link[redist:redist_map]{redist_map} and
@@ -43,4 +49,12 @@ redistricting plans within a given state which are tailored to its
 redistricting rules. Unlike traditional evaluation methods, therefore,
 simulations are able to directly account for the state’s political geography
 and redistricting criteria.
+}
+\examples{
+\dontrun{
+alarm_50state_map("WA")
+alarm_50state_plans("WA", stats=FALSE)
+alarm_50state_doc("WA")
+}
+
 }
