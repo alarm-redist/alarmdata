@@ -2,3 +2,5 @@
 
 export(alarm_50state_map)
 export(alarm_50state_plans)
+export(alarm_census_vest)
+export(alarm_epsg)
