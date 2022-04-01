@@ -66,8 +66,13 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
     if (isTRUE(stats)) {
         fname_stats = paste0(slug, "_stats.tab")
         raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
-
+        d_stats = readr::read_csv(raw_stats,
+                                  col_types=readr::cols(draw="f", district="i"),
+                                  show_col_types=FALSE)
+        plans = dplyr::left_join(plans, d_stats, by=c("draw", "district", "total_pop"))
     }
+
+    plans
 }
 
 
@@ -88,6 +93,8 @@ alarm_50state_doc = function(state, stats=TRUE, year=2020) {
     }
 }
 
+# try to download `fname` from the 50-states dataverse
+# Provide a human-readable error if the file doesn't exist.
 dv_download_handle = function(fname, type="File", state="") {
     tryCatch({
         raw = dataverse::get_file_by_name(fname, DV_DOI, server=DV_SERVER)
@@ -100,25 +107,3 @@ dv_download_handle = function(fname, type="File", state="") {
     raw
 }
 
-
-get_slug = function(state, type="cd", year=2020) {
-    abbr = censable::match_abb(state)
-    if (length(abbr) == 0)
-        cli::cli_abort("State {.val {state}} not found.", call=parent.frame())
-    paste0(abbr, "_", type, "_", as.integer(year))
-}
-
-id_compression = function(raw) {
-    gz_raw = c(0x1f, 0x8b, 0x08)
-    xz_raw = c(0xfd, 0x37, 0x7a, 0x58, 0x5a, 0x00)
-    bz_raw = c(0x42, 0x5a, 0x68)
-    if (all(raw[1:6] == xz_raw)) {
-        "xz"
-    } else if (all(raw[1:3] == gz_raw)) {
-        "gzip"
-    } else if (all(raw[1:3] == bz_raw)) {
-        "bzip2"
-    } else {
-        NA
-    }
-}

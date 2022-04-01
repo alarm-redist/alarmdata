@@ -4,21 +4,27 @@
 \alias{alarm_50state}
 \alias{alarm_50state_map}
 \alias{alarm_50state_plans}
+\alias{alarm_50state_doc}
 \title{Download maps and plans from the 50-State Simulation Project}
 \usage{
 alarm_50state_map(state, year = 2020)
 
-alarm_50state_plans(state, year = 2020)
+alarm_50state_plans(state, stats = TRUE, year = 2020)
+
+alarm_50state_doc(state, stats = TRUE, year = 2020)
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code}
 
 \item{year}{The redistricting cycle to download. Currently only "2020" is available.}
+
+\item{stats}{if \code{TRUE} (the default), download summary statistics for each plan.}
 }
 \description{
 These functions will download \link[redist:redist_map]{redist_map} and
 \link[redist:redist_plans]{redist_plans} objects for the 50-State Simulation
-Project from the ALARM Project's Dataverse.
+Project from the ALARM Project's Dataverse. \code{alarm_50state_doc()} will
+download documentation for a particular state and show it in a browser.
 }
 \details{
 Every decade following the Census, states and municipalities must redraw
