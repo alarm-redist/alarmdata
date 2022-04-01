@@ -5,9 +5,15 @@ Description:
     Utility functions to download and process data produced by the ALARM Project, 
     including 2020 redistricting files <https://alarm-redist.github.io/posts/2021-08-10-census-2020/> 
     and 50-State Redistricting Simulations <doi:10.7910/DVN/SLCD3E>.
-Authors@R: 
+Authors@R: c(
     person("Cory", "McCartan", , "cmccartan@g.harvard.edu", role = c("aut", "cre"),
-           comment = c(ORCID = "https://orcid.org/0000-0002-6251-669X"))
+           comment = c(ORCID = "0000-0002-6251-669X")),
+    person("Christopher T.", "Kenny", , "christopherkenny@fas.harvard.edu", role="aut",
+           comment = c(ORCID = "0000-0002-9386-6860")),
+    person("Tyler", "Simko", , "tsimko@g.harvard.edu", role="aut"),
+    person("Michael", "Zhao", , "michaelzhao@college.harvard.edu", role="aut"),
+    person("Kosuke", "Imai", , "imai@harvard.edu", role="aut")
+  )
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
