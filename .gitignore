@@ -1,0 +1,9 @@
+.Rproj.user
+
+.DS_Store
+*.swp
+*.tmp
+*.bak
+.Rhistory
+.Rdata
+.httr-oauth

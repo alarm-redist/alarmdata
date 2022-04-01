@@ -1,0 +1,14 @@
+Package: alarmdata
+Title: Download, Merge, and Process Redistricting Data
+Version: 0.0.0.9000
+Description: 
+    Utility functions to download and process data produced by the ALARM Project, 
+    including 2020 redistricting files <https://alarm-redist.github.io/posts/2021-08-10-census-2020/> 
+    and 50-State Redistricting Simulations <doi:10.7910/DVN/SLCD3E>.
+Authors@R: 
+    person("Cory", "McCartan", , "cmccartan@g.harvard.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "https://orcid.org/0000-0002-6251-669X"))
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
