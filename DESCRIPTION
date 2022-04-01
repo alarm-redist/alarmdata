@@ -17,6 +17,8 @@ Authors@R: c(
 Imports: 
     cli,
     dataverse,
+    censable,
+    geomander,
     httr
 License: MIT + file LICENSE
 Encoding: UTF-8
