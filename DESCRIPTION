@@ -14,6 +14,10 @@ Authors@R: c(
     person("Michael", "Zhao", , "michaelzhao@college.harvard.edu", role="aut"),
     person("Kosuke", "Imai", , "imai@harvard.edu", role="aut")
   )
+Imports: 
+    cli,
+    dataverse,
+    httr
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
