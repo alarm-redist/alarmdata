@@ -14,6 +14,7 @@ numeric EPSG code
 }
 \description{
 Provides suggested EPSG codes for each of the 50 states.
+One of the NAD83 (HARN) coordinate systems for each state.
 }
 \examples{
 alarm_epsg('NY')

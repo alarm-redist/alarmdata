@@ -4,9 +4,8 @@
 #' precincts collected by VEST to 2020 Census geographies.
 #'
 #' @templateVar state TRUE
-#' @param geometry Default is TRUE. Should `sf` geometry be included with the data?
-#' @param file file path to save csv to, without
-#' @param epsg numeric EPSG code to planarize to. Default is `alarm_epsg(state)`.
+#' @param geometry If `TRUE` (not the default), include `sf` geometry from `tigris` with the data.
+#' @param epsg numeric EPSG code to use as the coordinate system. Default is `alarm_epsg(state)`.
 #' @template state
 #'
 #' @return tibble with Census and election data
@@ -14,6 +13,6 @@
 #'
 #' @examples
 #' alarm_census_vest('DE', geometry = FALSE)
-alarm_census_vest <- function(state, geometry = TRUE, file = tempfile(fileext = '.csv'), epsg = alarm_epsg(state)) {
+alarm_census_vest <- function(state, geometry=FALSE, epsg=alarm_epsg(state)) {
     geomander::get_alarm(state = state, geometry = geometry, file = file, epsg = epsg)
 }

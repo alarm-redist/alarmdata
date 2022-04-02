@@ -49,13 +49,7 @@ alarm_50state_map = function(state, year=2020) {
     fname = paste0(get_slug(state, year=year), "_map.rds")
     raw = dv_download_handle(fname, "Map", state)
 
-    comp_fmt = id_compression(raw)
-    if (is.na(comp_fmt))
-        cli_abort(c("Map file has unknown compression format.",
-                    ">"="Please file an issue at {.url https://github.com/alarm-redist/fifty-states/issues}",
-                    ">"="Provide filename {.val {fname}}"))
-    # magic so that we don't have to write to disk first
-    readRDS(gzcon(rawConnection(memDecompress(raw, type=comp_fmt))))
+    read_rds_mem(raw, fname)
 }
 
 #' @rdname alarm_50state
@@ -65,13 +59,7 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
     fname_plans = paste0(slug, "_plans.rds")
 
     raw_plans = dv_download_handle(fname_plans, "Plans", state)
-    comp_fmt = id_compression(raw_plans)
-    if (is.na(comp_fmt))
-        cli_abort(c("Plans file has unknown compression format.",
-                    ">"="Please file an issue at {.url https://github.com/alarm-redist/fifty-states/issues}",
-                    ">"="Provide filename {.val {fname_plans}}"))
-    # magic so that we don't have to write to disk first
-    plans = readRDS(gzcon(rawConnection(memDecompress(raw_plans, type=comp_fmt))))
+    plans = read_rds_mem(raw_plans, fname_plans)
 
     if (isTRUE(stats)) {
         fname_stats = paste0(slug, "_stats.tab")

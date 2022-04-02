@@ -6,6 +6,20 @@ get_slug = function(state, type="cd", year=2020) {
     paste0(abbr, "_", type, "_", as.integer(year))
 }
 
+# read a raw vector as an RDS
+read_rds_mem = function(raw, err_fname="") {
+    comp_fmt = id_compression(raw)
+    if (is.na(comp_fmt))
+        cli_abort(c("File has unknown compression format.",
+                    ">"="Please file an issue at {.url https://github.com/alarm-redist/fifty-states/issues}",
+                    ">"="Provide filename {.val {err_fname}}"))
+
+    readRDS(gzcon(
+        rawConnection(memDecompress(raw, type=comp_fmt)),
+        allowNonCompressed=TRUE
+    ))
+}
+
 # figure out compression of raw vector
 id_compression = function(raw) {
     gz_raw = c(0x1f, 0x8b, 0x08)

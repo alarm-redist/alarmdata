@@ -1,6 +1,7 @@
 #' Suggested EPSG Codes
 #'
 #' Provides suggested EPSG codes for each of the 50 states.
+#' One of the NAD83 (HARN) coordinate systems for each state.
 #'
 #' @templateVar state TRUE
 #' @template state

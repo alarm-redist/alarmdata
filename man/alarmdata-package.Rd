@@ -14,6 +14,7 @@ Utility functions to download and process data produced by the ALARM Project, in
 Useful links:
 \itemize{
   \item \url{https://alarm-redist.github.io/alarmdata/}
+  \item Report bugs at \url{https://github.com/alarm-redist/alarmdata/issues/}
 }
 
 }

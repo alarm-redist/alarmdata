@@ -4,21 +4,14 @@
 \alias{alarm_census_vest}
 \title{Download Joined VEST and Census Data}
 \usage{
-alarm_census_vest(
-  state,
-  geometry = TRUE,
-  file = tempfile(fileext = ".csv"),
-  epsg = alarm_epsg(state)
-)
+alarm_census_vest(state, geometry = FALSE, epsg = alarm_epsg(state))
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code}
 
-\item{geometry}{Default is TRUE. Should \code{sf} geometry be included with the data?}
+\item{geometry}{If \code{TRUE} (not the default), include \code{sf} geometry from \code{tigris} with the data.}
 
-\item{file}{file path to save csv to, without}
-
-\item{epsg}{numeric EPSG code to planarize to. Default is \code{alarm_epsg(state)}.}
+\item{epsg}{numeric EPSG code to use as the coordinate system. Default is \code{alarm_epsg(state)}.}
 }
 \value{
 tibble with Census and election data
