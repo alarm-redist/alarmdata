@@ -43,34 +43,47 @@ NULL
 DV_DOI = "doi:10.7910/DVN/SLCD3E"
 DV_SERVER = "dataverse.harvard.edu"
 
+single_states <- c("ak", "nd", "sd", "wy", "vt", "de")
+
 #' @rdname alarm_50state
 #' @export
 alarm_50state_map = function(state, year=2020) {
+
+    if (tolower(state) %in% single_states) {
+        make_state_map_one(state)
+    } else {
     fname = paste0(get_slug(state, year=year), "_map.rds")
     raw = dv_download_handle(fname, "Map", state)
 
     read_rds_mem(raw, fname)
+    }
 }
 
 #' @rdname alarm_50state
 #' @export
 alarm_50state_plans = function(state, stats=TRUE, year=2020) {
-    slug = get_slug(state, year=year)
-    fname_plans = paste0(slug, "_plans.rds")
 
-    raw_plans = dv_download_handle(fname_plans, "Plans", state)
-    plans = read_rds_mem(raw_plans, fname_plans)
+    if (tolower(state) %in% single_states) {
+        make_state_plans_one(state)
+    } else {
 
-    if (isTRUE(stats)) {
-        fname_stats = paste0(slug, "_stats.tab")
-        raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
-        d_stats = readr::read_csv(raw_stats,
-                                  col_types=readr::cols(draw="f", district="i"),
-                                  show_col_types=FALSE)
-        plans = dplyr::left_join(plans, d_stats, by=c("draw", "district", "total_pop"))
+        slug = get_slug(state, year=year)
+        fname_plans = paste0(slug, "_plans.rds")
+
+        raw_plans = dv_download_handle(fname_plans, "Plans", state)
+        plans = read_rds_mem(raw_plans, fname_plans)
+
+        if (isTRUE(stats)) {
+            fname_stats = paste0(slug, "_stats.tab")
+            raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
+            d_stats = readr::read_csv(raw_stats,
+                                      col_types=readr::cols(draw="f", district="i"),
+                                      show_col_types=FALSE)
+            plans = dplyr::left_join(plans, d_stats, by=c("draw", "district", "total_pop"))
+        }
+
+        plans
     }
-
-    plans
 }
 
 
