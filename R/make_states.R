@@ -21,4 +21,6 @@ make_state_plans_one <- function(state) {
 
     redist:::new_redist_plans(m, map, algorithm = "Single", wgt = NULL)
 
+    # TODO: Add summary stats once calc_plan_stats() done.
+
 }
