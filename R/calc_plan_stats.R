@@ -1,4 +1,4 @@
-calc_plan_stats <- function(redist_plans, redist_map) {
+calc_plan_stats <- function(redist_plans, redist_map, ...) {
 
     redist_plans <- redist_plans %>%
         mutate(total_vap = tally_var(redist_map, vap),
@@ -75,14 +75,14 @@ calc_plan_stats <- function(redist_plans, redist_map) {
 #'
 #' @return a vector containing the tallied values by district and plan (column-major)
 #' @export
-tally_var <- function(redist_map, pop, .data = redist:::cur_redist_plans()) {
+tally_var <- function(redist_map, pop, .data = redist:::cur_plans()) {
 
     redist:::check_tidy_types(redist_map, .data)
     if (length(unique(diff(as.integer(.data$district)))) > 2)
         warning("Districts not sorted in ascending order; output may be incorrect.")
     idxs <- unique(as.integer(.data$draw))
     pop <- rlang::eval_tidy(rlang::enquo(pop), redist_map)
-    as.numeric(redist:::pop_tally(get_redist_plans_matrix(.data)[, idxs, drop = FALSE],
+    as.numeric(redist:::pop_tally(get_plans_matrix(.data)[, idxs, drop = FALSE],
                                   pop, attr(redist_map, "ndists")))
 
 }
