@@ -2,12 +2,12 @@
 % Please edit documentation in R/alarm_add_plan.R
 \name{alarm_add_plan}
 \alias{alarm_add_plan}
-\title{This function facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.}
+\title{Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.}
 \usage{
 alarm_add_plan(ref_plan, plans, map = NULL, name = NULL)
 }
 \arguments{
-\item{ref_plan}{An integer vector containing the reference plan. It will be renumbered to \code{1..ndists}}
+\item{ref_plan}{An integer vector containing the reference plan. It will be renumbered to \verb{1..ndists}.}
 
 \item{plans}{A \code{redist_plans} object.}
 
@@ -19,5 +19,5 @@ alarm_add_plan(ref_plan, plans, map = NULL, name = NULL)
 A modified \code{redist_plans} object containing the reference plan. Includes summary statistics if the original \code{redist_plans} object had them as well.
 }
 \description{
-This function facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
+Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
 }
