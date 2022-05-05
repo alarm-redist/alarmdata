@@ -1,3 +1,5 @@
+#' Add a reference plan to a set of plans
+#'
 #' Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
 #'
 #' @param ref_plan An integer vector containing the reference plan. It will be renumbered to `1..ndists`.
