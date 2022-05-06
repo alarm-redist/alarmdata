@@ -19,11 +19,11 @@ Imports:
     dataverse,
     censable,
     geomander,
+    redist,
     dplyr,
     readr,
     httr
 Suggests:
-    redist,
     redistmetrics,
     rstudioapi
 License: MIT + file LICENSE
