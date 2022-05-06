@@ -7,7 +7,7 @@
 alarm_epsg(state)
 }
 \arguments{
-\item{state}{A state name, abbreviation, FIPS code, or ANSI code}
+\item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
 }
 \value{
 numeric EPSG code

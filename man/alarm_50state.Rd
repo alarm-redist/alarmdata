@@ -14,7 +14,7 @@ alarm_50state_plans(state, stats = TRUE, year = 2020)
 alarm_50state_doc(state, year = 2020)
 }
 \arguments{
-\item{state}{A state name, abbreviation, FIPS code, or ANSI code}
+\item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
 
 \item{year}{The redistricting cycle to download. Currently only "2020" is available.}
 

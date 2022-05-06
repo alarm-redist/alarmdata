@@ -10,17 +10,18 @@
 #' @return A modified `redist_plans` object containing the reference plan. Includes summary statistics if the original `redist_plans` object had them as well.
 #' @export
 alarm_add_plan <- function(ref_plan, plans, map = NULL, name = NULL) {
-
+    ref_plan = redist::redist.sink.plan(ref_plan)
+    # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
     if ("comp_polsby" %in% names(plans)) {
-        # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
         if(is.null(map)) {
-            # Without a redist_map object, summary statistics cannot be calculated
             cli_abort("{.arg map} must be a {.cls redist_map} in order to calculate summary statistics for the provided reference plan.")
         }
-        ref_redist_plan <- redist::redist_plans(ref_plan, map, algorithm = attr(plans, "algorithm"), wgt = NULL)
+        ref_redist_plan <- redist::redist_plans(ref_plan, map,
+                                                algorithm=attr(plans, "algorithm"),
+                                                wgt=NULL)
         ref_plan_stats <- calc_plan_stats(ref_redist_plan, map)
-        rbind(plans, ref_plan_stats)
-    } else {
+        rbind(ref_plan_stats, plans)
+    } else { # just add reference
         redist::add_reference(plans, ref_plan, name)
     }
 
