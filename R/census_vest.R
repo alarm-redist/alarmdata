@@ -14,5 +14,5 @@
 #' @examples
 #' alarm_census_vest('DE', geometry = FALSE)
 alarm_census_vest <- function(state, geometry=FALSE, epsg=alarm_epsg(state)) {
-    geomander::get_alarm(state = state, geometry = geometry, file = file, epsg = epsg)
+    geomander::get_alarm(state = state, geometry = geometry, epsg = epsg)
 }
