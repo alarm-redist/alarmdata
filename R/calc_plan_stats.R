@@ -1,15 +1,29 @@
-calc_plan_stats <- function(redist_plans, redist_map, ...) {
+calc_plan_stats <- function(redist_plans, redist_map, calc_polsby = FALSE, ...) {
 
     redist_plans <- redist_plans %>%
         dplyr::mutate(total_vap = redist::tally_var(redist_map, .data$vap),
                plan_dev =  plan_parity(redist_map),
                comp_edge = distr_compactness(redist_map),
-               comp_polsby = distr_compactness(redist_map,
-                                               measure = "PolsbyPopper"),
                ndv = redist::tally_var(redist_map, .data$ndv),
                nrv = redist::tally_var(redist_map, .data$nrv),
                ndshare = .data$ndv / (.data$ndv + .data$nrv),
                ...)
+
+    if (calc_polsby == TRUE) {
+        state <- redist_map$state[1]
+        if (state %in% c("CA", "HI", "OR")) {
+            shp <- tigris::tracts(state = state)
+        } else {
+            shp <- tigris::voting_districts(state = state)
+        }
+        # TODO: Transform the shapefiles to arguments for prep_perims()
+        perim_df <- redistmetrics::prep_perims(shp = shp)
+        redist_plans <- redist_plans %>%
+            dplyr::mutate(comp_polsby = distr_compactness(redist_map, measure = "PolsbyPopper", perim_df = perim_df))
+    } else if ("comp_polsby" %!in% names(plans)) {
+        redist_plans <- redist_plans %>%
+            dplyr::mutate(comp_polsby = NA)
+    }
 
     tally_cols <- names(redist_map)[c(tidyselect::eval_select(tidyselect::starts_with("pop_"), redist_map),
                                       tidyselect::eval_select(tidyselect::starts_with("vap_"), redist_map),
