@@ -2,12 +2,12 @@ calc_plan_stats <- function(redist_plans, redist_map, calc_polsby = FALSE, ...) 
 
     redist_plans <- redist_plans %>%
         dplyr::mutate(total_vap = redist::tally_var(redist_map, .data$vap),
-               plan_dev =  plan_parity(redist_map),
-               comp_edge = distr_compactness(redist_map),
-               ndv = redist::tally_var(redist_map, .data$ndv),
-               nrv = redist::tally_var(redist_map, .data$nrv),
-               ndshare = .data$ndv / (.data$ndv + .data$nrv),
-               ...)
+                      plan_dev =  plan_parity(redist_map),
+                      comp_edge = distr_compactness(redist_map),
+                      ndv = redist::tally_var(redist_map, .data$ndv),
+                      nrv = redist::tally_var(redist_map, .data$nrv),
+                      ndshare = .data$ndv / (.data$ndv + .data$nrv),
+                      ...)
 
     if (calc_polsby == TRUE) {
         state <- redist_map$state[1]
@@ -16,13 +16,13 @@ calc_plan_stats <- function(redist_plans, redist_map, calc_polsby = FALSE, ...) 
         } else {
             shp <- tigris::voting_districts(state = state)
         }
-        # TODO: Transform the shapefiles to arguments for prep_perims()
-        perim_df <- redistmetrics::prep_perims(shp = shp)
-        redist_plans <- redist_plans %>%
-            dplyr::mutate(comp_polsby = distr_compactness(redist_map, measure = "PolsbyPopper", perim_df = perim_df))
-    } else if ("comp_polsby" %!in% names(plans)) {
-        redist_plans <- redist_plans %>%
-            dplyr::mutate(comp_polsby = NA)
+        redist_map <- redist_map %>%
+            sf::st_drop_geometry() %>%
+            left_join(y = shp, by = c("GEOID" = "GEOID20")) %>%
+            sf::st_as_sf() %>%
+            sf::st_transform(crs = alarm_epsg(state))
+
+        redist_plans <- redist_plans %>% dplyr::mutate(comp_polsby = distr_compactness(redist_map, measure = "PolsbyPopper"))
     }
 
     tally_cols <- names(redist_map)[c(tidyselect::eval_select(tidyselect::starts_with("pop_"), redist_map),
@@ -48,17 +48,17 @@ calc_plan_stats <- function(redist_plans, redist_map, calc_polsby = FALSE, ...) 
 
         redist_plans %>%
             dplyr::mutate(dem = group_frac(redist_map, dvote, dvote + rvote),
-                   egap = partisan_metrics(redist_map, "EffGap", rvote, dvote),
-                   pbias = partisan_metrics(redist_map, "Bias", rvote, dvote)) %>%
+                          egap = partisan_metrics(redist_map, "EffGap", rvote, dvote),
+                          pbias = partisan_metrics(redist_map, "Bias", rvote, dvote)) %>%
             as_tibble() %>%
             group_by(draw) %>%
             dplyr::transmute(draw = .data$draw,
-                      district = .data$district,
-                      e_dvs = .data$dem,
-                      pr_dem = .data$dem > 0.5,
-                      e_dem = sum(.data$dem > 0.5, na.rm=T),
-                      pbias = -.data$pbias[1], # flip so dem = negative (only for old redist versioning)
-                      egap = .data$egap[1])
+                             district = .data$district,
+                             e_dvs = .data$dem,
+                             pr_dem = .data$dem > 0.5,
+                             e_dem = sum(.data$dem > 0.5, na.rm=T),
+                             pbias = -.data$pbias[1], # flip so dem = negative (only for old redist versioning)
+                             egap = .data$egap[1])
     }))
 
     elect_tb <- elect_tb %>%
@@ -76,6 +76,13 @@ calc_plan_stats <- function(redist_plans, redist_map, calc_polsby = FALSE, ...) 
             redist_plans <- dplyr::mutate(redist_plans, "{col}_splits" := county_splits(redist_map, redist_map[[col]]), .before = ndv)
         }
     }
+
+    if (!("comp_polsby" %in% names(redist_plans))) {
+        redist_plans <- redist_plans %>%
+            dplyr::mutate(comp_polsby = NA_real_)
+    }
+
+    redist_plans <- redist_plans %>% dplyr::relocate(comp_polsby, .after = comp_edge)
 
     redist_plans
 
