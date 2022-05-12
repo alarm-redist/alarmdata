@@ -12,9 +12,9 @@ calc_plan_stats <- function(redist_plans, redist_map, calc_polsby = FALSE, ...) 
     if (calc_polsby == TRUE) {
         state <- redist_map$state[1]
         if (state %in% c("CA", "HI", "OR")) {
-            shp <- tigris::tracts(state = state)
+            shp <- tigris::tracts(censable::match_fips(state))
         } else {
-            shp <- tigris::voting_districts(state = state)
+            shp <- tigris::voting_districts(censable::match_fips(state))
         }
         redist_map <- redist_map %>%
             sf::st_drop_geometry() %>%
