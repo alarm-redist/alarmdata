@@ -19,13 +19,14 @@ Imports:
     censable,
     cli,
     dataverse,
-    dplyr,
+    censable,
     geomander,
+    redist,
+    dplyr,
     httr,
     readr,
     rlang
 Suggests:
-    redist,
     redistmetrics,
     rstudioapi,
     sf,
