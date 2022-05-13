@@ -13,7 +13,7 @@ alarm_add_plan(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL)
 
 \item{map}{A \code{redist_map} object. Only required if the \code{redist_plans} object includes summary statistics.}
 
-\item{calc_polsby}{A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan.}
+\item{calc_polsby}{A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to \code{FALSE}.}
 
 \item{name}{A human-readable name for the reference plan. Defaults to the name of \code{ref_plan}.}
 }

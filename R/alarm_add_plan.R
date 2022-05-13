@@ -5,7 +5,7 @@
 #' @param ref_plan An integer vector containing the reference plan. It will be renumbered to `1..ndists`.
 #' @param plans A `redist_plans` object.
 #' @param map A `redist_map` object. Only required if the `redist_plans` object includes summary statistics.
-#' @param calc_polsby A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan.
+#' @param calc_polsby A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to `FALSE`.
 #' @param name A human-readable name for the reference plan. Defaults to the name of `ref_plan`.
 #'
 #' @return A modified `redist_plans` object containing the reference plan. Includes summary statistics if the original `redist_plans` object had them as well.
