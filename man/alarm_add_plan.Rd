@@ -2,9 +2,9 @@
 % Please edit documentation in R/alarm_add_plan.R
 \name{alarm_add_plan}
 \alias{alarm_add_plan}
-\title{Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.}
+\title{Add a reference plan to a set of plans}
 \usage{
-alarm_add_plan(ref_plan, plans, map = NULL, name = NULL)
+alarm_add_plan(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL)
 }
 \arguments{
 \item{ref_plan}{An integer vector containing the reference plan. It will be renumbered to \verb{1..ndists}.}
@@ -12,6 +12,8 @@ alarm_add_plan(ref_plan, plans, map = NULL, name = NULL)
 \item{plans}{A \code{redist_plans} object.}
 
 \item{map}{A \code{redist_map} object. Only required if the \code{redist_plans} object includes summary statistics.}
+
+\item{calc_polsby}{A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to \code{FALSE}.}
 
 \item{name}{A human-readable name for the reference plan. Defaults to the name of \code{ref_plan}.}
 }
