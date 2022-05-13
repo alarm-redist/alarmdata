@@ -71,11 +71,34 @@ precincts collected by VEST to 2020 Census geographies.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">alarm_census_vest</span><span class="op">(</span><span class="st">'DE'</span>, geometry <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in utils::download.file(url = paste0(base_path, end_path), file) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   invalid 'destfile' argument</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in utils::download.file(url = paste0(base_path, end_path), file) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   invalid 'destfile' argument</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in geomander::get_alarm(state = state, geometry = geometry, file = file,     epsg = epsg):</span> State de not found in ALARM Data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">412</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">44</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Delimiter:</span> ","</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">chr</span>  (4): GEOID20, state, county, vtd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">dbl</span> (40): pop, pop_hisp, pop_white, pop_black, pop_aian, pop_asian, pop_nhpi...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 412 × 44</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    GEOID20     state county    vtd     pop pop_hisp pop_white pop_black pop_aian</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 10001001-28 DE    Kent Cou… 001-…  <span style="text-decoration: underline;">2</span>203      209       749      <span style="text-decoration: underline;">1</span>080       14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 10001001-29 DE    Kent Cou… 001-… <span style="text-decoration: underline;">11</span>966      651      <span style="text-decoration: underline;">7</span>465      <span style="text-decoration: underline;">2</span>933       46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 10001001-30 DE    Kent Cou… 001-…  <span style="text-decoration: underline;">5</span>543      300      <span style="text-decoration: underline;">3</span>878       911       15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 10001001-31 DE    Kent Cou… 001-…   537       20       417        76        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 10001001-32 DE    Kent Cou… 001-…  <span style="text-decoration: underline;">6</span>420      958      <span style="text-decoration: underline;">2</span>182      <span style="text-decoration: underline;">2</span>570       42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 10001001-33 DE    Kent Cou… 001-…   866       68       510       204        7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 10001001-34 DE    Kent Cou… 001-…   464       53       195       130        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 10001002-28 DE    Kent Cou… 002-…  <span style="text-decoration: underline;">4</span>366      322      <span style="text-decoration: underline;">2</span>697      <span style="text-decoration: underline;">1</span>007        5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 10001002-29 DE    Kent Cou… 002-…  <span style="text-decoration: underline;">8</span>882      647      <span style="text-decoration: underline;">4</span>801      <span style="text-decoration: underline;">2</span>561      121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10001002-30 DE    Kent Cou… 002-…   604       27       446        85        6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 402 more rows, and 35 more variables: pop_asian &lt;dbl&gt;, pop_nhpi &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   pop_other &lt;dbl&gt;, pop_two &lt;dbl&gt;, vap &lt;dbl&gt;, vap_hisp &lt;dbl&gt;, vap_white &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   vap_black &lt;dbl&gt;, vap_aian &lt;dbl&gt;, vap_asian &lt;dbl&gt;, vap_nhpi &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   vap_other &lt;dbl&gt;, vap_two &lt;dbl&gt;, pre_16_dem_cli &lt;dbl&gt;, pre_16_rep_tru &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   gov_16_dem_car &lt;dbl&gt;, gov_16_rep_bon &lt;dbl&gt;, uss_18_dem_car &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   uss_18_rep_arl &lt;dbl&gt;, atg_18_dem_jen &lt;dbl&gt;, atg_18_rep_pep &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   pre_20_dem_bid &lt;dbl&gt;, pre_20_rep_tru &lt;dbl&gt;, uss_20_dem_coo &lt;dbl&gt;, …</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
