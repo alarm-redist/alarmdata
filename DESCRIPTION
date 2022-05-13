@@ -19,12 +19,11 @@ Imports:
     censable,
     cli,
     dataverse,
-    censable,
-    geomander,
-    redist,
     dplyr,
+    geomander,
     httr,
     readr,
+    redist,
     rlang
 Suggests:
     redistmetrics,
