@@ -11,21 +11,27 @@ Authors@R: c(
     person("Christopher T.", "Kenny", , "christopherkenny@fas.harvard.edu", role="aut",
            comment = c(ORCID = "0000-0002-9386-6860")),
     person("Tyler", "Simko", , "tsimko@g.harvard.edu", role="aut"),
-    person("Michael", "Zhao", , "michaelzhao@college.harvard.edu", role="aut"),
+    person("Michael", "Zhao", , "michaelzhao@college.harvard.edu", role="aut",
+           comment=c(ORCID = "0000-0001-8435-2078")),
     person("Kosuke", "Imai", , "imai@harvard.edu", role="aut")
   )
 Imports: 
+    rlang,
     cli,
+    dplyr,
+    httr,
+    readr,
     dataverse,
     censable,
     geomander,
-    dplyr,
-    readr,
-    httr
+    redist
 Suggests:
-    redist,
     redistmetrics,
-    rstudioapi
+    rstudioapi,
+    sf,
+    stringr,
+    tidyselect,
+    tigris
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -36,9 +36,9 @@ id_compression = function(raw) {
     }
 }
 
-#' Download a file
+#' Download a file, with optional "caching"
 #'
-#' Backend-agnostic (currently `httr`)
+#' Back-end agnostic (currently `httr`)
 #'
 #' @param url a URL
 #' @param path a file path
@@ -52,6 +52,6 @@ download <- function(url, path, overwrite = FALSE) {
     if (!file.exists(path) || overwrite) {
         httr::GET(url = url, httr::write_disk(path))
     } else {
-        message(paste0("File already downloaded at", path, ". Set `overwrite = TRUE` to overwrite."))
+        cli_inform("File already downloaded at {.path {path}}. Set {.arg overwrite = TRUE} to overwrite.")
     }
 }

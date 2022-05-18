@@ -26,5 +26,5 @@ alarm_epsg <- function(state) {
 
     abb <- censable::match_abb(state)
 
-    epsg[[abb]]
+    epsg[[abb[1]]]
 }

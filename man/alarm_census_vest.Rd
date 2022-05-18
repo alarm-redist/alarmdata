@@ -7,7 +7,7 @@
 alarm_census_vest(state, geometry = FALSE, epsg = alarm_epsg(state))
 }
 \arguments{
-\item{state}{A state name, abbreviation, FIPS code, or ANSI code}
+\item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
 
 \item{geometry}{If \code{TRUE} (not the default), include \code{sf} geometry from \code{tigris} with the data.}
 
