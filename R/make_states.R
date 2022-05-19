@@ -19,8 +19,7 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
                ndv = round(.data$ndv, 1)) %>%
         dplyr::relocate(geometry, .after = .data$ndv)
 
-    redist::redist_map(nd, pop_col = .data$pop, ndists = 1, pop_tol = 0.01) %>%
-        suppressWarnings() # avoid adjacency warning
+    suppressWarnings(redist::redist_map(nd, pop_col = .data$pop, ndists = 1, pop_tol = 0.01))
 }
 
 

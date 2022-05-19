@@ -50,7 +50,7 @@ single_states_polsby <- c("ak" = 0.06574469, "de" = 0.4595251, "nd" = 0.5142261,
 alarm_50state_map = function(state, year=2020) {
 
     if (tolower(state) %in% names(single_states_polsby)) {
-        make_state_map_one(state)
+        make_state_map_one(state, stats = TRUE)
     } else {
     fname = paste0(get_slug(state, year=year), "_map.rds")
     raw = dv_download_handle(fname, "Map", state)
