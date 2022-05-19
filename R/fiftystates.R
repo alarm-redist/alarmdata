@@ -50,7 +50,7 @@ single_states_polsby <- c("ak" = 0.06574469, "de" = 0.4595251, "nd" = 0.5142261,
 alarm_50state_map = function(state, year=2020) {
 
     if (tolower(state) %in% names(single_states_polsby)) {
-        make_state_map_one(state, stats = TRUE)
+        make_state_map_one(state)
     } else {
     fname = paste0(get_slug(state, year=year), "_map.rds")
     raw = dv_download_handle(fname, "Map", state)
@@ -64,7 +64,7 @@ alarm_50state_map = function(state, year=2020) {
 alarm_50state_plans = function(state, stats=TRUE, year=2020) {
 
     if (tolower(state) %in% names(single_states_polsby)) {
-        make_state_plans_one(state) %>% dplyr::mutate(comp_polsby = single_states_polsby[tolower(state)])
+        make_state_plans_one(state, stats = stats) %>% dplyr::mutate(comp_polsby = single_states_polsby[tolower(state)])
 
     } else {
 
