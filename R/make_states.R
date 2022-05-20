@@ -19,16 +19,15 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
                ndv = round(.data$ndv, 1)) %>%
         dplyr::relocate(geometry, .after = .data$ndv)
 
-    suppressWarnings(redist::redist_map(nd, pop_col = .data$pop, ndists = 1, pop_tol = 0.01))
+    suppressWarnings(redist::redist_map(nd, pop_col = nd$pop, ndists = 1, pop_tol = 0.01))
 }
-
 
 make_state_plans_one <- function(state, stats = TRUE) {
 
     m <- matrix(1, nrow = 1, ncol = 5000)
     map <- make_state_map_one(state)
 
-    pl <- redist:::new_redist_plans(m, map, algorithm = "Single", wgt = NULL)
+    pl <- redist::redist_plans(m, map, algorithm = "Single", wgt = NULL)
 
     if (stats) {
         pl <- calc_plan_stats(pl, map)
