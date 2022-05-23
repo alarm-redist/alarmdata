@@ -43,34 +43,48 @@ NULL
 DV_DOI = "doi:10.7910/DVN/SLCD3E"
 DV_SERVER = "dataverse.harvard.edu"
 
+single_states_polsby <- c("ak" = 0.06574469, "de" = 0.4595251, "nd" = 0.5142261, "sd" = 0.5576591, "vt" = 0.3692381, "wy" = 0.7721791)
+
 #' @rdname alarm_50state
 #' @export
 alarm_50state_map = function(state, year=2020) {
+
+    if (tolower(state) %in% names(single_states_polsby)) {
+        make_state_map_one(state)
+    } else {
     fname = paste0(get_slug(state, year=year), "_map.rds")
     raw = dv_download_handle(fname, "Map", state)
 
     read_rds_mem(raw, fname)
+    }
 }
 
 #' @rdname alarm_50state
 #' @export
 alarm_50state_plans = function(state, stats=TRUE, year=2020) {
-    slug = get_slug(state, year=year)
-    fname_plans = paste0(slug, "_plans.rds")
 
-    raw_plans = dv_download_handle(fname_plans, "Plans", state)
-    plans = read_rds_mem(raw_plans, fname_plans)
+    if (tolower(state) %in% names(single_states_polsby)) {
+        make_state_plans_one(state, stats = stats) %>% dplyr::mutate(comp_polsby = single_states_polsby[tolower(state)])
 
-    if (isTRUE(stats)) {
-        fname_stats = paste0(slug, "_stats.tab")
-        raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
-        d_stats = readr::read_csv(raw_stats,
-                                  col_types=readr::cols(draw="f", district="i"),
-                                  show_col_types=FALSE)
-        plans = dplyr::left_join(plans, d_stats, by=c("draw", "district", "total_pop"))
+    } else {
+
+        slug = get_slug(state, year=year)
+        fname_plans = paste0(slug, "_plans.rds")
+
+        raw_plans = dv_download_handle(fname_plans, "Plans", state)
+        plans = read_rds_mem(raw_plans, fname_plans)
+
+        if (isTRUE(stats)) {
+            fname_stats = paste0(slug, "_stats.tab")
+            raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
+            d_stats = readr::read_csv(raw_stats,
+                                      col_types=readr::cols(draw="f", district="i"),
+                                      show_col_types=FALSE)
+            plans = dplyr::left_join(plans, d_stats, by=c("draw", "district", "total_pop"))
+        }
+
+        plans
     }
-
-    plans
 }
 
 
