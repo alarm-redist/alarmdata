@@ -16,15 +16,15 @@ Authors@R: c(
     person("Kosuke", "Imai", , "imai@harvard.edu", role="aut")
   )
 Imports: 
-    rlang,
+    censable,
     cli,
+    dataverse,
     dplyr,
+    geomander,
     httr,
     readr,
-    dataverse,
-    censable,
-    geomander,
-    redist
+    redist,
+    rlang
 Suggests:
     redistmetrics,
     rstudioapi,

@@ -20,33 +20,46 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         cli_abort("{.arg ref_plan} must be numeric")
     if (length(ref_plan) != nrow(redist::get_plans_matrix(plans)))
         cli_abort("{.arg ref_plan} must have the same number of precincts as {.arg plans}")
+
     if (is.null(name)) {
         ref_str = deparse(substitute(ref_plan))
-        if (stringr::str_detect(ref_str, stringr::fixed("$")))
+        if (stringr::str_detect(ref_str, stringr::fixed("$"))) {
             name = strsplit(ref_str, "$", fixed = TRUE)[[1]][2]
-        else name = ref_str
+        }
+        else {
+            name = ref_str
+        }
     }
-    else {
-        if (!is.character(name))
+    else if (!is.character(name)) {
             cli_abort("{.arg name} must be a {.cls chr}")
     }
-    if (name %in% levels(plans$draw))
+
+    if (name %in% levels(plans$draw)) {
         cli_abort("Reference plan name already exists")
+    }
 
     if ("comp_polsby" %in% names(plans)) {
         if (is.null(map)) {
-            cli_abort("{.arg map} must be a {.cls redist_map} in order to
-                      calculate summary statistics for the provided reference plan.")
+            cli_abort("{.arg map} must be a {.cls redist_map} in order to calculate summary statistics for the provided reference plan.")
         }
 
         ref_redist_plan <- redist::redist_plans(redist::redist.sink.plan(ref_plan),
                                                 map, algorithm=attr(plans, "algorithm"))
         ref_plan_stats <- calc_plan_stats(ref_redist_plan, map, calc_polsby)
+
         ref_plan_stats$draw <- name
         attr(ref_plan_stats, "resampled") <- attr(plans, "resampled")
         attr(ref_plan_stats, "compactness") <- attr(plans, "compactness")
         attr(ref_plan_stats, "constraints") <- attr(plans, "constraints")
-        rbind(ref_plan_stats, plans)
+        attr(ref_plan_stats, "ndists") <- attr(plans, "ndists")
+
+        new_plans <- rbind(ref_plan_stats, plans)
+        m <- redist::get_plans_matrix(ref_plan_stats)
+        colnames(m)[1] <- name
+        attr(new_plans, "plans") <- cbind(m, redist::get_plans_matrix(plans))
+
+        new_plans
+
     } else { # just add reference
         redist::add_reference(plans, ref_plan, name)
     }
