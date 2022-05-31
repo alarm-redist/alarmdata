@@ -43,13 +43,10 @@ NULL
 DV_DOI = "doi:10.7910/DVN/SLCD3E"
 DV_SERVER = "dataverse.harvard.edu"
 
-single_states_polsby <- c("ak" = 0.06574469, "de" = 0.4595251, "nd" = 0.5142261, "sd" = 0.5576591, "vt" = 0.3692381, "wy" = 0.7721791)
-
 #' @rdname alarm_50state
 #' @export
 alarm_50state_map = function(state, year=2020) {
-
-    if (tolower(state) %in% names(single_states_polsby)) {
+    if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
         make_state_map_one(state)
     } else {
     fname = paste0(get_slug(state, year=year), "_map.rds")
@@ -62,12 +59,10 @@ alarm_50state_map = function(state, year=2020) {
 #' @rdname alarm_50state
 #' @export
 alarm_50state_plans = function(state, stats=TRUE, year=2020) {
-
-    if (tolower(state) %in% names(single_states_polsby)) {
-        make_state_plans_one(state, stats = stats) %>% dplyr::mutate(comp_polsby = single_states_polsby[tolower(state)])
-
+    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+    if (toupper(state) %in% names(single_states_polsby)) {
+        make_state_plans_one(state, stats = stats) %>% dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
     } else {
-
         slug = get_slug(state, year=year)
         fname_plans = paste0(slug, "_plans.rds")
 

@@ -11,18 +11,24 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
 
     if (calc_polsby == TRUE) {
         state <- map$state[1]
-        if (state %in% c("CA", "HI", "OR")) {
-            shp <- tigris::tracts(censable::match_fips(state))
+        single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+        if (toupper(state) %in% names(single_states_polsby)) {
+            plans <- plans %>% dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
         } else {
-            shp <- tigris::voting_districts(censable::match_fips(state))
-        }
-        map <- map %>%
-            sf::st_drop_geometry() %>%
-            dplyr::left_join(y = shp, by = c("GEOID" = "GEOID20")) %>%
-            sf::st_as_sf() %>%
-            sf::st_transform(crs = alarm_epsg(state))
+            if (state %in% c("CA", "HI", "OR")) {
+                shp <- tigris::tracts(censable::match_fips(state))
+            } else {
+                shp <- tigris::voting_districts(censable::match_fips(state))
+            }
 
-        plans <- plans %>% dplyr::mutate(comp_polsby = redist::distr_compactness(map, measure = "PolsbyPopper"))
+            map <- map %>%
+                sf::st_drop_geometry() %>%
+                dplyr::left_join(y = shp, by = c("GEOID" = "GEOID20")) %>%
+                sf::st_as_sf() %>%
+                sf::st_transform(crs = alarm_epsg(state))
+
+            plans <- plans %>% dplyr::mutate(comp_polsby = redist::distr_compactness(map, measure = "PolsbyPopper"))
+        }
     }
 
     tally_cols <- names(map)[c(tidyselect::eval_select(tidyselect::starts_with("pop_"), map),
