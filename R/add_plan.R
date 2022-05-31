@@ -25,12 +25,10 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         ref_str = deparse(substitute(ref_plan))
         if (stringr::str_detect(ref_str, stringr::fixed("$"))) {
             name = strsplit(ref_str, "$", fixed = TRUE)[[1]][2]
-        }
-        else {
+        } else {
             name = ref_str
         }
-    }
-    else if (!is.character(name)) {
+    } else if (!is.character(name)) {
             cli_abort("{.arg name} must be a {.cls chr}")
     }
 
