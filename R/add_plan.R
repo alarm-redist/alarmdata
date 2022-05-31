@@ -51,6 +51,10 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         attr(ref_plan_stats, "resampled") <- attr(plans, "resampled")
         attr(ref_plan_stats, "compactness") <- attr(plans, "compactness")
         attr(ref_plan_stats, "constraints") <- attr(plans, "constraints")
+
+        if (is.null(attr(plans, "ndists"))) {
+            attr(plans, "ndists") <- max(as.matrix(plans)[, 1])
+        }
         attr(ref_plan_stats, "ndists") <- attr(plans, "ndists")
 
         new_plans <- rbind(ref_plan_stats, plans)
