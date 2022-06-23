@@ -21,17 +21,16 @@ Imports:
     dplyr,
     httr,
     readr,
+    stringr,
+    sf,
     dataverse,
     censable,
     geomander,
+    tidyselect,
+    tigris,
     redist
 Suggests:
-    redistmetrics,
-    rstudioapi,
-    sf,
-    stringr,
-    tidyselect,
-    tigris
+    rstudioapi
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
