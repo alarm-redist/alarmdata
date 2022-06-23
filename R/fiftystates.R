@@ -97,7 +97,6 @@ alarm_50state_stats <- function(state, year = 2020) {
       make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
           dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
           dplyr::as_tibble()
-      # TODO fix the one state case
   } else {
     slug = get_slug(state, year=year)
     fname_stats <- paste0(slug, '_stats.tab')
