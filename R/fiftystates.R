@@ -82,6 +82,33 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
     }
 }
 
+#' @rdname alarm_50state
+#' @export
+alarm_50state_stats <- function(state, year = 2020) {
+  state <- censable::match_abb(state)
+  if (length(state) != 1) {
+    cli_abort(c('{.arg state} could not be matched to a single state.',
+      'x' = 'Please make {arg state} correspond to the name, abbreviation, or FIPS of one state.'
+    ))
+  }
+
+  single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+  if (state %in% names(single_states_polsby)) {
+      make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
+          dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
+          dplyr::as_tibble()
+      # TODO fix the one state case
+  } else {
+    slug = get_slug(state, year=year)
+    fname_stats <- paste0(slug, '_stats.tab')
+    raw_stats <- dv_download_handle(fname_stats, 'Plan statistics', state)
+    readr::read_csv(raw_stats,
+      col_types = readr::cols(draw = 'f', district = 'i'),
+      show_col_types = FALSE
+    )
+  }
+}
+
 
 #' @rdname alarm_50state
 #' @export

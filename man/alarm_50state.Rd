@@ -4,12 +4,15 @@
 \alias{alarm_50state}
 \alias{alarm_50state_map}
 \alias{alarm_50state_plans}
+\alias{alarm_50state_stats}
 \alias{alarm_50state_doc}
 \title{Download maps and plans from the 50-State Simulation Project}
 \usage{
 alarm_50state_map(state, year = 2020)
 
 alarm_50state_plans(state, stats = TRUE, year = 2020)
+
+alarm_50state_stats(state, year = 2020)
 
 alarm_50state_doc(state, year = 2020)
 }

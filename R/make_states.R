@@ -7,7 +7,11 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
                   dplyr::across(tidyselect::starts_with("vap"), sum),
                   dplyr::across(tidyselect::matches("_(dem|rep)_"), sum),
                   dplyr::across(tidyselect::matches("^a[dr]v_"), sum),
-                  geometry = sf::st_union(geometry))
+                  geometry = ifelse(.env$geometry, sf::st_union(geometry), sf::st_sfc(sf::st_polygon())))
+
+    if (!geometry) {
+        nd <- sf::st_sf(nd, crs = epsg)
+    }
 
     id_nrv <- stringr::str_detect(colnames(nd), "arv_")
     id_ndv <- stringr::str_detect(colnames(nd), "adv_")
@@ -19,16 +23,16 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
                ndv = round(.data$ndv, 1)) %>%
         dplyr::relocate(geometry, .after = .data$ndv)
 
-    map <- suppressWarnings(redist::redist_map(nd, ndists = 1, pop_tol = 0.01))
+    map <- suppressWarnings(redist::redist_map(nd, ndists = 1, pop_tol = 0.01, adj = list(numeric())))
     map$state <- state
 
     map
 }
 
-make_state_plans_one <- function(state, stats = TRUE) {
+make_state_plans_one <- function(state, stats = TRUE, geometry = TRUE, epsg = alarm_epsg(state)) {
 
     m <- matrix(1, nrow = 1, ncol = 5000)
-    map <- make_state_map_one(state)
+    map <- make_state_map_one(state, geometry = geometry, epsg = alarm_epsg(state))
 
     pl <- redist::redist_plans(m, map, algorithm = "Single", wgt = NULL)
 

@@ -3,6 +3,7 @@
 export(alarm_50state_doc)
 export(alarm_50state_map)
 export(alarm_50state_plans)
+export(alarm_50state_stats)
 export(alarm_add_plan)
 export(alarm_census_vest)
 export(alarm_epsg)

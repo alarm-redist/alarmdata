@@ -13,7 +13,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         state <- censable::match_abb(map$state[1])
         if (length(state) != 1) {
             cli_abort(c("Column {.field state} of {.arg map} could not be matched to a single state.",
-                        "x" = "Please make {.field} state column correspond to the name, abbreviation, or FIPS."))
+                        "x" = "Please make {.field state} column correspond to the name, abbreviation, or FIPS of one state."))
         }
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
         if (state %in% names(single_states_polsby)) {
