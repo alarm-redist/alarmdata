@@ -27,13 +27,14 @@ alarm_50state_doc(state, year = 2020)
 For \code{alarm_50state_map()}, a \link[redist:redist_map]{redist_map}. For
 \code{alarm_50state_plans()}, a \link[redist:redist_plans]{redist_plans}. For
 \code{alarm_50state_doc()}, nothing (but load an HTML file into the viewer or web
-browser).
+browser). For \code{alarm_50state_stats()}, a \link[dplyr:reexports]{tibble}.
 }
 \description{
 These functions will download \link[redist:redist_map]{redist_map} and
 \link[redist:redist_plans]{redist_plans} objects for the 50-State Simulation
 Project from the ALARM Project's Dataverse. \code{alarm_50state_doc()} will
 download documentation for a particular state and show it in a browser.
+\code{alarm_50state_stats} will download just the summary statistics for a state.
 }
 \details{
 Every decade following the Census, states and municipalities must redraw
@@ -57,6 +58,7 @@ and redistricting criteria.
 \dontrun{
 alarm_50state_map("WA")
 alarm_50state_plans("WA", stats=FALSE)
+alarm_50states_stats('WA')
 alarm_50state_doc("WA")
 }
 

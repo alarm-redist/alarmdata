@@ -4,6 +4,7 @@
 #' [redist_plans][redist::redist_plans] objects for the 50-State Simulation
 #' Project from the ALARM Project's Dataverse. `alarm_50state_doc()` will
 #' download documentation for a particular state and show it in a browser.
+#' `alarm_50state_stats` will download just the summary statistics for a state.
 #'
 #' Every decade following the Census, states and municipalities must redraw
 #' districts for Congress, state houses, city councils, and more. The goal of
@@ -29,11 +30,12 @@
 #' @returns For `alarm_50state_map()`, a [redist_map][redist::redist_map]. For
 #'   `alarm_50state_plans()`, a [redist_plans][redist::redist_plans]. For
 #'   `alarm_50state_doc()`, nothing (but load an HTML file into the viewer or web
-#'   browser).
+#'   browser). For `alarm_50state_stats()`, a [tibble][dplyr::tibble].
 #'
 #' @examples \dontrun{
 #' alarm_50state_map("WA")
 #' alarm_50state_plans("WA", stats=FALSE)
+#' alarm_50states_stats('WA')
 #' alarm_50state_doc("WA")
 #' }
 #'
