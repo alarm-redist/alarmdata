@@ -30,6 +30,7 @@ Imports:
     tigris,
     redist
 Suggests:
+    redistmetrics,
     rstudioapi
 License: MIT + file LICENSE
 Encoding: UTF-8
