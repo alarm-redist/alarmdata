@@ -10,15 +10,19 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
                       ...)
 
     if (calc_polsby == TRUE) {
-        state <- map$state[1]
+        state <- censable::match_abb(map$state[1])
+        if (length(state) != 1) {
+            cli_abort(c("Column {.field state} of {.arg map} could not be matched to a single state.",
+                        "x" = "Please make {.field} state column correspond to the name, abbreviation, or FIPS."))
+        }
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
-        if (toupper(state) %in% names(single_states_polsby)) {
-            plans <- plans %>% dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
+        if (state %in% names(single_states_polsby)) {
+            plans <- plans %>% dplyr::mutate(comp_polsby = single_states_polsby[state])
         } else {
             if (state %in% c("CA", "HI", "OR")) {
-                shp <- tigris::tracts(censable::match_fips(state))
+                shp <- tigris::tracts(state = censable::match_fips(state))
             } else {
-                shp <- tigris::voting_districts(censable::match_fips(state))
+                shp <- tigris::voting_districts(state = censable::match_fips(state))
             }
 
             map <- map %>%
@@ -91,5 +95,4 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
     plans <- plans %>% dplyr::relocate(.data$comp_polsby, .after = .data$comp_edge)
 
     plans
-
 }

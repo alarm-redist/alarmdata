@@ -1,4 +1,5 @@
 # Test Environments
+* local R installation (Windows 11), R 4.2.0
 * local R installation (macOS), R 4.1.2
 * macos-latest (on GitHub Actions), (release)
 * windows-latest (on GitHub Actions), (release)
@@ -12,4 +13,4 @@
 
 * This is a new release.
 * Examples are \dontrun in the `alarm_50state_*` functions since these functions
-download data from the Dataverse, which generally takes many seconds.
+download data from the Harvard Dataverse, which generally takes many seconds.

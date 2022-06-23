@@ -6,9 +6,9 @@
 \alias{alarmdata-package}
 \title{alarmdata: Download, Merge, and Process Redistricting Data}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Utility functions to download and process data produced by the ALARM Project, including 2020 redistricting files <https://alarm-redist.github.io/posts/2021-08-10-census-2020/> and 50-State Redistricting Simulations <doi:10.7910/DVN/SLCD3E>.
+Utility functions to download and process data produced by the ALARM Project, including 2020 redistricting files \url{https://alarm-redist.github.io/posts/2021-08-10-census-2020/} and 50-State Redistricting Simulations \doi{10.7910/DVN/SLCD3E}.
 }
 \seealso{
 Useful links:

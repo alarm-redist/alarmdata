@@ -20,6 +20,15 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         cli_abort("{.arg ref_plan} must be numeric")
     if (length(ref_plan) != nrow(redist::get_plans_matrix(plans)))
         cli_abort("{.arg ref_plan} must have the same number of precincts as {.arg plans}")
+    if (dplyr::n_distinct(ref_plan) != dplyr::n_distinct(plans$district)) {
+        cli::cli_abort("{.arg ref_plan} must have the same number of precincts as {.arg plans}")
+    } else {
+        if (max(ref_plan) != dplyr::n_distinct(ref_plan)) {
+            ref_plan <- match(ref_plan, unique(sort(ref_plan, na.last = TRUE)))
+            cli::cli_warn(c("{.arg ref_plan} should be numbered {{1, 2, ..., ndists}}.",
+                            "i" = "{.arg ref_plan} was renumbered based on the order of entries."))
+        }
+    }
 
     if (is.null(name)) {
         ref_str = deparse(substitute(ref_plan))
@@ -41,8 +50,9 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
             cli_abort("{.arg map} must be a {.cls redist_map} in order to calculate summary statistics for the provided reference plan.")
         }
 
-        ref_redist_plan <- redist::redist_plans(redist::redist.sink.plan(ref_plan),
-                                                map, algorithm=attr(plans, "algorithm"))
+        ref_redist_plan <- redist::redist_plans(
+            plans = ref_plan, map = map, algorithm = attr(plans, "algorithm")
+            )
         ref_plan_stats <- calc_plan_stats(ref_redist_plan, map, calc_polsby)
 
         ref_plan_stats$draw <- name
@@ -65,5 +75,4 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
     } else { # just add reference
         redist::add_reference(plans, ref_plan, name)
     }
-
 }
