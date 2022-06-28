@@ -53,6 +53,7 @@ alarm_50state_map = function(state, year=2020) {
     } else {
         fname = paste0(get_slug(state, year=year), "_map.rds")
         raw = dv_download_handle(fname, "Map", state)
+        if (is.null(raw)) cli::cli_abort("Download failed.")
 
         read_rds_mem(raw, fname)
     }
@@ -69,11 +70,14 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
         fname_plans = paste0(slug, "_plans.rds")
 
         raw_plans = dv_download_handle(fname_plans, "Plans", state)
+        if (is.null(raw_plans)) cli::cli_abort("Download failed.")
         plans = read_rds_mem(raw_plans, fname_plans)
 
         if (isTRUE(stats)) {
             fname_stats = paste0(slug, "_stats.tab")
             raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
+            if (is.null(raw_stats)) cli::cli_abort("Download failed.")
+
             d_stats = readr::read_csv(raw_stats,
                                       col_types=readr::cols(draw="f", district="i"),
                                       show_col_types=FALSE)
@@ -103,6 +107,8 @@ alarm_50state_stats <- function(state, year = 2020) {
     slug = get_slug(state, year=year)
     fname_stats <- paste0(slug, '_stats.tab')
     raw_stats <- dv_download_handle(fname_stats, 'Plan statistics', state)
+    if (is.null(raw_stats)) cli::cli_abort("Download failed.")
+
     readr::read_csv(raw_stats,
       col_types = readr::cols(draw = 'f', district = 'i'),
       show_col_types = FALSE
@@ -118,6 +124,7 @@ alarm_50state_doc = function(state, year=2020) {
     fname = paste0(slug, "_doc.html")
 
     raw = dv_download_handle(fname, "Documentation", state)
+    if (is.null(raw)) cli::cli_abort("Download failed.")
     tmp_html = tempfile(slug, fileext=".html")
     writeBin(raw, tmp_html)
 
@@ -131,10 +138,18 @@ alarm_50state_doc = function(state, year=2020) {
 # try to download `fname` from the 50-states dataverse
 # Provide a human-readable error if the file doesn't exist.
 dv_download_handle = function(fname, type="File", state="") {
+    raw <- NULL
     tryCatch({
         raw = dataverse::get_file_by_name(fname, DV_DOI, server=DV_SERVER)
     }, error=function(e) {
         if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {
+            tryCatch({
+                dataverse::get_dataset(DV_DOI, server=DV_SERVER)
+            }, error = function(e) {
+                cli::cli_abort("Could not connect to Dataverse.
+                               Check your API key and/or internet connection.", call=NULL)
+            })
+
             cli::cli_abort("{type} not found for {.val {state}}.", call=NULL)
         } else {
             e
