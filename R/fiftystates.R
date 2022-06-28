@@ -51,10 +51,10 @@ alarm_50state_map = function(state, year=2020) {
     if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
         make_state_map_one(state)
     } else {
-    fname = paste0(get_slug(state, year=year), "_map.rds")
-    raw = dv_download_handle(fname, "Map", state)
+        fname = paste0(get_slug(state, year=year), "_map.rds")
+        raw = dv_download_handle(fname, "Map", state)
 
-    read_rds_mem(raw, fname)
+        read_rds_mem(raw, fname)
     }
 }
 
@@ -134,10 +134,11 @@ dv_download_handle = function(fname, type="File", state="") {
     tryCatch({
         raw = dataverse::get_file_by_name(fname, DV_DOI, server=DV_SERVER)
     }, error=function(e) {
-        if (e$message == "File not found")
-            cli::cli_abort("{type} not found for {.val {state}}.")
-        else
+        if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {
+            cli::cli_abort("{type} not found for {.val {state}}.", call=NULL)
+        } else {
             e
+        }
     })
     raw
 }
