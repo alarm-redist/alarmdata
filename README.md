@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# alarmdata <a href="https://alarm-redist.github.io/alarmdata/"><img src="man/figures/logo.png" align="right" height="120" /></a>
+# alarmdata <a href="https://alarm-redist.github.io/alarmdata/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 

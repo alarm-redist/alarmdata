@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# alarmdata <a href="https://alarm-redist.github.io/alarmdata/"><img src="man/figures/logo.png" align="right" height="120" /></a>
+# alarmdata <a href="https://alarm-redist.github.io/alarmdata/"><img src="man/figures/logo.png" align="right" height="138" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/alarm-redist/alarmdata/workflows/R-CMD-check/badge.svg)](https://github.com/alarm-redist/alarmdata/actions)
