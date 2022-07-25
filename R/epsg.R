@@ -25,6 +25,10 @@ alarm_epsg <- function(state) {
                  VA = 2853L, WA = 2855L, WV = 2857L, WI = 2860L, WY = 2863L)
 
     abb <- censable::match_abb(state)
+    if (length(abb) != 1) {
+        cli_abort(c("{.arg state}could not be matched to a single state.",
+                    "x" = "Please make {.arg state} correspond to the name, abbreviation, or FIPS of one state."))
+    }
 
-    epsg[[abb[1]]]
+    epsg[[abb]]
 }
