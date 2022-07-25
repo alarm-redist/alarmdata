@@ -27,7 +27,7 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
     nd <- nd %>%
         dplyr::mutate(cd_2020 = 1L, .before = dplyr::everything())
 
-    map <- suppressWarnings(redist::redist_map(nd, existing_plan = 'cd_2020', pop_tol = 0.005, adj = list(numeric())))
+    map <- suppressWarnings(redist::redist_map(nd, existing_plan = 'cd_2020', pop_tol = 0.005, adj = list(integer())))
     map$state <- state
 
     attr(map, 'analysis_name') <- paste0(censable::match_abb(state), '_', year)
