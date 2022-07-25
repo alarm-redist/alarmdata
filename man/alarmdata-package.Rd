@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Utility functions to download and process data produced by the ALARM Project, including 2020 redistricting files \url{https://alarm-redist.github.io/posts/2021-08-10-census-2020/} and 50-State Redistricting Simulations \doi{10.7910/DVN/SLCD3E}.
+Utility functions to download and process data produced by the ALARM Project, including 2020 redistricting files \url{https://alarm-redist.github.io/posts/2021-08-10-census-2020/} and 50-State Redistricting Simulations \doi{10.7910/DVN/SLCD3E}. The package extends functionality introduced in \href{https://arxiv.org/abs/2206.10763}{arXiv:2206.10763} to cover states with only a single district.
 }
 \seealso{
 Useful links:
