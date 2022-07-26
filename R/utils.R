@@ -21,10 +21,9 @@ read_rds_mem <- function(raw, err_fname = "") {
             ">" = "Please file an issue at {.url https://github.com/alarm-redist/fifty-states/issues}",
             ">" = "Provide filename {.val {err_fname}}"))
 
-    readRDS(gzcon(
-        rawConnection(memDecompress(raw, type = comp_fmt)),
-        allowNonCompressed = TRUE
-    ))
+    con = rawConnection(memDecompress(raw, type = comp_fmt))
+    on.exit(close(con))
+    readRDS(gzcon(con, allowNonCompressed = TRUE))
 }
 
 # figure out compression of raw vector
