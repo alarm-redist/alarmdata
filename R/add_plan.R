@@ -29,7 +29,8 @@
 #'  baf <- readr::read_csv(file = paste0(dirname(tf), '/Congressional Concept A.csv'),
 #'                         col_types = 'ci')
 #'  names(baf) <- c('GEOID', 'concept_a')
-#'  alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), name = 'concept_a')
+#'  map_nm <- alarm_50state_map('NM')
+#'  alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), map = , name = 'concept_a')
 #' }
 alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL, GEOID = 'GEOID') {
     # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
