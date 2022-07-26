@@ -2,22 +2,69 @@
 #'
 #' Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
 #'
-#' @param ref_plan An integer vector containing the reference plan. It will be renumbered to `1..ndists`.
+#' @param ref_plan An integer vector containing the reference plan or a block assignment file as a `tibble` or `data.frame`.
 #' @param plans A `redist_plans` object.
 #' @param map A `redist_map` object. Only required if the `redist_plans` object includes summary statistics.
 #' @param calc_polsby A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to `FALSE`.
-#' @param name A human-readable name for the reference plan. Defaults to the name of `ref_plan`.
+#' @param name A human-readable name for the reference plan. Defaults to the name of `ref_plan`. If `ref_plan` is a
+#' `tibble` or `data.frame`, it should be the name of the column of `ref_plan` that identifies districts.
+#' @param GEOID character. Ignored unless `ref_plan` is a `tibble` or `data.frame`.
+#' Should correspond to the column of `ref_plan` that identifies block `GEOID`s.
+#' Default is `'GEOID'`.
 #'
 #' @return A modified `redist_plans` object containing the reference plan. Includes summary statistics if the original `redist_plans` object had them as well.
 #' @export
-alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL) {
+#'
+#' @examples
+#' map <- alarm_50state_map('WY')
+#' pl <- alarm_50state_plans('WY')
+#' alarm_add_plan(c(1), pl, map, name = 'example')
+#'
+#' \dontrun{
+#' # requires stable connection to the Harvard Dataverse
+#'  url <- 'https://www.redistrict2020.org/files/NM-2021-10/Congressional_Concept_A.zip'
+#'  tf <- tempfile(fileext = '.zip')
+#'  utils::download.file(url, tf)
+#'  utils::unzip(tf, exdir = dirname(tf))
+#'  baf <- readr::read_csv(file = paste0(dirname(tf), '/Congressional Concept A.csv'),
+#'                         col_types = 'ci')
+#'  names(baf) <- c('GEOID', 'concept_a')
+#'  alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), name = 'concept_a')
+#' }
+alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL, GEOID = 'GEOID') {
     # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
     if (!inherits(plans, "redist_plans"))
         cli_abort("{.arg plans} must be a {.cls redist_plans}")
     if (isTRUE(attr(plans, "partial")))
         cli_abort("Reference plans not supported for partial plans objects")
-    if (!is.numeric(ref_plan))
-        cli_abort("{.arg ref_plan} must be numeric")
+
+    if (is.null(name)) {
+        ref_str = deparse(substitute(ref_plan))
+        if (stringr::str_detect(ref_str, stringr::fixed("$"))) {
+            name = strsplit(ref_str, "$", fixed = TRUE)[[1]][2]
+        } else {
+            name = ref_str
+        }
+    } else if (!is.character(name)) {
+        cli_abort("{.arg name} must be a {.cls chr}")
+    }
+
+    if (name %in% levels(plans$draw)) {
+        cli_abort("Reference plan name already exists")
+    }
+
+    if (!is.numeric(ref_plan)){
+        if (is.data.frame(ref_plan)) {
+            if (is.null(map)) {
+                cli::cli_abort('{.arg map} must be provided to use a {.cls data.frame} for {.arg ref_plan}.')
+            }
+            ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID)
+            ref_plan <- ref_plan[[name]][match(ref_plan[[GEOID]], map[[names(map)[stringr::str_detect(names(map), 'GEOID')][1]]])]
+        } else {
+            cli_abort("{.arg ref_plan} must be numeric or inherit {.cls data.frame}.")
+        }
+    }
+
     if (length(ref_plan) != nrow(redist::get_plans_matrix(plans)))
         cli_abort("{.arg ref_plan} must have the same number of precincts as {.arg plans}")
     if (dplyr::n_distinct(ref_plan) != dplyr::n_distinct(plans$district)) {
@@ -28,21 +75,6 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
             cli::cli_warn(c("{.arg ref_plan} should be numbered {{1, 2, ..., ndists}}.",
                             "i" = "{.arg ref_plan} was renumbered based on the order of entries."))
         }
-    }
-
-    if (is.null(name)) {
-        ref_str = deparse(substitute(ref_plan))
-        if (stringr::str_detect(ref_str, stringr::fixed("$"))) {
-            name = strsplit(ref_str, "$", fixed = TRUE)[[1]][2]
-        } else {
-            name = ref_str
-        }
-    } else if (!is.character(name)) {
-            cli_abort("{.arg name} must be a {.cls chr}")
-    }
-
-    if (name %in% levels(plans$draw)) {
-        cli_abort("Reference plan name already exists")
     }
 
     if ("comp_polsby" %in% names(plans)) {

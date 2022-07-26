@@ -34,7 +34,7 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
     map
 }
 
-make_state_plans_one <- function(state, stats = TRUE, geometry = TRUE, epsg = alarm_epsg(state)) {
+make_state_plans_one <- function(state, stats = TRUE, geometry = FALSE, epsg = alarm_epsg(state)) {
     nsims <- 5000
 
     m <- matrix(1L, nrow = 1, ncol = nsims)

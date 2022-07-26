@@ -32,12 +32,17 @@
 #'   `alarm_50state_doc()`, nothing (but load an HTML file into the viewer or web
 #'   browser). For `alarm_50state_stats()`, a [tibble][dplyr::tibble].
 #'
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
+#' # requires stable connection to the Harvard Dataverse
 #' alarm_50state_map("WA")
 #' alarm_50state_plans("WA", stats=FALSE)
 #' alarm_50states_stats('WA')
 #' alarm_50state_doc("WA")
 #' }
+#'
+#' alarm_50state_plans('WY')
+#' alarm_50state_stats("WY")
 #'
 #' @name alarm_50state
 NULL
@@ -71,7 +76,8 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
 
         raw_plans = dv_download_handle(fname_plans, "Plans", state)
         if (is.null(raw_plans)) cli::cli_abort("Download failed.")
-        plans = read_rds_mem(raw_plans, fname_plans)
+        plans = read_rds_mem(raw_plans, fname_plans) %>%
+            dplyr::mutate(district = as.integer(.data$district))
 
         if (isTRUE(stats)) {
             fname_stats = paste0(slug, "_stats.tab")

@@ -4,10 +4,17 @@
 \alias{alarm_add_plan}
 \title{Add a reference plan to a set of plans}
 \usage{
-alarm_add_plan(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL)
+alarm_add_plan(
+  ref_plan,
+  plans,
+  map = NULL,
+  calc_polsby = FALSE,
+  name = NULL,
+  GEOID = "GEOID"
+)
 }
 \arguments{
-\item{ref_plan}{An integer vector containing the reference plan. It will be renumbered to \verb{1..ndists}.}
+\item{ref_plan}{An integer vector containing the reference plan or a block assignment file as a \code{tibble} or \code{data.frame}.}
 
 \item{plans}{A \code{redist_plans} object.}
 
@@ -15,11 +22,32 @@ alarm_add_plan(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL)
 
 \item{calc_polsby}{A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to \code{FALSE}.}
 
-\item{name}{A human-readable name for the reference plan. Defaults to the name of \code{ref_plan}.}
+\item{name}{A human-readable name for the reference plan. Defaults to the name of \code{ref_plan}. If \code{ref_plan} is a
+\code{tibble} or \code{data.frame}, it should be the name of the column of \code{ref_plan} that identifies districts.}
+
+\item{GEOID}{character. Ignored unless \code{ref_plan} is a \code{tibble} or \code{data.frame}.
+Should correspond to the column of \code{ref_plan} that identifies block \code{GEOID}s.
+Default is \code{'GEOID'}.}
 }
 \value{
 A modified \code{redist_plans} object containing the reference plan. Includes summary statistics if the original \code{redist_plans} object had them as well.
 }
 \description{
 Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
+}
+\examples{
+map <- alarm_50state_map('WY')
+pl <- alarm_50state_plans('WY')
+alarm_add_plan(c(1), pl, map, name = 'example')
+\dontrun{
+# requires stable connection to the Harvard Dataverse
+ url <- 'https://www.redistrict2020.org/files/NM-2021-10/Congressional_Concept_A.zip'
+ tf <- tempfile(fileext = '.zip')
+ utils::download.file(url, tf)
+ utils::unzip(tf, exdir = dirname(tf))
+ baf <- readr::read_csv(file = paste0(dirname(tf), '/Congressional Concept A.csv'),
+                        col_types = 'ci')
+ names(baf) <- c('GEOID', 'concept_a')
+ alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), name = 'concept_a')
+}
 }
