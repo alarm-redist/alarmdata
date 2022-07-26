@@ -23,3 +23,27 @@ You can install the development version of **alarmdata** from
 # install.packages("devtools")
 devtools::install_github("alarm-redist/alarmdata")
 ```
+
+## Example
+
+We can easily download simulation data for a state and make some plots.
+
+``` r
+library(alarmdata)
+library(redist)
+
+map_wa = alarm_50state_map("WA")
+plans_wa = alarm_50state_plans("WA")
+
+redist.plot.plans(plans_wa, draws=1:4, shp=map_wa)
+```
+
+<img src="man/figures/README-ex-1.png" width="100%" />
+
+``` r
+
+hist(plans_wa, e_dem) +
+    ggplot2::labs(x=NULL, title="Expected Democratic seats")
+```
+
+<img src="man/figures/README-ex-2.png" width="100%" />
