@@ -5,14 +5,14 @@
 #'
 #' @templateVar state TRUE
 #' @param geometry If `TRUE` (not the default), include `sf` geometry from `tigris` with the data.
-#' @param epsg numeric EPSG code to use as the coordinate system. Default is `alarm_epsg(state)`.
+#' @param epsg A numeric EPSG code to use as the coordinate system. Default is `alarm_epsg(state)`.
 #' @template state
 #'
 #' @return tibble with Census and election data
 #' @export
 #'
 #' @examples
-#' alarm_census_vest('DE', geometry = FALSE)
-alarm_census_vest <- function(state, geometry=FALSE, epsg=alarm_epsg(state)) {
+#' alarm_census_vest("DE", geometry = FALSE)
+alarm_census_vest <- function(state, geometry = FALSE, epsg = alarm_epsg(state)) {
     geomander::get_alarm(state = state, geometry = geometry, epsg = epsg)
 }

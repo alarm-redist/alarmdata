@@ -2,18 +2,18 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
 
     plans <- plans %>%
         dplyr::mutate(total_vap = redist::tally_var(map, .data$vap),
-                      plan_dev =  redist::plan_parity(map),
-                      comp_edge = redist::distr_compactness(map),
-                      ndv = redist::tally_var(map, .data$ndv),
-                      nrv = redist::tally_var(map, .data$nrv),
-                      ndshare = .data$ndv / (.data$ndv + .data$nrv),
-                      ...)
+            plan_dev =  redist::plan_parity(map),
+            comp_edge = redist::distr_compactness(map),
+            ndv = redist::tally_var(map, .data$ndv),
+            nrv = redist::tally_var(map, .data$nrv),
+            ndshare = .data$ndv/(.data$ndv + .data$nrv),
+            ...)
 
     if (calc_polsby == TRUE) {
         state <- censable::match_abb(map$state[1])
         if (length(state) != 1) {
             cli_abort(c("Column {.field state} of {.arg map} could not be matched to a single state.",
-                        "x" = "Please make {.field state} column correspond to the name, abbreviation, or FIPS of one state."))
+                "x" = "Please make {.field state} column correspond to the name, abbreviation, or FIPS of one state."))
         }
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
         if (state %in% names(single_states_polsby)) {
@@ -36,9 +36,9 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
     }
 
     tally_cols <- names(map)[c(tidyselect::eval_select(tidyselect::starts_with("pop_"), map),
-                                      tidyselect::eval_select(tidyselect::starts_with("vap_"), map),
-                                      tidyselect::eval_select(tidyselect::matches("_(dem|rep)_"), map),
-                                      tidyselect::eval_select(tidyselect::matches("^a[dr]v_"), map))]
+        tidyselect::eval_select(tidyselect::starts_with("vap_"), map),
+        tidyselect::eval_select(tidyselect::matches("_(dem|rep)_"), map),
+        tidyselect::eval_select(tidyselect::matches("^a[dr]v_"), map))]
     for (col in tally_cols) {
         plans <- dplyr::mutate(plans, {{ col }} := redist::tally_var(map, map[[col]]), .before = .data$ndv)
     }
@@ -49,26 +49,26 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         unique()
 
     elect_tb <- do.call(dplyr::bind_rows, lapply(elecs, function(el) {
-        vote_d = dplyr::select(dplyr::as_tibble(map),
-                        dplyr::starts_with(paste0(el, "_dem_")),
-                        dplyr::starts_with(paste0(el, "_rep_")))
+        vote_d <- dplyr::select(dplyr::as_tibble(map),
+            dplyr::starts_with(paste0(el, "_dem_")),
+            dplyr::starts_with(paste0(el, "_rep_")))
         if (ncol(vote_d) != 2) return(dplyr::tibble())
         dvote <- dplyr::pull(vote_d, 1)
         rvote <- dplyr::pull(vote_d, 2)
 
         plans %>%
             dplyr::mutate(dem = redist::group_frac(map, dvote, dvote + rvote),
-                          egap = redist::partisan_metrics(map, "EffGap", rvote, dvote),
-                          pbias = redist::partisan_metrics(map, "Bias", rvote, dvote)) %>%
+                egap = redist::partisan_metrics(map, "EffGap", rvote, dvote),
+                pbias = redist::partisan_metrics(map, "Bias", rvote, dvote)) %>%
             dplyr::as_tibble() %>%
             dplyr::group_by(.data$draw) %>%
             dplyr::transmute(draw = .data$draw,
-                             district = .data$district,
-                             e_dvs = .data$dem,
-                             pr_dem = .data$dem > 0.5,
-                             e_dem = sum(.data$dem > 0.5, na.rm=T),
-                             pbias = .data$pbias[1],
-                             egap = .data$egap[1])
+                district = .data$district,
+                e_dvs = .data$dem,
+                pr_dem = .data$dem > 0.5,
+                e_dem = sum(.data$dem > 0.5, na.rm = T),
+                pbias = .data$pbias[1],
+                egap = .data$egap[1])
     }))
 
     elect_tb <- elect_tb %>%

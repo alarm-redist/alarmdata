@@ -25,39 +25,40 @@
 #'
 #' @template state
 #' @param year The redistricting cycle to download. Currently only "2020" is available.
-#' @param stats if `TRUE` (the default), download summary statistics for each plan.
+#' @param stats If `TRUE` (the default), download summary statistics for each plan.
 #'
 #' @returns For `alarm_50state_map()`, a [redist_map][redist::redist_map]. For
 #'   `alarm_50state_plans()`, a [redist_plans][redist::redist_plans]. For
-#'   `alarm_50state_doc()`, nothing (but load an HTML file into the viewer or web
-#'   browser). For `alarm_50state_stats()`, a [tibble][dplyr::tibble].
+#'   `alarm_50state_doc()`, invisibly returns the path to the HTML documentation,
+#'   and also loads an HTML file into the viewer or web browser.
+#'   For `alarm_50state_stats()`, a [tibble][dplyr::tibble].
 #'
 #' @examples
 #' \dontrun{
 #' # requires stable connection to the Harvard Dataverse
 #' alarm_50state_map("WA")
-#' alarm_50state_plans("WA", stats=FALSE)
-#' alarm_50states_stats('WA')
+#' alarm_50state_plans("WA", stats = FALSE)
+#' alarm_50states_stats("WA")
 #' alarm_50state_doc("WA")
 #' }
 #'
-#' map <- alarm_50state_map('WY')
-#' pl <- alarm_50state_plans('WY')
+#' map <- alarm_50state_map("WY")
+#' pl <- alarm_50state_plans("WY")
 #'
 #' @name alarm_50state
 NULL
 
-DV_DOI = "doi:10.7910/DVN/SLCD3E"
-DV_SERVER = "dataverse.harvard.edu"
+DV_DOI <- "doi:10.7910/DVN/SLCD3E"
+DV_SERVER <- "dataverse.harvard.edu"
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_map = function(state, year=2020) {
+alarm_50state_map <- function(state, year = 2020) {
     if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
         make_state_map_one(state)
     } else {
-        fname = paste0(get_slug(state, year=year), "_map.rds")
-        raw = dv_download_handle(fname, "Map", state)
+        fname <- paste0(get_slug(state, year = year), "_map.rds")
+        raw <- dv_download_handle(fname, "Map", state)
         if (is.null(raw)) cli::cli_abort("Download failed.")
 
         read_rds_mem(raw, fname)
@@ -66,7 +67,7 @@ alarm_50state_map = function(state, year=2020) {
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_plans = function(state, stats=TRUE, year=2020) {
+alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
     single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
     if (toupper(state) %in% names(single_states_polsby)) {
         plans <- make_state_plans_one(state, stats = stats)
@@ -75,23 +76,23 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
                 dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
         }
     } else {
-        slug = get_slug(state, year=year)
-        fname_plans = paste0(slug, "_plans.rds")
+        slug <- get_slug(state, year = year)
+        fname_plans <- paste0(slug, "_plans.rds")
 
-        raw_plans = dv_download_handle(fname_plans, "Plans", state)
+        raw_plans <- dv_download_handle(fname_plans, "Plans", state)
         if (is.null(raw_plans)) cli::cli_abort("Download failed.")
-        plans = read_rds_mem(raw_plans, fname_plans) %>%
+        plans <- read_rds_mem(raw_plans, fname_plans) %>%
             dplyr::mutate(district = as.integer(.data$district))
 
         if (isTRUE(stats)) {
-            fname_stats = paste0(slug, "_stats.tab")
-            raw_stats = dv_download_handle(fname_stats, "Plan statistics", state)
+            fname_stats <- paste0(slug, "_stats.tab")
+            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
             if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
-            d_stats = readr::read_csv(raw_stats,
-                                      col_types=readr::cols(draw="f", district="i"),
-                                      show_col_types=FALSE)
-            plans = dplyr::left_join(plans, d_stats, by=c("draw", "district", "total_pop"))
+            d_stats <- readr::read_csv(raw_stats,
+                col_types = readr::cols(draw = "f", district = "i"),
+                show_col_types = FALSE)
+            plans <- dplyr::left_join(plans, d_stats, by = c("draw", "district", "total_pop"))
         }
     }
     plans
@@ -100,70 +101,75 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
 #' @rdname alarm_50state
 #' @export
 alarm_50state_stats <- function(state, year = 2020) {
-  state <- censable::match_abb(state)
-  if (length(state) != 1) {
-    cli_abort(c('{.arg state} could not be matched to a single state.',
-      'x' = 'Please make {arg state} correspond to the name, abbreviation, or FIPS of one state.'
-    ))
-  }
+    state <- censable::match_abb(state)
+    if (length(state) != 1) {
+        cli_abort(c("{.arg state} could not be matched to a single state.",
+            "x" = "Please make {arg state} correspond to the name, abbreviation, or FIPS of one state."
+        ))
+    }
 
-  single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
-  if (state %in% names(single_states_polsby)) {
-      make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
-          dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
-          dplyr::as_tibble()
-  } else {
-    slug = get_slug(state, year=year)
-    fname_stats <- paste0(slug, '_stats.tab')
-    raw_stats <- dv_download_handle(fname_stats, 'Plan statistics', state)
-    if (is.null(raw_stats)) cli::cli_abort("Download failed.")
+    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+    if (state %in% names(single_states_polsby)) {
+        make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
+            dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
+            dplyr::as_tibble()
+    } else {
+        slug <- get_slug(state, year = year)
+        fname_stats <- paste0(slug, "_stats.tab")
+        raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
+        if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
-    readr::read_csv(raw_stats,
-      col_types = readr::cols(draw = 'f', district = 'i'),
-      show_col_types = FALSE
-    )
-  }
+        readr::read_csv(raw_stats,
+            col_types = readr::cols(draw = "f", district = "i"),
+            show_col_types = FALSE
+        )
+    }
 }
 
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_doc = function(state, year=2020) {
-    slug = get_slug(state, year=year)
-    fname = paste0(slug, "_doc.html")
+alarm_50state_doc <- function(state, year = 2020) {
+    slug <- get_slug(state, year = year)
+    fname <- paste0(slug, "_doc.html")
 
-    raw = dv_download_handle(fname, "Documentation", state)
+    raw <- dv_download_handle(fname, "Documentation", state)
     if (is.null(raw)) cli::cli_abort("Download failed.")
-    tmp_html = tempfile(slug, fileext=".html")
+    tmp_html <- tempfile(slug, fileext = ".html")
     writeBin(raw, tmp_html)
 
-    if (requireNamespace("rstudioapi", quietly=TRUE) && rstudioapi::isAvailable()) {
+    if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
         rstudioapi::viewer(tmp_html)
     } else {
         browseURL(tmp_html)
     }
+
+    invisible(tmp_html)
 }
 
 # try to download `fname` from the 50-states dataverse
 # Provide a human-readable error if the file doesn't exist.
-dv_download_handle = function(fname, type="File", state="") {
+dv_download_handle <- function(fname, type = "File", state = "") {
     raw <- NULL
-    tryCatch({
-        raw = dataverse::get_file_by_name(fname, DV_DOI, server=DV_SERVER)
-    }, error=function(e) {
-        if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {
-            tryCatch({
-                dataverse::get_dataset(DV_DOI, server=DV_SERVER)
-            }, error = function(e) {
-                cli::cli_abort("Could not connect to Dataverse.
-                               Check your API key and/or internet connection.", call=NULL)
-            })
+    tryCatch(
+        {
+            raw <- dataverse::get_file_by_name(fname, DV_DOI, server = DV_SERVER)
+        },
+        error = function(e) {
+            if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {
+                tryCatch(
+                    {
+                        dataverse::get_dataset(DV_DOI, server = DV_SERVER)
+                    },
+                    error = function(e) {
+                        cli::cli_abort("Could not connect to Dataverse.
+                               Check your API key and/or internet connection.", call = NULL)
+                    })
 
-            cli::cli_abort("{type} not found for {.val {state}}.", call=NULL)
-        } else {
-            e
-        }
-    })
+                cli::cli_abort("{type} not found for {.val {state}}.", call = NULL)
+            } else {
+                e
+            }
+        })
     raw
 }
-

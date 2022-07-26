@@ -11,7 +11,7 @@ alarm_census_vest(state, geometry = FALSE, epsg = alarm_epsg(state))
 
 \item{geometry}{If \code{TRUE} (not the default), include \code{sf} geometry from \code{tigris} with the data.}
 
-\item{epsg}{numeric EPSG code to use as the coordinate system. Default is \code{alarm_epsg(state)}.}
+\item{epsg}{A numeric EPSG code to use as the coordinate system. Default is \code{alarm_epsg(state)}.}
 }
 \value{
 tibble with Census and election data
@@ -21,5 +21,5 @@ Downloads Census data joined with VEST's election data. All are re-tabulated fro
 precincts collected by VEST to 2020 Census geographies.
 }
 \examples{
-alarm_census_vest('DE', geometry = FALSE)
+alarm_census_vest("DE", geometry = FALSE)
 }

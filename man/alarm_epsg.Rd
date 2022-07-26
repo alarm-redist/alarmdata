@@ -10,12 +10,12 @@ alarm_epsg(state)
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
 }
 \value{
-numeric EPSG code
+A numeric EPSG code
 }
 \description{
 Provides suggested EPSG codes for each of the 50 states.
 One of the NAD83 (HARN) coordinate systems for each state.
 }
 \examples{
-alarm_epsg('NY')
+alarm_epsg("NY")
 }

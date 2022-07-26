@@ -21,13 +21,14 @@ alarm_50state_doc(state, year = 2020)
 
 \item{year}{The redistricting cycle to download. Currently only "2020" is available.}
 
-\item{stats}{if \code{TRUE} (the default), download summary statistics for each plan.}
+\item{stats}{If \code{TRUE} (the default), download summary statistics for each plan.}
 }
 \value{
 For \code{alarm_50state_map()}, a \link[redist:redist_map]{redist_map}. For
 \code{alarm_50state_plans()}, a \link[redist:redist_plans]{redist_plans}. For
-\code{alarm_50state_doc()}, nothing (but load an HTML file into the viewer or web
-browser). For \code{alarm_50state_stats()}, a \link[dplyr:reexports]{tibble}.
+\code{alarm_50state_doc()}, invisibly returns the path to the HTML documentation,
+and also loads an HTML file into the viewer or web browser.
+For \code{alarm_50state_stats()}, a \link[dplyr:reexports]{tibble}.
 }
 \description{
 These functions will download \link[redist:redist_map]{redist_map} and
@@ -58,12 +59,12 @@ and redistricting criteria.
 \dontrun{
 # requires stable connection to the Harvard Dataverse
 alarm_50state_map("WA")
-alarm_50state_plans("WA", stats=FALSE)
-alarm_50states_stats('WA')
+alarm_50state_plans("WA", stats = FALSE)
+alarm_50states_stats("WA")
 alarm_50state_doc("WA")
 }
 
-map <- alarm_50state_map('WY')
-pl <- alarm_50state_plans('WY')
+map <- alarm_50state_map("WY")
+pl <- alarm_50state_plans("WY")
 
 }

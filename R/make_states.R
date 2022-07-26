@@ -51,7 +51,7 @@ make_state_plans_one <- function(state, stats = TRUE, geometry = TRUE, epsg = al
 
     pl <- redist::redist_plans(m, map, algorithm = "Single", wgt = NULL)
     pl <- redist::add_reference(pl, ref_plan = redist::get_existing(map),
-                                name = attr(map, "existing_col"))
+        name = attr(map, "existing_col"))
 
     if (stats) {
         pl <- calc_plan_stats(pl, map)

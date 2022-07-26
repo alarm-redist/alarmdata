@@ -16,24 +16,27 @@
 #' @export
 #'
 #' @examples
-#' map <- alarm_50state_map('WY')
-#' pl <- alarm_50state_plans('WY')
-#' alarm_add_plan(c(1), pl, map, name = 'example')
+#' map <- alarm_50state_map("WY")
+#' pl <- alarm_50state_plans("WY")
+#' alarm_add_plan(c(1), pl, map, name = "example")
 #'
 #' \dontrun{
 #' # requires stable connection to the Harvard Dataverse
-#'  url <- 'https://www.redistrict2020.org/files/NM-2021-10/Congressional_Concept_A.zip'
-#'  tf <- tempfile(fileext = '.zip')
-#'  utils::download.file(url, tf)
-#'  utils::unzip(tf, exdir = dirname(tf))
-#'  baf <- readr::read_csv(file = paste0(dirname(tf), '/Congressional Concept A.csv'),
-#'                         col_types = 'ci')
-#'  names(baf) <- c('GEOID', 'concept_a')
-#'  map_nm <- alarm_50state_map('NM')
-#'  alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), map = map_nm, name = 'concept_a')
+#' # download and load a comparison plan
+#' url <- "https://www.redistrict2020.org/files/NM-2021-10/Congressional_Concept_A.zip"
+#' tf <- tempfile(fileext = ".zip")
+#' utils::download.file(url, tf)
+#' utils::unzip(tf, exdir = dirname(tf))
+#' baf <- readr::read_csv(file = paste0(dirname(tf), "/Congressional Concept A.csv"),
+#'                        col_types = "ci")
+#' names(baf) <- c("GEOID", "concept_a")
+#' # Add it to the plans object
+#' map_nm <- alarm_50state_map("NM")
+#' plans_nm <- alarm_50state_plans("NM", stats = FALSE)
+#' alarm_add_plan(baf, plans_nm, map = map_nm, name = "concept_a")
 #' }
 #'
-alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL, GEOID = 'GEOID') {
+alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL, GEOID = "GEOID") {
     # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
     if (!inherits(plans, "redist_plans"))
         cli_abort("{.arg plans} must be a {.cls redist_plans}")
@@ -41,11 +44,11 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         cli_abort("Reference plans not supported for partial plans objects")
 
     if (is.null(name)) {
-        ref_str = deparse(substitute(ref_plan))
+        ref_str <- deparse(substitute(ref_plan))
         if (stringr::str_detect(ref_str, stringr::fixed("$"))) {
-            name = strsplit(ref_str, "$", fixed = TRUE)[[1]][2]
+            name <- strsplit(ref_str, "$", fixed = TRUE)[[1]][2]
         } else {
-            name = ref_str
+            name <- ref_str
         }
     } else if (!is.character(name)) {
         cli_abort("{.arg name} must be a {.cls chr}")
@@ -55,13 +58,13 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         cli_abort("Reference plan name already exists")
     }
 
-    if (!is.numeric(ref_plan)){
+    if (!is.numeric(ref_plan)) {
         if (is.data.frame(ref_plan)) {
             if (is.null(map)) {
-                cli::cli_abort('{.arg map} must be provided to use a {.cls data.frame} for {.arg ref_plan}.')
+                cli::cli_abort("{.arg map} must be provided to use a {.cls data.frame} for {.arg ref_plan}.")
             }
             ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID)
-            ref_plan <- ref_plan[[name]][match(ref_plan[[GEOID]], map[[names(map)[stringr::str_detect(names(map), 'GEOID')][1]]])]
+            ref_plan <- ref_plan[[name]][match(ref_plan[[GEOID]], map[[names(map)[stringr::str_detect(names(map), "GEOID")][1]]])]
         } else {
             cli_abort("{.arg ref_plan} must be numeric or inherit {.cls data.frame}.")
         }
@@ -75,7 +78,7 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         if (max(ref_plan) != dplyr::n_distinct(ref_plan)) {
             ref_plan <- match(ref_plan, unique(sort(ref_plan, na.last = TRUE)))
             cli::cli_warn(c("{.arg ref_plan} should be numbered {{1, 2, ..., ndists}}.",
-                            "i" = "{.arg ref_plan} was renumbered based on the order of entries."))
+                "i" = "{.arg ref_plan} was renumbered based on the order of entries."))
         }
     }
 
@@ -86,7 +89,7 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
 
         ref_redist_plan <- redist::redist_plans(
             plans = ref_plan, map = map, algorithm = attr(plans, "algorithm")
-            )
+        )
         ref_plan_stats <- calc_plan_stats(ref_redist_plan, map, calc_polsby)
 
         ref_plan_stats$draw <- name
