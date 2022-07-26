@@ -54,7 +54,7 @@ make_state_plans_one <- function(state, stats = TRUE, geometry = TRUE, epsg = al
         name = attr(map, "existing_col"))
 
     if (stats) {
-        pl <- calc_plan_stats(pl, map)
+        pl <- suppressMessages(calc_plan_stats(pl, map))
     }
 
     pl

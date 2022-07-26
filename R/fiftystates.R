@@ -68,7 +68,8 @@ alarm_50state_map <- function(state, year = 2020) {
 #' @rdname alarm_50state
 #' @export
 alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
-    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
+                              "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
     if (toupper(state) %in% names(single_states_polsby)) {
         plans <- make_state_plans_one(state, stats = stats)
         if (stats) {
@@ -92,7 +93,8 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
             d_stats <- readr::read_csv(raw_stats,
                 col_types = readr::cols(draw = "f", district = "i"),
                 show_col_types = FALSE)
-            plans <- dplyr::left_join(plans, d_stats, by = c("draw", "district", "total_pop"))
+            join_vars = intersect(colnames(plans), colnames(d_stats))
+            plans <- dplyr::left_join(plans, d_stats, by = join_vars)
         }
     }
     plans
@@ -108,7 +110,8 @@ alarm_50state_stats <- function(state, year = 2020) {
         ))
     }
 
-    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
+                              "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
     if (state %in% names(single_states_polsby)) {
         make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
             dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
@@ -147,13 +150,21 @@ alarm_50state_doc <- function(state, year = 2020) {
     invisible(tmp_html)
 }
 
+dv_files_cache = list()
+
 # try to download `fname` from the 50-states dataverse
 # Provide a human-readable error if the file doesn't exist.
 dv_download_handle <- function(fname, type = "File", state = "") {
+    if (length(dv_files_cache) == 0) {
+        full_files <- dataverse::dataset_files(DV_DOI, server = DV_SERVER)
+        dv_files_cache[[1]] <- sapply(full_files, function(f) f$dataFile$id)
+        names(dv_files_cache[[1]]) <- sapply(full_files, function(f) f$label)
+    }
+
     raw <- NULL
     tryCatch(
         {
-            raw <- dataverse::get_file_by_name(fname, DV_DOI, server = DV_SERVER)
+            raw <- dataverse::get_file_by_id(dv_files_cache[[1]][fname], server = DV_SERVER)
         },
         error = function(e) {
             if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {

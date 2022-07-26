@@ -15,10 +15,13 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
             cli_abort(c("Column {.field state} of {.arg map} could not be matched to a single state.",
                 "x" = "Please make {.field state} column correspond to the name, abbreviation, or FIPS of one state."))
         }
-        single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+        single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
+                                  "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
         if (state %in% names(single_states_polsby)) {
             plans <- plans %>% dplyr::mutate(comp_polsby = single_states_polsby[state])
         } else {
+            rlang::check_installed("tigris", "for calculating Polsby-Popper compactness.")
+
             if (state %in% c("CA", "HI", "OR")) {
                 shp <- tigris::tracts(state = censable::match_fips(state))
             } else {
