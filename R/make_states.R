@@ -28,13 +28,13 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
     # nd <- nd %>%
     #     dplyr::mutate(cd_2020 = 1L, .before = dplyr::everything())
     #
-    # map <- suppressWarnings(redist::redist_map(nd, existing_plan = 'cd_2020', pop_tol = 0.005, adj = list(integer())))
+    # map <- suppressWarnings(redist::redist_map(nd, existing_plan = "cd_2020", pop_tol = 0.005, adj = list(integer())))
     # map$state <- state
     #
-    # attr(map, 'analysis_name') <- paste0(censable::match_abb(state), '_', year)
+    # attr(map, "analysis_name") <- paste0(censable::match_abb(state), "_", year)
 
 
-    map <- maps[[paste0(state, '_2020')]]
+    map <- maps[[paste0(state, "_2020")]]
 
     if (!geometry) {
         map$geometry <- sf::st_sfc(sf::st_polygon())
@@ -51,7 +51,7 @@ make_state_plans_one <- function(state, stats = TRUE, geometry = TRUE, epsg = al
 
     pl <- redist::redist_plans(m, map, algorithm = "Single", wgt = NULL)
     pl <- redist::add_reference(pl, ref_plan = redist::get_existing(map),
-                                name = attr(map, 'existing_col'))
+                                name = attr(map, "existing_col"))
 
     if (stats) {
         pl <- calc_plan_stats(pl, map)

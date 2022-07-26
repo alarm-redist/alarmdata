@@ -67,7 +67,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
                              e_dvs = .data$dem,
                              pr_dem = .data$dem > 0.5,
                              e_dem = sum(.data$dem > 0.5, na.rm=T),
-                             pbias = -.data$pbias[1], # flip so dem = negative (only for old redist versioning)
+                             pbias = .data$pbias[1],
                              egap = .data$egap[1])
     }))
 
