@@ -63,7 +63,6 @@ alarm_50states_stats('WA')
 alarm_50state_doc("WA")
 }
 
-alarm_50state_map('WY')
 alarm_50state_plans('WY')
 alarm_50state_stats("WY")
 

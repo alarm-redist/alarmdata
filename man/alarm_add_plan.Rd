@@ -39,6 +39,7 @@ Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a 
 map <- alarm_50state_map('WY')
 pl <- alarm_50state_plans('WY')
 alarm_add_plan(c(1), pl, map, name = 'example')
+
 \dontrun{
 # requires stable connection to the Harvard Dataverse
  url <- 'https://www.redistrict2020.org/files/NM-2021-10/Congressional_Concept_A.zip'
@@ -48,6 +49,7 @@ alarm_add_plan(c(1), pl, map, name = 'example')
  baf <- readr::read_csv(file = paste0(dirname(tf), '/Congressional Concept A.csv'),
                         col_types = 'ci')
  names(baf) <- c('GEOID', 'concept_a')
- alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), name = 'concept_a')
+ map_nm <- alarm_50state_map('NM')
+ alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), map = map_nm, name = 'concept_a')
 }
 }
