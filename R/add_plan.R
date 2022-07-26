@@ -32,6 +32,7 @@
 #'  map_nm <- alarm_50state_map('NM')
 #'  alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), map = map_nm, name = 'concept_a')
 #' }
+#'
 alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL, GEOID = 'GEOID') {
     # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
     if (!inherits(plans, "redist_plans"))

@@ -52,4 +52,5 @@ alarm_add_plan(c(1), pl, map, name = 'example')
  map_nm <- alarm_50state_map('NM')
  alarm_add_plan(baf, alarm_50state_plans('NM', stats = FALSE), map = map_nm, name = 'concept_a')
 }
+
 }

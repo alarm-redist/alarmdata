@@ -41,8 +41,8 @@
 #' alarm_50state_doc("WA")
 #' }
 #'
-#' alarm_50state_plans('WY')
-#' alarm_50state_stats("WY")
+#' map <- alarm_50state_map('WY')
+#' pl <- alarm_50state_plans('WY')
 #'
 #' @name alarm_50state
 NULL
