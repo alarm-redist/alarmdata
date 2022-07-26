@@ -69,7 +69,11 @@ alarm_50state_map = function(state, year=2020) {
 alarm_50state_plans = function(state, stats=TRUE, year=2020) {
     single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261, "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
     if (toupper(state) %in% names(single_states_polsby)) {
-        make_state_plans_one(state, stats = stats) %>% dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
+        plans <- make_state_plans_one(state, stats = stats)
+        if (stats) {
+            plans <- plans %>%
+                dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
+        }
     } else {
         slug = get_slug(state, year=year)
         fname_plans = paste0(slug, "_plans.rds")
@@ -89,9 +93,8 @@ alarm_50state_plans = function(state, stats=TRUE, year=2020) {
                                       show_col_types=FALSE)
             plans = dplyr::left_join(plans, d_stats, by=c("draw", "district", "total_pop"))
         }
-
-        plans
     }
+    plans
 }
 
 #' @rdname alarm_50state
