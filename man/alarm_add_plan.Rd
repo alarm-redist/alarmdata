@@ -5,25 +5,25 @@
 \title{Add a reference plan to a set of plans}
 \usage{
 alarm_add_plan(
-  ref_plan,
   plans,
+  ref_plan,
   map = NULL,
-  calc_polsby = FALSE,
   name = NULL,
+  calc_polsby = FALSE,
   GEOID = "GEOID"
 )
 }
 \arguments{
-\item{ref_plan}{An integer vector containing the reference plan or a block assignment file as a \code{tibble} or \code{data.frame}.}
-
 \item{plans}{A \code{redist_plans} object.}
+
+\item{ref_plan}{An integer vector containing the reference plan or a block assignment file as a \code{tibble} or \code{data.frame}.}
 
 \item{map}{A \code{redist_map} object. Only required if the \code{redist_plans} object includes summary statistics.}
 
-\item{calc_polsby}{A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to \code{FALSE}.}
-
 \item{name}{A human-readable name for the reference plan. Defaults to the name of \code{ref_plan}. If \code{ref_plan} is a
 \code{tibble} or \code{data.frame}, it should be the name of the column of \code{ref_plan} that identifies districts.}
+
+\item{calc_polsby}{A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to \code{FALSE}.}
 
 \item{GEOID}{character. Ignored unless \code{ref_plan} is a \code{tibble} or \code{data.frame}.
 Should correspond to the column of \code{ref_plan} that identifies block \code{GEOID}s.
