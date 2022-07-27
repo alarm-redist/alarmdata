@@ -90,9 +90,14 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
             raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
             if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
-            d_stats <- readr::read_csv(raw_stats,
-                col_types = readr::cols(draw = "f", district = "i"),
+            d_stats <<- readr::read_csv(raw_stats,
+                col_types = readr::cols(draw = "f", district = "i", .default="d"),
                 show_col_types = FALSE)
+            # rounding errors will cause bad join
+            if ("pop_overlap" %in% colnames(plans) &&
+                "pop_overlap" %in% colnames(d_stats)) {
+                d_stats$pop_overlap = NULL
+            }
             join_vars = intersect(colnames(plans), colnames(d_stats))
             plans <- dplyr::left_join(plans, d_stats, by = join_vars)
         }
@@ -123,7 +128,7 @@ alarm_50state_stats <- function(state, year = 2020) {
         if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
         readr::read_csv(raw_stats,
-            col_types = readr::cols(draw = "f", district = "i"),
+            col_types = readr::cols(draw = "f", district = "i", .default="d"),
             show_col_types = FALSE
         )
     }

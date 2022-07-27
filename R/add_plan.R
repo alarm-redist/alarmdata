@@ -2,12 +2,12 @@
 #'
 #' Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
 #'
-#' @param ref_plan An integer vector containing the reference plan or a block assignment file as a `tibble` or `data.frame`.
 #' @param plans A `redist_plans` object.
+#' @param ref_plan An integer vector containing the reference plan or a block assignment file as a `tibble` or `data.frame`.
 #' @param map A `redist_map` object. Only required if the `redist_plans` object includes summary statistics.
-#' @param calc_polsby A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to `FALSE`.
 #' @param name A human-readable name for the reference plan. Defaults to the name of `ref_plan`. If `ref_plan` is a
 #' `tibble` or `data.frame`, it should be the name of the column of `ref_plan` that identifies districts.
+#' @param calc_polsby A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to `FALSE`.
 #' @param GEOID character. Ignored unless `ref_plan` is a `tibble` or `data.frame`.
 #' Should correspond to the column of `ref_plan` that identifies block `GEOID`s.
 #' Default is `'GEOID'`.
@@ -36,7 +36,8 @@
 #' alarm_add_plan(baf, plans_nm, map = map_nm, name = "concept_a")
 #' }
 #'
-alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, name = NULL, GEOID = "GEOID") {
+alarm_add_plan <- function(plans, ref_plan, map = NULL, name = NULL,
+                           calc_polsby = FALSE, GEOID = "GEOID") {
     # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
     if (!inherits(plans, "redist_plans"))
         cli_abort("{.arg plans} must be a {.cls redist_plans}")
@@ -73,7 +74,7 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
     if (length(ref_plan) != nrow(redist::get_plans_matrix(plans)))
         cli_abort("{.arg ref_plan} must have the same number of precincts as {.arg plans}")
     if (dplyr::n_distinct(ref_plan) != dplyr::n_distinct(plans$district)) {
-        cli::cli_abort("{.arg ref_plan} must have the same number of precincts as {.arg plans}")
+        cli::cli_abort("{.arg ref_plan} must have the same number of districts as {.arg plans}")
     } else {
         if (max(ref_plan) != dplyr::n_distinct(ref_plan)) {
             ref_plan <- match(ref_plan, unique(sort(ref_plan, na.last = TRUE)))
@@ -93,6 +94,7 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         ref_plan_stats <- calc_plan_stats(ref_redist_plan, map, calc_polsby)
 
         ref_plan_stats$draw <- name
+        if ("chain" %in% names(plans)) ref_plan_stats$chain <- NA
         attr(ref_plan_stats, "resampled") <- attr(plans, "resampled")
         attr(ref_plan_stats, "compactness") <- attr(plans, "compactness")
         attr(ref_plan_stats, "constraints") <- attr(plans, "constraints")
@@ -106,6 +108,7 @@ alarm_add_plan <- function(ref_plan, plans, map = NULL, calc_polsby = FALSE, nam
         m <- redist::get_plans_matrix(ref_plan_stats)
         colnames(m)[1] <- name
         attr(new_plans, "plans") <- cbind(m, redist::get_plans_matrix(plans))
+        new_plans$draw = factor(new_plans$draw, levels=unique(new_plans$draw))
 
         new_plans
 
