@@ -90,7 +90,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
             raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
             if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
-            d_stats <<- readr::read_csv(raw_stats,
+            d_stats <- readr::read_csv(raw_stats,
                 col_types = readr::cols(draw = "f", district = "i", .default="d"),
                 show_col_types = FALSE)
             # rounding errors will cause bad join
