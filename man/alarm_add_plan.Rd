@@ -38,7 +38,7 @@ Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a 
 \examples{
 map <- alarm_50state_map("WY")
 pl <- alarm_50state_plans("WY")
-alarm_add_plan(c(1), pl, map, name = "example")
+alarm_add_plan(pl, ref_plan = c(1), map, name = "example")
 
 \dontrun{
 # requires stable connection to the Harvard Dataverse
@@ -53,7 +53,7 @@ names(baf) <- c("GEOID", "concept_a")
 # Add it to the plans object
 map_nm <- alarm_50state_map("NM")
 plans_nm <- alarm_50state_plans("NM", stats = FALSE)
-alarm_add_plan(baf, plans_nm, map = map_nm, name = "concept_a")
+alarm_add_plan(plans_nm, baf, map = map_nm, name = "concept_a")
 }
 
 }
