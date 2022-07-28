@@ -1,4 +1,4 @@
-devtools::load_all(".")
+devtools::load_all()
 
 make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state)) {
     year <- 2020
@@ -49,5 +49,8 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
 
 maps <- lapply(c("AK", "DE", "ND", "SD", "VT", "WY"), make_state_map_one)
 names(maps) <- paste0(c("AK", "DE", "ND", "SD", "VT", "WY"), "_2020")
+
+maps$SD$nrv <- rowMeans(dplyr::select(dplyr::as_tibble(maps$SD), dplyr::contains('_rep_')), na.rm = TRUE)
+maps$SD$ndv <- rowMeans(dplyr::select(dplyr::as_tibble(maps$SD), dplyr::contains('_dem_')), na.rm = TRUE)
 
 usethis::use_data(maps, internal=TRUE, overwrite=TRUE, compress="xz")
