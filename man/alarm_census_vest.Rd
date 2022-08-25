@@ -9,7 +9,7 @@ alarm_census_vest(state, geometry = FALSE, epsg = alarm_epsg(state))
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
 
-\item{geometry}{If \code{TRUE} (not the default), include \code{sf} geometry from \code{tigris} with the data.}
+\item{geometry}{If \code{TRUE} (default is \code{FALSE}), include \code{sf} geometry from Census Bureau TIGER Lines with the data.}
 
 \item{epsg}{A numeric EPSG code to use as the coordinate system. Default is \code{alarm_epsg(state)}.}
 }

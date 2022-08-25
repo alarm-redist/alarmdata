@@ -31,9 +31,9 @@ Imports:
     censable,
     geomander (>= 2.1.0),
     tidyselect,
-    redist
+    redist,
+    tinytiger
 Suggests:
-    tigris,
     redistmetrics,
     rstudioapi,
     rmapshaper,
@@ -41,7 +41,7 @@ Suggests:
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 URL: https://alarm-redist.github.io/alarmdata/
 BugReports: https://github.com/alarm-redist/alarmdata/issues/
 Config/testthat/edition: 3

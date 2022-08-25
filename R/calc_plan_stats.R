@@ -20,12 +20,10 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         if (state %in% names(single_states_polsby)) {
             plans <- plans %>% dplyr::mutate(comp_polsby = single_states_polsby[state])
         } else {
-            rlang::check_installed("tigris", "for calculating Polsby-Popper compactness.")
-
             if (state %in% c("CA", "HI", "OR")) {
-                shp <- tigris::tracts(state = censable::match_fips(state))
+                shp <- tinytiger::tt_tracts(state = censable::match_fips(state))
             } else {
-                shp <- tigris::voting_districts(state = censable::match_fips(state))
+                shp <- tinytiger::tt_voting_districts(state = censable::match_fips(state))
             }
 
             map <- map %>%
