@@ -54,53 +54,71 @@ DV_SERVER <- "dataverse.harvard.edu"
 #' @rdname alarm_50state
 #' @export
 alarm_50state_map <- function(state, year = 2020) {
-    if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
-        make_state_map_one(state)
-    } else {
-        fname <- paste0(get_slug(state, year = year), "_map.rds")
-        raw <- dv_download_handle(fname, "Map", state)
-        if (is.null(raw)) cli::cli_abort("Download failed.")
+    path <- paste0(alarm_download_path(), '/', state, '_', year, '_map.rds')
+    if (!file.exists(path)) {
+        if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
+            make_state_map_one(state)
+        } else {
+            fname <- paste0(get_slug(state, year = year), "_map.rds")
+            raw <- dv_download_handle(fname, "Map", state)
+            if (is.null(raw)) cli::cli_abort("Download failed.")
 
-        read_rds_mem(raw, fname)
+            out <- read_rds_mem(raw, fname)
+            readr::write_rds(out, file = path)
+        }
+    } else {
+        out <- readr::read_rds(file = path)
     }
+    out
 }
 
 #' @rdname alarm_50state
 #' @export
 alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
-    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
-                              "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
-    if (toupper(state) %in% names(single_states_polsby)) {
-        plans <- make_state_plans_one(state, stats = stats)
-        if (stats) {
-            plans <- plans %>%
-                dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
-        }
-    } else {
-        slug <- get_slug(state, year = year)
-        fname_plans <- paste0(slug, "_plans.rds")
+    path <- paste0(alarm_download_path(), '/', state, '_', year, '_', stats, '_plans.rds')
 
-        raw_plans <- dv_download_handle(fname_plans, "Plans", state)
-        if (is.null(raw_plans)) cli::cli_abort("Download failed.")
-        plans <- read_rds_mem(raw_plans, fname_plans) %>%
-            dplyr::mutate(district = as.integer(.data$district))
+    if (!file.exists(path)) {
 
-        if (isTRUE(stats)) {
-            fname_stats <- paste0(slug, "_stats.tab")
-            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
-            if (is.null(raw_stats)) cli::cli_abort("Download failed.")
-
-            d_stats <- readr::read_csv(raw_stats,
-                col_types = readr::cols(draw = "f", district = "i", .default="d"),
-                show_col_types = FALSE)
-            # rounding errors will cause bad join
-            if ("pop_overlap" %in% colnames(plans) &&
-                "pop_overlap" %in% colnames(d_stats)) {
-                d_stats$pop_overlap = NULL
+        single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251,
+                                  "ND" = 0.5142261, "SD" = 0.5576591,
+                                  "VT" = 0.3692381, "WY" = 0.7721791)
+        if (toupper(state) %in% names(single_states_polsby)) {
+            plans <- make_state_plans_one(state, stats = stats)
+            if (stats) {
+                plans <- plans %>%
+                    dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
             }
-            join_vars = intersect(colnames(plans), colnames(d_stats))
-            plans <- dplyr::left_join(plans, d_stats, by = join_vars)
+        } else {
+            slug <- get_slug(state, year = year)
+            fname_plans <- paste0(slug, "_plans.rds")
+
+            raw_plans <- dv_download_handle(fname_plans, "Plans", state)
+            if (is.null(raw_plans)) cli::cli_abort("Download failed.")
+            plans <- read_rds_mem(raw_plans, fname_plans) %>%
+                dplyr::mutate(district = as.integer(.data$district))
+
+            if (isTRUE(stats)) {
+                fname_stats <- paste0(slug, "_stats.tab")
+                raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
+                if (is.null(raw_stats)) cli::cli_abort("Download failed.")
+
+                d_stats <- readr::read_csv(raw_stats,
+                                           col_types = readr::cols(draw = "f", district = "i", .default="d"),
+                                           show_col_types = FALSE)
+                # rounding errors will cause bad join
+                if ("pop_overlap" %in% colnames(plans) &&
+                    "pop_overlap" %in% colnames(d_stats)) {
+                    d_stats$pop_overlap = NULL
+                }
+                join_vars = intersect(colnames(plans), colnames(d_stats))
+                plans <- dplyr::left_join(plans, d_stats, by = join_vars)
+            }
         }
+
+        readr::write_rds(plans, file = path)
+
+    } else {
+        plans <- readr::read_rds(file = path)
     }
     plans
 }
@@ -108,30 +126,43 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
 #' @rdname alarm_50state
 #' @export
 alarm_50state_stats <- function(state, year = 2020) {
-    state <- censable::match_abb(state)
-    if (length(state) != 1) {
-        cli_abort(c("{.arg state} could not be matched to a single state.",
-            "x" = "Please make {arg state} correspond to the name, abbreviation, or FIPS of one state."
-        ))
-    }
 
-    single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
-                              "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
-    if (state %in% names(single_states_polsby)) {
-        make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
-            dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
-            dplyr::as_tibble()
+    path <- paste0(alarm_download_path(), '/', state, '_', year, '_stats.csv')
+
+    if (!file.exists(path)) {
+
+        state <- censable::match_abb(state)
+        if (length(state) != 1) {
+            cli_abort(c("{.arg state} could not be matched to a single state.",
+                        "x" = "Please make {arg state} correspond to the name, abbreviation, or FIPS of one state."
+            ))
+        }
+
+        single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
+                                  "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+        if (state %in% names(single_states_polsby)) {
+            make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
+                dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
+                dplyr::as_tibble()
+        } else {
+            slug <- get_slug(state, year = year)
+            fname_stats <- paste0(slug, "_stats.tab")
+            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
+            if (is.null(raw_stats)) cli::cli_abort("Download failed.")
+
+            stats <- readr::read_csv(raw_stats,
+                                     col_types = readr::cols(draw = "f", district = "i", .default="d"),
+                                     show_col_types = FALSE
+            )
+            readr::write_csv(stats, file = path)
+        }
     } else {
-        slug <- get_slug(state, year = year)
-        fname_stats <- paste0(slug, "_stats.tab")
-        raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
-        if (is.null(raw_stats)) cli::cli_abort("Download failed.")
-
-        readr::read_csv(raw_stats,
-            col_types = readr::cols(draw = "f", district = "i", .default="d"),
-            show_col_types = FALSE
+        stats <- stats <- readr::read_csv(path,
+                                          col_types = readr::cols(draw = "f", district = "i", .default="d"),
+                                          show_col_types = FALSE
         )
     }
+    stats
 }
 
 
