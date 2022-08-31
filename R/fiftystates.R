@@ -57,7 +57,7 @@ alarm_50state_map <- function(state, year = 2020) {
     path <- paste0(alarm_download_path(), '/', state, '_', year, '_map.rds')
     if (!file.exists(path)) {
         if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
-            make_state_map_one(state)
+            out <- make_state_map_one(state)
         } else {
             fname <- paste0(get_slug(state, year = year), "_map.rds")
             raw <- dv_download_handle(fname, "Map", state)
@@ -88,6 +88,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
                 plans <- plans %>%
                     dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
             }
+            readr::write_csv(plans, file = path)
         } else {
             slug <- get_slug(state, year = year)
             fname_plans <- paste0(slug, "_plans.rds")
@@ -141,9 +142,10 @@ alarm_50state_stats <- function(state, year = 2020) {
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
                                   "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
         if (state %in% names(single_states_polsby)) {
-            make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
+            stats <- make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
                 dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
                 dplyr::as_tibble()
+            readr::write_csv(stats, file = path)
         } else {
             slug <- get_slug(state, year = year)
             fname_stats <- paste0(slug, "_stats.tab")
