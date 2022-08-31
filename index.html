@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="
     Utility functions to download and process data produced by the ALARM Project, 
-    including 2020 redistricting files &lt;https://alarm-redist.github.io/posts/2021-08-10-census-2020/&gt; 
+    including 2020 redistricting files &lt;https://alarm-redist.org/posts/2021-08-10-census-2020/&gt; 
     and 50-State Redistricting Simulations &lt;doi:10.7910/DVN/SLCD3E&gt;. The package
     extends functionality introduced in &lt;arXiv:2206.10763&gt; to cover states with
     only a single district.">
@@ -25,7 +25,7 @@
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Download, Merge, and Process Redistricting Data">
 <meta property="og:description" content="
     Utility functions to download and process data produced by the ALARM Project, 
-    including 2020 redistricting files &lt;https://alarm-redist.github.io/posts/2021-08-10-census-2020/&gt; 
+    including 2020 redistricting files &lt;https://alarm-redist.org/posts/2021-08-10-census-2020/&gt; 
     and 50-State Redistricting Simulations &lt;doi:10.7910/DVN/SLCD3E&gt;. The package
     extends functionality introduced in &lt;arXiv:2206.10763&gt; to cover states with
     only a single district.">
@@ -84,7 +84,7 @@
 </h1>
 </div>
 <!-- badges: start -->
-<p><strong>alarmdata</strong> provides utility functions to download and process data produced by the ALARM Project, including <a href="https://alarm-redist.github.io/posts/2021-08-10-census-2020/" class="external-link">2020 redistricting files</a> and <a href="https://doi.org/10.7910/DVN/SLCD3E" class="external-link">50-State Redistricting Simulations</a>.</p>
+<p><strong>alarmdata</strong> provides utility functions to download and process data produced by the ALARM Project, including <a href="https://alarm-redist.org/posts/2021-08-10-census-2020/" class="external-link">2020 redistricting files</a> and <a href="https://doi.org/10.7910/DVN/SLCD3E" class="external-link">50-State Redistricting Simulations</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -98,7 +98,7 @@
 </h2>
 <p>We can easily download simulation data for a state and make some plots.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alarm-redist.github.io/alarmdata/">alarmdata</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alarm-redist.org/alarmdata/" class="external-link">alarmdata</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alarm-redist.github.io/redist/" class="external-link">redist</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">map_wa</span> <span class="op">=</span> <span class="fu"><a href="reference/alarm_50state.html">alarm_50state_map</a></span><span class="op">(</span><span class="st">"WA"</span><span class="op">)</span></span>
