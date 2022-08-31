@@ -3,7 +3,7 @@
 #' Functions to inspect and clear the cache. If the cache is not enabled, uses a
 #' temporary directory.
 #'
-#' @returns For `alarm_cache_size()`, tthe size in bytes, invisbly
+#' @returns For `alarm_cache_size()`, the size in bytes, invisibly
 #'
 #' @examples
 #' alarm_cache_size()
@@ -21,7 +21,7 @@ alarm_cache_size <- function() {
 
 #' @param force FALSE by default. Asks the user to confirm if interactive. Does
 #' not clear cache if force is FALSE and not interactive.
-#' @returns For `alarm_cache_clear()`, the path to the cache, invisbly.
+#' @returns For `alarm_cache_clear()`, the path to the cache, invisibly.
 #'
 #' @examples
 #' alarm_cache_clear()
