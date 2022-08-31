@@ -54,7 +54,9 @@ DV_SERVER <- "dataverse.harvard.edu"
 #' @rdname alarm_50state
 #' @export
 alarm_50state_map <- function(state, year = 2020) {
-    path <- paste0(alarm_download_path(), '/', state, '_', year, '_map.rds')
+    slug <- get_slug(state, year = year)
+    path <- stringr::str_glue("{alarm_download_path()}/{slug}_map.rds")
+
     if (!file.exists(path)) {
         if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
             out <- make_state_map_one(state)
@@ -75,7 +77,8 @@ alarm_50state_map <- function(state, year = 2020) {
 #' @rdname alarm_50state
 #' @export
 alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
-    path <- paste0(alarm_download_path(), '/', state, '_', year, '_', stats, '_plans.rds')
+    slug <- get_slug(state, year = year)
+    path <- stringr::str_glue("{alarm_download_path()}/{slug}_plans.rds")
 
     if (!file.exists(path)) {
 
@@ -90,7 +93,6 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
             }
             readr::write_csv(plans, file = path)
         } else {
-            slug <- get_slug(state, year = year)
             fname_plans <- paste0(slug, "_plans.rds")
 
             raw_plans <- dv_download_handle(fname_plans, "Plans", state)
@@ -127,8 +129,8 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
 #' @rdname alarm_50state
 #' @export
 alarm_50state_stats <- function(state, year = 2020) {
-
-    path <- paste0(alarm_download_path(), '/', state, '_', year, '_stats.csv')
+    slug <- get_slug(state, year = year)
+    path <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
 
     if (!file.exists(path)) {
 

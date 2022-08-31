@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# alarmdata <a href="https://alarm-redist.org/alarmdata/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# alarmdata <a href="https://alarm-redist.org/alarmdata/"><img src="man/figures/logo.png" align="right" height="156" /></a>
 
 <!-- badges: start -->
 
@@ -47,3 +47,11 @@ hist(plans_wa, e_dem) +
 ```
 
 <img src="man/figures/README-ex-2.png" width="100%" />
+
+Downloads will go to `options(alarm.cache_dir)` if it is set. If it is
+not, and `options(alarm.use_cache = TRUE)`, downloads will be cached
+between sessions in `rappdirs::user_cache_dir("alarm")`. If If
+`options(alarm.use_cache = FALSE)` (the default), then the cache will be
+in a temporary directory that does not persist between sessions. You can
+check the size of the cache and clear it with `alarm_cache_size()` and
+`alarm_cache_clear()`.

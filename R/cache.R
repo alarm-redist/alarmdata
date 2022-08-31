@@ -3,7 +3,7 @@
 #' Functions to inspect and clear the cache. If the cache is not enabled, uses a
 #' temporary directory.
 #'
-#' @returns For `tt_cache_size()`, tthe size in bytes, invisbly
+#' @returns For `alarm_cache_size()`, tthe size in bytes, invisbly
 #'
 #' @examples
 #' alarm_cache_size()
@@ -32,7 +32,7 @@ alarm_cache_clear <- function(force = FALSE) {
     path <- alarm_download_path()
     if (interactive() && !force) {
         del <- utils::askYesNo(
-            msg = "Are you sure? All recursive directories will be deleted.",
+            msg = "Are you sure? The entire cache will be deleted.",
             default = FALSE
         )
     } else {
