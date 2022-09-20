@@ -26,6 +26,8 @@
 #' @template state
 #' @param year The redistricting cycle to download. Currently only "2020" is available.
 #' @param stats If `TRUE` (the default), download summary statistics for each plan.
+#' @param refresh If `TRUE`, ignore the cache and download again.
+#' @param compress The compression level used for caching [redist_plans][redist::redist_plans] objects.
 #'
 #' @returns For `alarm_50state_map()`, a [redist_map][redist::redist_map]. For
 #'   `alarm_50state_plans()`, a [redist_plans][redist::redist_plans]. For
@@ -53,11 +55,11 @@ DV_SERVER <- "dataverse.harvard.edu"
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_map <- function(state, year = 2020) {
+alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
     slug <- get_slug(state, year = year)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_map.rds")
 
-    if (!file.exists(path)) {
+    if (!file.exists(path) || isTRUE(refresh)) {
         if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
             out <- make_state_map_one(state)
         } else {
@@ -66,7 +68,7 @@ alarm_50state_map <- function(state, year = 2020) {
             if (is.null(raw)) cli::cli_abort("Download failed.")
 
             out <- read_rds_mem(raw, fname)
-            readr::write_rds(out, file = path)
+            writeBin(raw, path)
         }
     } else {
         out <- readr::read_rds(file = path)
@@ -76,11 +78,11 @@ alarm_50state_map <- function(state, year = 2020) {
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
+alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALSE, compress = "xz") {
     slug <- get_slug(state, year = year)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_plans.rds")
 
-    if (!file.exists(path)) {
+    if (!file.exists(path) || isTRUE(refresh)) {
 
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251,
                                   "ND" = 0.5142261, "SD" = 0.5576591,
@@ -118,7 +120,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
             }
         }
 
-        readr::write_rds(plans, file = path)
+        readr::write_rds(plans, file = path, compress = compress)
 
     } else {
         plans <- readr::read_rds(file = path)
@@ -128,11 +130,11 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020) {
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_stats <- function(state, year = 2020) {
+alarm_50state_stats <- function(state, year = 2020, refresh = FALSE) {
     slug <- get_slug(state, year = year)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
 
-    if (!file.exists(path)) {
+    if (!file.exists(path) || isTRUE(refresh)) {
 
         state <- censable::match_abb(state)
         if (length(state) != 1) {
