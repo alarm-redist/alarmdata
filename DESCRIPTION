@@ -11,18 +11,15 @@ Authors@R: c(
            comment=c(ORCID = "0000-0001-8435-2078")),
     person("Kosuke", "Imai", , "imai@harvard.edu", role="aut")
   )
-Description: 
-    Utility functions to download and process data produced by the ALARM Project, 
-    including 2020 redistricting files <https://alarm-redist.org/posts/2021-08-10-census-2020/> 
+Description:
+    Utility functions to download and process data produced by the ALARM Project,
+    including 2020 redistricting files <https://alarm-redist.org/posts/2021-08-10-census-2020/>
     and 50-State Redistricting Simulations <doi:10.7910/DVN/SLCD3E>. The package
     extends functionality introduced in <arXiv:2206.10763> to cover states with
     only a single district.
-License: MIT + file LICENSE
-URL: https://alarm-redist.org/alarmdata/
-BugReports: https://github.com/alarm-redist/alarmdata/issues/
-Depends: 
+Depends:
     R (>= 3.10)
-Imports: 
+Imports:
     rlang,
     cli,
     dplyr,
@@ -43,6 +40,10 @@ Suggests:
     rmapshaper,
     testthat (>= 3.0.0),
     spelling
+    License: MIT + file LICENSE
+    URL: https://github.com/alarm-redist/alarmdata/,
+        https://alarm-redist.org/alarmdata/
+    BugReports: https://github.com/alarm-redist/alarmdata/issues/
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

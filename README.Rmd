@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# alarmdata <a href="https://alarm-redist.org/alarmdata/"><img src="man/figures/logo.png" align="right" height="138" /></a>
+# alarmdata <a href="https://alarm-redist.org/alarmdata/"><img src="man/figures/logo.png" align="right" height="156" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/alarm-redist/alarmdata/workflows/R-CMD-check/badge.svg)](https://github.com/alarm-redist/alarmdata/actions)
@@ -48,3 +48,10 @@ redist.plot.plans(plans_wa, draws=1:4, shp=map_wa)
 hist(plans_wa, e_dem) +
     ggplot2::labs(x=NULL, title="Expected Democratic seats")
 ```
+
+Downloads will go to `options(alarm.cache_dir)` if it is set. If it is not, and
+`options(alarm.use_cache = TRUE)`, downloads will be cached between sessions in
+`rappdirs::user_cache_dir("alarm")`. If If `options(alarm.use_cache = FALSE)`
+(the default), then the cache will be in a temporary directory that does not
+persist between sessions. You can check the size of the cache and clear it with
+`alarm_cache_size()` and `alarm_cache_clear()`.

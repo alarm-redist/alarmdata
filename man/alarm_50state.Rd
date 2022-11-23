@@ -8,11 +8,17 @@
 \alias{alarm_50state_doc}
 \title{Download maps and plans from the 50-State Simulation Project}
 \usage{
-alarm_50state_map(state, year = 2020)
+alarm_50state_map(state, year = 2020, refresh = FALSE)
 
-alarm_50state_plans(state, stats = TRUE, year = 2020)
+alarm_50state_plans(
+  state,
+  stats = TRUE,
+  year = 2020,
+  refresh = FALSE,
+  compress = "xz"
+)
 
-alarm_50state_stats(state, year = 2020)
+alarm_50state_stats(state, year = 2020, refresh = FALSE)
 
 alarm_50state_doc(state, year = 2020)
 }
@@ -21,7 +27,11 @@ alarm_50state_doc(state, year = 2020)
 
 \item{year}{The redistricting cycle to download. Currently only "2020" is available.}
 
+\item{refresh}{If \code{TRUE}, ignore the cache and download again.}
+
 \item{stats}{If \code{TRUE} (the default), download summary statistics for each plan.}
+
+\item{compress}{The compression level used for caching \link[redist:redist_plans]{redist_plans} objects.}
 }
 \value{
 For \code{alarm_50state_map()}, a \link[redist:redist_map]{redist_map}. For

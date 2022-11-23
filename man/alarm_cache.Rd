@@ -17,7 +17,7 @@ alarm_cache_path()
 not clear cache if force is FALSE and not interactive.}
 }
 \value{
-For \code{tt_cache_size()}, the size in bytes, invisibly
+For \code{alarm_cache_size()}, the size in bytes, invisibly
 
 For \code{alarm_cache_clear()}, the path to the cache, invisibly.
 
