@@ -6,7 +6,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-6251-669X")),
     person("Christopher T.", "Kenny", , "christopherkenny@fas.harvard.edu", role="aut",
            comment = c(ORCID = "0000-0002-9386-6860")),
-    person("Tyler", "Simko", , "tsimko@g.harvard.edu", role="aut"),
+    person("Tyler", "Simko", , "tsimko@g.harvard.edu", role="aut",
+           comment = c(ORCID = "0000-0001-9382-7346")),
     person("Michael", "Zhao", , "michaelzhao@college.harvard.edu", role="aut",
            comment=c(ORCID = "0000-0001-8435-2078")),
     person("Kosuke", "Imai", , "imai@harvard.edu", role="aut")
