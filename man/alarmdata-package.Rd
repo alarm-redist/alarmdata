@@ -10,15 +10,24 @@
 
 Utility functions to download and process data produced by the ALARM Project, including 2020 redistricting files \url{https://alarm-redist.org/posts/2021-08-10-census-2020/} and 50-State Redistricting Simulations \doi{10.7910/DVN/SLCD3E}. The package extends functionality introduced in \href{https://arxiv.org/abs/2206.10763}{arXiv:2206.10763} to cover states with only a single district.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/alarm-redist/alarmdata/}
+  \item \url{https://alarm-redist.org/alarmdata/}
+  \item Report bugs at \url{https://github.com/alarm-redist/alarmdata/issues/}
+}
+
+}
 \author{
 \strong{Maintainer}: Cory McCartan \email{cmccartan@g.harvard.edu} (\href{https://orcid.org/0000-0002-6251-669X}{ORCID})
 
 Authors:
 \itemize{
   \item Christopher T. Kenny \email{christopherkenny@fas.harvard.edu} (\href{https://orcid.org/0000-0002-9386-6860}{ORCID})
-  \item Tyler Simko \email{tsimko@g.harvard.edu}
+  \item Tyler Simko \email{tsimko@g.harvard.edu} (\href{https://orcid.org/0000-0001-9382-7346}{ORCID})
   \item Michael Zhao \email{michaelzhao@college.harvard.edu} (\href{https://orcid.org/0000-0001-8435-2078}{ORCID})
-  \item Kosuke Imai \email{imai@harvard.edu}
+  \item Kosuke Imai \email{imai@harvard.edu} (\href{https://orcid.org/0000-0002-2748-1022}{ORCID})
 }
 
 }

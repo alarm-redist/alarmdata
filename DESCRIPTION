@@ -10,7 +10,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-9382-7346")),
     person("Michael", "Zhao", , "michaelzhao@college.harvard.edu", role="aut",
            comment=c(ORCID = "0000-0001-8435-2078")),
-    person("Kosuke", "Imai", , "imai@harvard.edu", role="aut")
+    person("Kosuke", "Imai", , "imai@harvard.edu", role="aut",
+           comment = c(ORCID = "0000-0002-2748-1022"))
   )
 Description:
     Utility functions to download and process data produced by the ALARM Project,
@@ -48,5 +49,5 @@ BugReports: https://github.com/alarm-redist/alarmdata/issues/
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2
 Language: en-US
