@@ -22,6 +22,7 @@ This has been corrected to name the authors of the package, rather than the grou
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* This is a resubmission of a new release.
+* Failures on automated checks have been fixed
 * Some examples are \dontrun in the `alarm_50state_*` functions since these functions
 download data from the Harvard Dataverse, which generally takes many seconds.

@@ -1,3 +1,7 @@
+# alarmdata 0.1.1
+
+* Fixes for CRAN submission
+
 # alarmdata 0.1.0
 
 * Initial package release
