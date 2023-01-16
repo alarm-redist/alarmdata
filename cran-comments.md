@@ -10,8 +10,8 @@ However, this is  the name of the research group that the authors belong to.
 This has been corrected to name the authors of the package, rather than the group.
 
 # Test Environments
-* local R installation (Windows 11), R 4.2.0
-* local R installation (macOS), R 4.2.0
+* local R installation (Windows 11), R 4.2.2
+* local R installation (macOS), R 4.2.2
 * macos-latest (on GitHub Actions), (release)
 * windows-latest (on GitHub Actions), (release)
 * ubuntu-latest (on GitHub Actions), (release)
