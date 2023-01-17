@@ -44,7 +44,7 @@ Suggests:
     spelling
 License: MIT + file LICENSE
 URL: https://github.com/alarm-redist/alarmdata/,
-     https://alarm-redist.org/alarmdata/
+    https://alarm-redist.org/alarmdata/
 BugReports: https://github.com/alarm-redist/alarmdata/issues/
 Config/testthat/edition: 3
 Encoding: UTF-8

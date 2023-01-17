@@ -1,7 +1,7 @@
-url: https://alarm-redist.github.io/alarmdata/
+url: http://alarm-redist.org/alarmdata/
 template:
-    bootstrap: 5
-    bootswatch: journal
+  bootstrap: 5
+  bootswatch: journal
 navbar:
-    type: light
+  type: light
 
