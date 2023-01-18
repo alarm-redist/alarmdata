@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/404.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/404.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/LICENSE-text.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/LICENSE.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/authors.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/authors.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/index.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/index.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/news/index.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/news/index.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/reference/alarm_50state.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/reference/alarm_50state.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/reference/alarm_add_plan.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/reference/alarm_add_plan.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/reference/alarm_cache.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/reference/alarm_cache.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/reference/alarm_census_vest.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/reference/alarm_census_vest.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/reference/alarm_epsg.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/reference/alarm_epsg.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/reference/alarmdata-package.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/reference/alarmdata-package.html</loc>
   </url>
   <url>
-    <loc>https://alarm-redist.github.io/alarmdata/reference/index.html</loc>
+    <loc>http://alarm-redist.org/alarmdata/reference/index.html</loc>
   </url>
 </urlset>
