@@ -20,7 +20,7 @@
 #' pl <- alarm_50state_plans("WY")
 #' alarm_add_plan(pl, ref_plan = c(1), map, name = "example")
 #'
-#' if (Sys.getenv('DATAVERSE_KEY') != '') {
+#' \dontrun{
 #' # requires Harvard Dataverse API key
 #' # download and load a comparison plan
 #' url <- "https://www.redistrict2020.org/files/NM-2021-10/Congressional_Concept_A.zip"

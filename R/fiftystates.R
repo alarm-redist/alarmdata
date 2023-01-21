@@ -36,11 +36,11 @@
 #'   For `alarm_50state_stats()`, a [tibble][dplyr::tibble].
 #'
 #' @examples
-#' if (Sys.getenv('DATAVERSE_KEY') != '') {
+#' \dontrun{
 #' # requires Harvard Dataverse API key
 #' alarm_50state_map("WA")
 #' alarm_50state_plans("WA", stats = FALSE)
-#' alarm_50states_stats("WA")
+#' alarm_50state_stats("WA")
 #' alarm_50state_doc("WA")
 #' }
 #'

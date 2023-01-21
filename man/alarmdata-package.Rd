@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Utility functions to download and process data produced by the ALARM Project, including 2020 redistricting files Kenny and McCartan 2021 \url{https://alarm-redist.org/posts/2021-08-10-census-2020/} and 50-State Redistricting Simulations of McCartan, Kenny, Simko, Garcia, Wang, Wu, Kuriwaki, and Imai \doi{10.7910/DVN/SLCD3E}. The package extends functionality introduced in McCartan, Kenny, Simko, Garcia, Wang, Wu, Kuriwaki, and Imai \doi{10.1038/s41597-022-01808-2} to cover states with only a single district.
+Utility functions to download and process data produced by the ALARM Project, including 2020 redistricting files Kenny and McCartan 2021 \url{https://alarm-redist.org/posts/2021-08-10-census-2020/} and the 50-State Redistricting Simulations of McCartan, Kenny, Simko, Garcia, Wang, Wu, Kuriwaki, and Imai \doi{10.7910/DVN/SLCD3E}. The package extends the data introduced in McCartan, Kenny, Simko, Garcia, Wang, Wu, Kuriwaki, and Imai \doi{10.1038/s41597-022-01808-2} to also include states with only a single district.
 }
 \seealso{
 Useful links:

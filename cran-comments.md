@@ -3,7 +3,8 @@
 * Description links have been corrected to include author names before the links. The 
 arXiv link as been updated to the published `doi`.
 
-* TODO what is the examples comment?
+* Updates the comments below and relevant examples to address the issue of an 
+API key being required to run the examples.
 
 * The ALARM Project was incorrectly named as the copyright holder in the initial submission. 
 However, this is  the name of the research group that the authors belong to. 
@@ -24,5 +25,7 @@ This has been corrected to name the authors of the package, rather than the grou
 
 * This is a resubmission of a new release.
 * Failures on automated checks have been fixed
-* Some examples are \dontrun in the `alarm_50state_*` functions since these functions
-download data from the Harvard Dataverse, which generally takes many seconds.
+* Some examples are \dontrun in the `alarm_50state_*` and `alarm_add_plan` 
+functions since these functions download data from the Harvard Dataverse, 
+which requires an API key. Examples that don't require an API key are also 
+included in the documentation.
