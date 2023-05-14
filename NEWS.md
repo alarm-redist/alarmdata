@@ -1,3 +1,7 @@
+# alarmdata 0.1.3
+
+* Adds support for 2010 50-state simulation data.
+
 # alarmdata 0.1.2
 
 * Fixes for CRAN submission
