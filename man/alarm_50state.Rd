@@ -25,7 +25,7 @@ alarm_50state_doc(state, year = 2020)
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
 
-\item{year}{The redistricting cycle to download. Currently only "2020" is available.}
+\item{year}{The redistricting cycle to download. Currently only \code{2020} and \code{2010} are available.}
 
 \item{refresh}{If \code{TRUE}, ignore the cache and download again.}
 
