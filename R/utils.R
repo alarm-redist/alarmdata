@@ -4,7 +4,7 @@ get_slug <- function(state, type = "cd", year = 2020) {
     if (length(abbr) == 0)
         cli::cli_abort("State {.val {state}} not found.", call = parent.frame())
 
-    avail_years = c(2020)
+    avail_years = c(2010, 2020)
     if (!year %in% avail_years) {
         cli::cli_abort("Only year{?s} {as.character(avail_years)} {?is/are} supported.",
                        call = parent.frame())
