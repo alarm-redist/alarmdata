@@ -24,7 +24,7 @@
 #' and redistricting criteria.
 #'
 #' @template state
-#' @param year The redistricting cycle to download. Currently only "2020" is available.
+#' @param year The redistricting cycle to download. Currently only `2020` and `2010` are available.
 #' @param stats If `TRUE` (the default), download summary statistics for each plan.
 #' @param refresh If `TRUE`, ignore the cache and download again.
 #' @param compress The compression level used for caching [redist_plans][redist::redist_plans] objects.
