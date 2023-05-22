@@ -60,8 +60,9 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_map.rds")
 
     if (!file.exists(path) || isTRUE(refresh)) {
-        if (toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY")) {
-            out <- make_state_map_one(state)
+        if ((toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY") && year == 2020L) ||
+            (toupper(state) %in% c("AK", "DE", "MT", "ND", "SD", "VT", "WY") && year == 2010L)) {
+            out <- make_state_map_one(state, year = year)
         } else {
             fname <- paste0(get_slug(state, year = year), "_map.rds")
             raw <- dv_download_handle(fname, "Map", state)
@@ -85,6 +86,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
     if (!file.exists(path) || isTRUE(refresh)) {
 
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251,
+                                  "MT" = 0.4813638,
                                   "ND" = 0.5142261, "SD" = 0.5576591,
                                   "VT" = 0.3692381, "WY" = 0.7721791)
         if (toupper(state) %in% names(single_states_polsby)) {
