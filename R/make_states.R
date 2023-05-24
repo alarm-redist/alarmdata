@@ -39,8 +39,11 @@ make_state_map_one <- function(state, year = 2020L, geometry = TRUE, epsg = alar
             dplyr::mutate(cd_2010 = 1L, .before = dplyr::everything())
 
         map <- suppressWarnings(redist::redist_map(nd, existing_plan = "cd_2010", pop_tol = 0.005, adj = list(integer())))
-        map <- map %>% dplyr::mutate(state = as.character(.env$state), .before = dplyr::everything())
-
+        map <- map %>%
+            dplyr::mutate(
+                GEOID = censable::match_fips(.env$state),
+                state = as.character(.env$state), .before = dplyr::everything()
+            )
         attr(map, "analysis_name") <- paste0(censable::match_abb(state), "_", year)
     } else {
         map <- maps[[paste0(state, "_2020")]]
