@@ -89,8 +89,11 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
                                   "MT" = 0.4813638,
                                   "ND" = 0.5142261, "SD" = 0.5576591,
                                   "VT" = 0.3692381, "WY" = 0.7721791)
+        if (year == 2020) {
+            single_states_polsby <- single_states_polsby[-3]
+        }
         if (toupper(state) %in% names(single_states_polsby)) {
-            plans <- make_state_plans_one(state, stats = stats)
+            plans <- make_state_plans_one(state, year = year, stats = stats)
             if (stats) {
                 plans <- plans %>%
                     dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
@@ -146,9 +149,13 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE) {
         }
 
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
+                                  "MT" = 0.4813638,
                                   "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
+        if (year == 2020) {
+            single_states_polsby <- single_states_polsby[-4]
+        }
         if (state %in% names(single_states_polsby)) {
-            stats <- make_state_plans_one(state, geometry = FALSE, stats = TRUE) %>%
+            stats <- make_state_plans_one(state, year = year, geometry = FALSE, stats = TRUE) %>%
                 dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
                 dplyr::as_tibble()
             readr::write_csv(stats, file = path)
