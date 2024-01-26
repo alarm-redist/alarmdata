@@ -8,12 +8,13 @@ test_that("involved add plan works", {
                            col_types = 'ci')
     names(baf) <- c('GEOID', 'concept_a')
     map_nm <- alarm_50state_map('NM')
-    x <- alarm_add_plan(baf, plans = alarm_50state_plans('NM', stats = FALSE), map = map_nm, name = 'concept_a')
+    x <- alarm_add_plan(baf, plans = alarm_50state_plans('NM', stats = FALSE),
+                        map = map_nm, name = 'concept_a')
 
     expect_equal(nrow(x), 15006)
 })
 
-test_that("involved add plan works", {
+test_that("single state add plan works", {
     x <- alarm_add_plan(ref_plan = 1, plans = alarm_50state_plans('DE', stats = FALSE),
                         map = alarm_50state_map('DE'), name = 'example')
     expect_equal(nrow(x), 5002)
