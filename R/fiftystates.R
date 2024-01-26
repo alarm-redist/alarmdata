@@ -82,6 +82,7 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
 alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALSE, compress = "xz") {
     slug <- get_slug(state, year = year)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_plans.rds")
+    path_stats <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
 
     if (!file.exists(path) || isTRUE(refresh)) {
 
@@ -92,6 +93,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
         if (year == 2020) {
             single_states_polsby <- single_states_polsby[-3]
         }
+
         if (toupper(state) %in% names(single_states_polsby)) {
             plans <- make_state_plans_one(state, year = year, stats = stats)
             if (stats) {
@@ -106,30 +108,24 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
             if (is.null(raw_plans)) cli::cli_abort("Download failed.")
             plans <- read_rds_mem(raw_plans, fname_plans) %>%
                 dplyr::mutate(district = as.integer(.data$district))
-
-            if (isTRUE(stats)) {
-                fname_stats <- paste0(slug, "_stats.tab")
-                raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
-                if (is.null(raw_stats)) cli::cli_abort("Download failed.")
-
-                d_stats <- readr::read_csv(raw_stats,
-                                           col_types = readr::cols(draw = "f", district = "i", .default="d"),
-                                           show_col_types = FALSE)
-                # rounding errors will cause bad join
-                if ("pop_overlap" %in% colnames(plans) &&
-                    "pop_overlap" %in% colnames(d_stats)) {
-                    d_stats$pop_overlap = NULL
-                }
-                join_vars = intersect(colnames(plans), colnames(d_stats))
-                plans <- dplyr::left_join(plans, d_stats, by = join_vars)
-            }
         }
 
         readr::write_rds(plans, file = path, compress = compress)
-
     } else {
         plans <- readr::read_rds(file = path)
     }
+
+    if (isTRUE(stats)) {
+        # farm out cache for stats to the stats fn
+        d_stats <- alarm_50state_stats(state, year = year, refresh = refresh)
+        # rounding errors will cause bad join
+        if ('pop_overlap' %in% colnames(plans) && 'pop_overlap' %in% colnames(d_stats)) {
+            d_stats$pop_overlap <- NULL
+        }
+        join_vars <- intersect(colnames(plans), colnames(d_stats))
+        plans <- dplyr::left_join(plans, d_stats, by = join_vars)
+    }
+
     plans
 }
 
@@ -172,9 +168,9 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE) {
             readr::write_csv(stats, file = path)
         }
     } else {
-        stats <- stats <- readr::read_csv(path,
-                                          col_types = readr::cols(draw = "f", district = "i", .default="d"),
-                                          show_col_types = FALSE
+        stats <- readr::read_csv(path,
+                                 col_types = readr::cols(draw = "f", district = "i", .default="d"),
+                                 show_col_types = FALSE
         )
     }
     stats
