@@ -11,6 +11,7 @@
 #' @param GEOID character. Ignored unless `ref_plan` is a `tibble` or `data.frame`.
 #' Should correspond to the column of `ref_plan` that identifies block `GEOID`s.
 #' Default is `'GEOID'`.
+#' @param year the decade to request if passing a `tibble` to `ref_plan`, either `2010` or `2020`. Default is `2020`.
 #'
 #' @return A modified `redist_plans` object containing the reference plan. Includes summary statistics if the original `redist_plans` object had them as well.
 #' @export
@@ -38,7 +39,7 @@
 #' }
 #'
 alarm_add_plan <- function(plans, ref_plan, map = NULL, name = NULL,
-                           calc_polsby = FALSE, GEOID = "GEOID") {
+                           calc_polsby = FALSE, GEOID = "GEOID", year = 2020) {
     # redist_plans object already has summary statistics, so they must be calculated for ref_plan as well
     if (!inherits(plans, "redist_plans"))
         cli_abort("{.arg plans} must be a {.cls redist_plans}")
@@ -65,7 +66,15 @@ alarm_add_plan <- function(plans, ref_plan, map = NULL, name = NULL,
             if (is.null(map)) {
                 cli::cli_abort("{.arg map} must be provided to use a {.cls data.frame} for {.arg ref_plan}.")
             }
-            ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID)
+            if (year != 2020 && utils::packageVersion('geomander') < '2.2.1') {
+                cli::cli_abort('geomander must be updated to use {.arg year} != 2020')
+            }
+            if (utils::packageVersion('geomander') < '2.2.1') {
+                ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID)
+            } else {
+                ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID, year = year)
+            }
+
             ref_plan <- ref_plan[[name]][match(ref_plan[[GEOID]], map[[names(map)[stringr::str_detect(names(map), "GEOID")][1]]])]
         } else {
             cli_abort("{.arg ref_plan} must be numeric or inherit {.cls data.frame}.")

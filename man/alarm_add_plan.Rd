@@ -10,7 +10,8 @@ alarm_add_plan(
   map = NULL,
   name = NULL,
   calc_polsby = FALSE,
-  GEOID = "GEOID"
+  GEOID = "GEOID",
+  year = 2020
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ alarm_add_plan(
 \item{GEOID}{character. Ignored unless \code{ref_plan} is a \code{tibble} or \code{data.frame}.
 Should correspond to the column of \code{ref_plan} that identifies block \code{GEOID}s.
 Default is \code{'GEOID'}.}
+
+\item{year}{the decade to request if passing a \code{tibble} to \code{ref_plan}, either \code{2010} or \code{2020}. Default is \code{2020}.}
 }
 \value{
 A modified \code{redist_plans} object containing the reference plan. Includes summary statistics if the original \code{redist_plans} object had them as well.
