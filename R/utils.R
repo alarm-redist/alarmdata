@@ -44,19 +44,19 @@ id_compression <- function(raw) {
 
 #' Download a file, with optional "caching"
 #'
-#' Back-end agnostic (currently `httr`)
+#' Back-end agnostic (currently `curl`)
 #'
 #' @param url a URL
 #' @param path a file path
 #' @param overwrite should the file at path be overwritten if it already exists? Default is FALSE.
 #'
-#' @returns the `httr` request
+#' @returns the `curl` request
 #' @noRd
 download <- function(url, path, overwrite = FALSE) {
     dir <- dirname(path)
     if (!dir.exists(dir)) dir.create(dir, recursive = TRUE)
     if (!file.exists(path) || overwrite) {
-        httr::GET(url = url, httr::write_disk(path))
+        curl::curl_download(url = url, destfile = path)
     } else {
         cli_inform("File already downloaded at {.path {path}}. Set {.arg overwrite = TRUE} to overwrite.")
     }

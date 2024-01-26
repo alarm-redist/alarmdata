@@ -27,8 +27,8 @@ Depends:
 Imports:
     rlang,
     cli,
+    curl,
     dplyr,
-    httr,
     readr,
     stringr,
     sf,
