@@ -3,10 +3,10 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
     plans <- plans %>%
         dplyr::mutate(total_vap = redist::tally_var(map, .data$vap),
             plan_dev =  redist::plan_parity(map),
-            comp_edge = redist::distr_compactness(map),
+            comp_edge = redistmetrics::comp_edges_rem(plans = redist::pl(), map),
             ndv = redist::tally_var(map, .data$ndv),
             nrv = redist::tally_var(map, .data$nrv),
-            ndshare = .data$ndv/(.data$ndv + .data$nrv),
+            ndshare = .data$ndv / (.data$ndv + .data$nrv),
             ...)
 
     if (calc_polsby == TRUE) {
@@ -41,7 +41,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         tidyselect::eval_select(tidyselect::matches("_(dem|rep)_"), map),
         tidyselect::eval_select(tidyselect::matches("^a[dr]v_"), map))]
     for (col in tally_cols) {
-        plans <- dplyr::mutate(plans, {{ col }} := redist::tally_var(map, map[[col]]), .before = .data$ndv)
+        plans <- dplyr::mutate(plans, {{ col }} := redist::tally_var(map, map[[col]]), .before = 'ndv')
     }
 
     elecs <- dplyr::select(dplyr::as_tibble(map), dplyr::contains("_dem_")) %>%
@@ -58,9 +58,11 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         rvote <- dplyr::pull(vote_d, 2)
 
         plans %>%
-            dplyr::mutate(dem = redist::group_frac(map, dvote, dvote + rvote),
-                egap = redist::partisan_metrics(map, "EffGap", rvote, dvote),
-                pbias = redist::partisan_metrics(map, "Bias", rvote, dvote)) %>%
+            dplyr::mutate(
+                dem = redist::group_frac(map, dvote, dvote + rvote),
+                egap = redistmetrics::part_egap(plans = redist::pl(), map, rvote, dvote),
+                pbias = redistmetrics::part_bias(plans = redist::pl(), map, rvote, dvote)
+            ) %>%
             dplyr::as_tibble() %>%
             dplyr::group_by(.data$draw) %>%
             dplyr::transmute(draw = .data$draw,
@@ -80,11 +82,14 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
     split_cols <- names(map)[tidyselect::eval_select(tidyselect::any_of(c("county", "muni")), map)]
     for (col in split_cols) {
         if (col == "county") {
-            plans <- dplyr::mutate(plans, county_splits = redist::county_splits(map, .data$county), .before = .data$ndv)
+            plans <- dplyr::mutate(plans, county_splits = redistmetrics::splits_admin(plans = redist::pl(),
+                                                                                      shp =map, .data$county), .before = 'ndv')
         } else if (col == "muni") {
-            plans <- dplyr::mutate(plans, muni_splits = redist::muni_splits(map, .data$muni), .before = .data$ndv)
+            plans <- dplyr::mutate(plans, muni_splits = redistmetrics::splits_sub_admin(plans = redist::pl(),
+                                                                                        shp = map, .data$muni), .before = 'ndv')
         } else {
-            plans <- dplyr::mutate(plans, "{col}_splits" := redist::county_splits(map, map[[col]]), .before = .data$ndv)
+            plans <- dplyr::mutate(plans, "{col}_splits" := redistmetrics::splits_admin(plans = redist::pl(),
+                                                                                        shp = map, map[[col]]), .before = 'ndv')
         }
     }
 
@@ -93,7 +98,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
             dplyr::mutate(comp_polsby = NA_real_)
     }
 
-    plans <- plans %>% dplyr::relocate(.data$comp_polsby, .after = .data$comp_edge)
+    plans <- plans %>% dplyr::relocate('comp_polsby', .after = 'comp_edge')
 
     plans
 }

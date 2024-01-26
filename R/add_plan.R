@@ -23,7 +23,7 @@
 #' \dontrun{
 #' # requires Harvard Dataverse API key
 #' # download and load a comparison plan
-#' url <- "https://www.redistrict2020.org/files/NM-2021-10/Congressional_Concept_A.zip"
+#' url <- "https://github.com/PlanScore/Redistrict2020/raw/main/files/NM-2021-10/Congressional_Concept_A.zip"
 #' tf <- tempfile(fileext = ".zip")
 #' utils::download.file(url, tf)
 #' utils::unzip(tf, exdir = dirname(tf))
