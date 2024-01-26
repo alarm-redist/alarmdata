@@ -66,10 +66,10 @@ alarm_add_plan <- function(plans, ref_plan, map = NULL, name = NULL,
             if (is.null(map)) {
                 cli::cli_abort("{.arg map} must be provided to use a {.cls data.frame} for {.arg ref_plan}.")
             }
-            if (year != 2020 && utils::packageVersion('geomander') < '2.2.1') {
+            if (year != 2020 && utils::packageVersion('geomander') < '2.3.0') {
                 cli::cli_abort('geomander must be updated to use {.arg year} != 2020')
             }
-            if (utils::packageVersion('geomander') < '2.2.1' && year != 2020) {
+            if (utils::packageVersion('geomander') < '2.3.0' && year != 2020) {
                 ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID)
             } else {
                 ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID, year = year)
