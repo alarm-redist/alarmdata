@@ -163,6 +163,7 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE) {
 
             stats <- readr::read_csv(raw_stats,
                                      col_types = readr::cols(draw = "f", district = "i", .default="d"),
+                                     progress = FALSE,
                                      show_col_types = FALSE
             )
             readr::write_csv(stats, file = path)
@@ -170,6 +171,7 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE) {
     } else {
         stats <- readr::read_csv(path,
                                  col_types = readr::cols(draw = "f", district = "i", .default="d"),
+                                 progress = FALSE,
                                  show_col_types = FALSE
         )
     }
