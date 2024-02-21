@@ -19,7 +19,7 @@
 #' @examples
 #' map <- alarm_50state_map("WY")
 #' pl <- alarm_50state_plans("WY")
-#' alarm_add_plan(pl, ref_plan = c(1), map, name = "example")
+#' pl_new <- alarm_add_plan(pl, ref_plan = c(1), map, name = "example")
 #'
 #' \dontrun{
 #' # requires Harvard Dataverse API key
