@@ -36,7 +36,7 @@ Imports:
     censable,
     geomander (>= 2.1.0),
     tidyselect,
-    redist,
+    redist (>= 4.2.0),
     tinytiger,
     rappdirs
 Suggests:
