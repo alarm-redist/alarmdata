@@ -66,15 +66,15 @@ simulations are able to directly account for the state’s political geography
 and redistricting criteria.
 }
 \examples{
-\dontrun{
+\dontshow{if (Sys.getenv("DATAVERSE_KEY") != '') (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 # requires Harvard Dataverse API key
 alarm_50state_map("WA")
 alarm_50state_plans("WA", stats = FALSE)
 alarm_50state_stats("WA")
 alarm_50state_doc("WA")
-}
 
 map <- alarm_50state_map("WY")
 pl <- alarm_50state_plans("WY")
-
+\dontshow{\}) # examplesIf}
 }

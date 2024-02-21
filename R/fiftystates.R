@@ -35,14 +35,13 @@
 #'   and also loads an HTML file into the viewer or web browser.
 #'   For `alarm_50state_stats()`, a [tibble][dplyr::tibble].
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf Sys.getenv("DATAVERSE_KEY") != ''
+#'
 #' # requires Harvard Dataverse API key
 #' alarm_50state_map("WA")
 #' alarm_50state_plans("WA", stats = FALSE)
 #' alarm_50state_stats("WA")
 #' alarm_50state_doc("WA")
-#' }
 #'
 #' map <- alarm_50state_map("WY")
 #' pl <- alarm_50state_plans("WY")
