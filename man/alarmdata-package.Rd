@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Cory McCartan \email{cmccartan@g.harvard.edu} (\href{https://orcid.org/0000-0002-6251-669X}{ORCID})
+\strong{Maintainer}: Cory McCartan \email{corymccartan@nyu.edu} (\href{https://orcid.org/0000-0002-6251-669X}{ORCID})
 
 Authors:
 \itemize{

@@ -81,7 +81,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
                 egap = .data$egap[1]
             )
     }) |>
-        purrr::list_rbind()
+        do.call(what = dplyr::bind_rows)
 
     elect_tb <- elect_tb %>%
         dplyr::group_by(.data$draw, .data$district) %>%
