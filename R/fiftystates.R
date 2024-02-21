@@ -56,6 +56,7 @@ DV_SERVER <- "dataverse.harvard.edu"
 #' @rdname alarm_50state
 #' @export
 alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
+    requireNamespace('sf', quietly = TRUE)
     slug <- get_slug(state, year = year)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_map.rds")
 
