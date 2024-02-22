@@ -39,12 +39,12 @@ A modified \code{redist_plans} object containing the reference plan. Includes su
 Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
 }
 \examples{
+\dontshow{if (Sys.getenv("DATAVERSE_KEY") != '') (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# requires Harvard Dataverse API key
 map <- alarm_50state_map("WY")
 pl <- alarm_50state_plans("WY")
 pl_new <- alarm_add_plan(pl, ref_plan = c(1), map, name = "example")
 
-\dontrun{
-# requires Harvard Dataverse API key
 # download and load a comparison plan
 url <- paste0("https://github.com/PlanScore/Redistrict2020/raw/main/files/",
   "NM-2021-10/Congressional_Concept_A.zip")
@@ -58,6 +58,5 @@ names(baf) <- c("GEOID", "concept_a")
 map_nm <- alarm_50state_map("NM")
 plans_nm <- alarm_50state_plans("NM", stats = FALSE)
 alarm_add_plan(plans_nm, baf, map = map_nm, name = "concept_a")
-}
-
+\dontshow{\}) # examplesIf}
 }

@@ -16,13 +16,12 @@
 #' @return A modified `redist_plans` object containing the reference plan. Includes summary statistics if the original `redist_plans` object had them as well.
 #' @export
 #'
-#' @examples
+#' @examplesIf Sys.getenv("DATAVERSE_KEY") != ''
+#' # requires Harvard Dataverse API key
 #' map <- alarm_50state_map("WY")
 #' pl <- alarm_50state_plans("WY")
 #' pl_new <- alarm_add_plan(pl, ref_plan = c(1), map, name = "example")
 #'
-#' \dontrun{
-#' # requires Harvard Dataverse API key
 #' # download and load a comparison plan
 #' url <- paste0("https://github.com/PlanScore/Redistrict2020/raw/main/files/",
 #'   "NM-2021-10/Congressional_Concept_A.zip")
@@ -36,7 +35,6 @@
 #' map_nm <- alarm_50state_map("NM")
 #' plans_nm <- alarm_50state_plans("NM", stats = FALSE)
 #' alarm_add_plan(plans_nm, baf, map = map_nm, name = "concept_a")
-#' }
 #'
 alarm_add_plan <- function(plans, ref_plan, map = NULL, name = NULL,
                            calc_polsby = FALSE, GEOID = "GEOID", year = 2020) {
