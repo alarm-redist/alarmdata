@@ -37,10 +37,10 @@ Imports:
     geomander (>= 2.1.0),
     tidyselect,
     redist (>= 4.2.0),
+    redistmetrics,
     tinytiger,
     rappdirs
 Suggests:
-    redistmetrics,
     rstudioapi,
     rmapshaper,
     testthat (>= 3.0.0),
