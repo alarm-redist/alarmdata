@@ -13,7 +13,7 @@
 #' Default is `'GEOID'`.
 #' @param year the decade to request if passing a `tibble` to `ref_plan`, either `2010` or `2020`. Default is `2020`.
 #'
-#' @return A modified `redist_plans` object containing the reference plan. Includes summary statistics if the original `redist_plans` object had them as well.
+#' @returns A modified `redist_plans` object containing the reference plan. Includes summary statistics if the original `redist_plans` object had them as well.
 #' @export
 #'
 #' @examplesIf Sys.getenv("DATAVERSE_KEY") != ''

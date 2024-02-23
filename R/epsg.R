@@ -6,7 +6,7 @@
 #' @templateVar state TRUE
 #' @template state
 #'
-#' @return A numeric EPSG code
+#' @returns A numeric EPSG code
 #' @export
 #'
 #' @examples

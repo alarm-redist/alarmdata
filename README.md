@@ -16,12 +16,18 @@ Simulations](https://doi.org/10.7910/DVN/SLCD3E).
 
 ## Installation
 
-You can install the development version of **alarmdata** from
+You can install **alarmdata** with:
+
+``` r
+install.packages("alarmdata")
+```
+
+You can also install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("alarm-redist/alarmdata")
+# install.packages("remotes")
+remotes::install_github("alarm-redist/alarmdata")
 ```
 
 ## Example

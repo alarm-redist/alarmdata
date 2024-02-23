@@ -8,7 +8,7 @@
 #' @param epsg A numeric EPSG code to use as the coordinate system. Default is `alarm_epsg(state)`.
 #' @template state
 #'
-#' @return tibble with Census and election data
+#' @returns tibble with Census and election data
 #' @export
 #'
 #' @examples
