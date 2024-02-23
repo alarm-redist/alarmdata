@@ -1,6 +1,6 @@
 Package: alarmdata
 Title: Download, Merge, and Process Redistricting Data
-Version: 0.1.3
+Version: 0.2.0
 Authors@R: c(
     person("Cory", "McCartan", , "corymccartan@nyu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6251-669X")),
