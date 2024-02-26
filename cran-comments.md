@@ -1,3 +1,11 @@
+# Resubmission notes
+
+* This is a resubmission after prior rejection of version 0.1.3.
+* * The ALARM Project was incorrectly named as the copyright holder in the initial submission. 
+However, this is  the name of the research group that the authors belong to. 
+This has been corrected to name the authors of the package, rather than the group.
+* The missing years in the description have been added to references take the form Authors (year) <link>.
+
 # Test Environments
 * local R installation (Windows 11), R 4.3.2
 * local R installation (macOS), R 4.3.2
