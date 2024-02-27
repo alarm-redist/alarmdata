@@ -1,4 +1,4 @@
-# alarmdata 0.2.0
+# alarmdata 0.2.1
 
 * Adds support for 2010 50-state simulation data.
 * Prepare for CRAN release
