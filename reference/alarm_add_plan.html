@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">alarmdata</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,9 @@
 
 
 <dt>ref_plan</dt>
-<dd><p>An integer vector containing the reference plan or a block assignment file as a <code>tibble</code> or <code>data.frame</code>.</p></dd>
+<dd><p>An <code>integer</code> vector containing the reference plan,
+a block assignment file as a <code>tibble</code> or <code>data.frame</code>, or an <code>sf</code> object where each
+row corresponds to a district.</p></dd>
 
 
 <dt>map</dt>
@@ -86,8 +88,10 @@
 
 
 <dt>GEOID</dt>
-<dd><p>character. Ignored unless <code>ref_plan</code> is a <code>tibble</code> or <code>data.frame</code>.
-Should correspond to the column of <code>ref_plan</code> that identifies block <code>GEOID</code>s.
+<dd><p>character. If <code>ref_plan</code> is a <code>tibble</code> or <code>data.frame</code>, then it
+should correspond to the column of <code>ref_plan</code> that identifies block <code>GEOID</code>s.
+If <code>ref_plan</code> is an <code>sf</code> object, then it should correspond to the column of
+<code>ref_plan</code> that identifies district numbers. Ignored when <code>ref_plan</code> is numeric.
 Default is <code>'GEOID'</code>.</p></dd>
 
 
