@@ -17,7 +17,9 @@ alarm_add_plan(
 \arguments{
 \item{plans}{A \code{redist_plans} object.}
 
-\item{ref_plan}{An integer vector containing the reference plan or a block assignment file as a \code{tibble} or \code{data.frame}.}
+\item{ref_plan}{An \code{integer} vector containing the reference plan,
+a block assignment file as a \code{tibble} or \code{data.frame}, or an \code{sf} object where each
+row corresponds to a district.}
 
 \item{map}{A \code{redist_map} object. Only required if the \code{redist_plans} object includes summary statistics.}
 
@@ -26,8 +28,10 @@ alarm_add_plan(
 
 \item{calc_polsby}{A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to \code{FALSE}.}
 
-\item{GEOID}{character. Ignored unless \code{ref_plan} is a \code{tibble} or \code{data.frame}.
-Should correspond to the column of \code{ref_plan} that identifies block \code{GEOID}s.
+\item{GEOID}{character. If \code{ref_plan} is a \code{tibble} or \code{data.frame}, then it
+should correspond to the column of \code{ref_plan} that identifies block \code{GEOID}s.
+If \code{ref_plan} is an \code{sf} object, then it should correspond to the column of
+\code{ref_plan} that identifies district numbers. Ignored when \code{ref_plan} is numeric.
 Default is \code{'GEOID'}.}
 
 \item{year}{the decade to request if passing a \code{tibble} to \code{ref_plan}, either \code{2010} or \code{2020}. Default is \code{2020}.}

@@ -3,13 +3,17 @@
 #' Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
 #'
 #' @param plans A `redist_plans` object.
-#' @param ref_plan An integer vector containing the reference plan or a block assignment file as a `tibble` or `data.frame`.
+#' @param ref_plan An `integer` vector containing the reference plan,
+#' a block assignment file as a `tibble` or `data.frame`, or an `sf` object where each
+#' row corresponds to a district.
 #' @param map A `redist_map` object. Only required if the `redist_plans` object includes summary statistics.
 #' @param name A human-readable name for the reference plan. Defaults to the name of `ref_plan`. If `ref_plan` is a
 #' `tibble` or `data.frame`, it should be the name of the column of `ref_plan` that identifies districts.
 #' @param calc_polsby A logical value indicating whether a Polsby-Popper compactness score should be calculated for the reference plan. Defaults to `FALSE`.
-#' @param GEOID character. Ignored unless `ref_plan` is a `tibble` or `data.frame`.
-#' Should correspond to the column of `ref_plan` that identifies block `GEOID`s.
+#' @param GEOID character. If `ref_plan` is a `tibble` or `data.frame`, then it
+#' should correspond to the column of `ref_plan` that identifies block `GEOID`s.
+#' If `ref_plan` is an `sf` object, then it should correspond to the column of
+#' `ref_plan` that identifies district numbers. Ignored when `ref_plan` is numeric.
 #' Default is `'GEOID'`.
 #' @param year the decade to request if passing a `tibble` to `ref_plan`, either `2010` or `2020`. Default is `2020`.
 #'
@@ -64,16 +68,33 @@ alarm_add_plan <- function(plans, ref_plan, map = NULL, name = NULL,
             if (is.null(map)) {
                 cli::cli_abort("{.arg map} must be provided to use a {.cls data.frame} for {.arg ref_plan}.")
             }
-            if (year != 2020 && utils::packageVersion('geomander') < '2.3.0') {
-                cli::cli_abort('geomander must be updated to use {.arg year} != 2020')
-            }
-            if (utils::packageVersion('geomander') < '2.3.0') {
-                ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID)
-            } else {
-                ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID, year = year)
-            }
+            # if a baf
+            if (!inherits(ref_plan, 'sf')) {
+                if (year != 2020 && utils::packageVersion('geomander') < '2.3.0') {
+                    cli::cli_abort('geomander must be updated to use {.arg year} != 2020')
+                }
+                if (utils::packageVersion('geomander') < '2.3.0') {
+                    ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID)
+                } else {
+                    ref_plan <- geomander::baf_to_vtd(ref_plan, name, GEOID, year = year)
+                }
 
-            ref_plan <- ref_plan[[name]][match(ref_plan[[GEOID]], map[[names(map)[stringr::str_detect(names(map), "GEOID")][1]]])]
+                ref_plan <- ref_plan[[name]][match(ref_plan[[GEOID]], map[[names(map)[stringr::str_detect(names(map), "GEOID")][1]]])]
+            } else {
+                # then it has an sf shape
+                #cli::cli_abort('{.cls sf} input to {.arg ref_plan} detected but not yet supported.')
+                # first we have to check that it has the right # of rows
+                ndist_ref <- nrow(ref_plan)
+                if (ndist_ref != attr(map, "ndists")) {
+                    cli::cli_abort("The number of districts in {.arg ref_plan} must match the number of districts in {.arg map}")
+                }
+                ref_plan_m <- geomander::geo_match(from = map, to = ref_plan)
+                if (GEOID %in% names(ref_plan)) {
+                    ref_plan <- ref_plan[[GEOID]][ref_plan_m]
+                } else {
+                    ref_plan <- ref_plan_m
+                }
+            }
         } else {
             cli_abort("{.arg ref_plan} must be numeric or inherit {.cls data.frame}.")
         }

@@ -20,3 +20,10 @@ test_that("single state add plan works", {
     expect_equal(nrow(x), 5002)
     expect_s3_class(x, 'data.frame')
 })
+
+test_that("sf input to alarm_add_plan() works", {
+    x <- alarm_add_plan(ref_plan = alarm_50state_map('DE'), plans = alarm_50state_plans('DE', stats = FALSE),
+                        map = alarm_50state_map('DE'), name = 'example')
+    expect_equal(nrow(x), 5002)
+    expect_s3_class(x, 'data.frame')
+})
