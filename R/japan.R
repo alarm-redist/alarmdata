@@ -46,7 +46,7 @@ DV_SERVER <- "dataverse.harvard.edu"
 #' @export
 alarm_japan_map <- function(pref, year = 2022, refresh = FALSE) {
     requireNamespace('sf', quietly = TRUE)
-    slug <- get_slug(pref, year = year)
+    slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_map.rds")
     readr::read_rds(file = path)
@@ -54,14 +54,14 @@ alarm_japan_map <- function(pref, year = 2022, refresh = FALSE) {
 #' @rdname alarm_japan
 #' @export
 alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, compress = "xz") {
-    slug <- get_slug(pref, year = year)
+    slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_plans.rds")
-    path_stats <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
+    path_stats <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.tab")
 
     if (isTRUE(stats)) {
         # farm out cache for stats to the stats fn
-        d_stats <- alarm_japan_stats(japan, year = year, refresh = refresh)
+        d_stats <- alarm_japan_stats(pref, year = year, refresh = refresh)
         join_vars <- intersect(colnames(plans), colnames(d_stats))
         plans <- dplyr::left_join(plans, d_stats, by = join_vars)
     } else {
@@ -74,9 +74,9 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
 #' @rdname alarm_japan
 #' @export
 alarm_japan_stats <- function(pref, year = 2022, refresh = FALSE) {
-    slug <- get_slug(pref, year = year)
+    slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
-    path <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
+    path <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.tab")
 
     stats <- readr::read_csv(path,
                                  col_types = readr::cols(draw = "f", district = "i", .default="d"),
@@ -90,7 +90,7 @@ alarm_japan_stats <- function(pref, year = 2022, refresh = FALSE) {
 #' @rdname alarm_japan
 #' @export
 alarm_japan_doc <- function(pref, year = 2022) {
-    slug <- get_slug(pref, year = year)
+    slug <- get_slug_japan(pref, year = year)
     slug <- sub("_lh_2022$", "", slug)
     fname <- paste0("doc_", slug, ".md")
 
@@ -165,5 +165,5 @@ get_slug_japan <- function(pref, type = "lh", year = 2022) {
                        call = parent.frame())
     }
 
-    paste0(pref_num, "_", type, "_", as.integer(year))
+    paste0(pref_num, "_", pref, "_", type, "_", as.integer(year))
 }
