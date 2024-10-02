@@ -87,11 +87,9 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
         plans <- readr::read_rds(file = path)
     }
 
-    if (isTRUE(stats)) {
-        # Cache for stats
-        d_stats <- alarm_japan_stats(pref, year = year, refresh = refresh)
-        join_vars <- intersect(colnames(plans), colnames(d_stats))
-        plans <- dplyr::left_join(plans, d_stats, by = join_vars)
+    if (!isTRUE(stats)) {
+        plans <- plans %>%
+            select(draw, district, total_pop, chain)
     }
 
     plans
