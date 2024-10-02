@@ -49,6 +49,20 @@ alarm_japan_map <- function(pref, year = 2022, refresh = FALSE) {
     slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_map.rds")
+    # Condition to refresh or if file doesn't exist
+    if (!file.exists(path) || isTRUE(refresh)) {
+
+        # Download and save the map
+        fname <- paste0(slug, "_map.rds")
+        raw <- dv_download_handle_japan(fname, "Map", pref)
+        if (is.null(raw)) cli::cli_abort("Download failed.")
+
+        out <- read_rds_mem(raw, fname)
+        writeBin(raw, path)
+        return(out)
+    }
+
+    # Return the map from the file if it exists
     readr::read_rds(file = path)
 }
 #' @rdname alarm_japan
@@ -57,32 +71,58 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
     slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
     path <- stringr::str_glue("{alarm_download_path()}/{slug}_plans.rds")
-    path_stats <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.tab")
+    path_stats <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
+    if (!file.exists(path) || isTRUE(refresh)) {
+
+        # Download and process plans
+        fname_plans <- paste0(slug, "_plans.rds")
+        raw_plans <- dv_download_handle_japan(fname_plans, "Plans", pref)
+        if (is.null(raw_plans)) cli::cli_abort("Download failed.")
+
+        plans <- read_rds_mem(raw_plans, fname_plans) %>%
+            dplyr::mutate(district = as.integer(.data$district))
+
+        readr::write_rds(plans, file = path, compress = compress)
+    } else {
+        plans <- readr::read_rds(file = path)
+    }
 
     if (isTRUE(stats)) {
-        # farm out cache for stats to the stats fn
+        # Cache for stats
         d_stats <- alarm_japan_stats(pref, year = year, refresh = refresh)
         join_vars <- intersect(colnames(plans), colnames(d_stats))
         plans <- dplyr::left_join(plans, d_stats, by = join_vars)
-    } else {
-        plans <- readr::read_rds(file = path)
-        }
+    }
 
     plans
 }
-
 #' @rdname alarm_japan
 #' @export
 alarm_japan_stats <- function(pref, year = 2022, refresh = FALSE) {
     slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
-    path <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.tab")
+    path <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
 
-    stats <- readr::read_csv(path,
+    if (!file.exists(path) || isTRUE(refresh)) {
+
+        fname_stats <- paste0(slug, "_stats.tab")
+        raw_stats <- dv_download_handle_japan(fname_stats, "Plan statistics", pref)
+        if (is.null(raw_stats)) cli::cli_abort("Download failed.")
+
+        stats <- readr::read_csv(raw_stats,
+                                 col_types = readr::cols(draw = "f", district = "i", .default="d"),
+                                 progress = FALSE,
+                                 show_col_types = FALSE
+            )
+            readr::write_csv(stats, file = path)
+        }
+    else {
+        stats <- readr::read_csv(path,
                                  col_types = readr::cols(draw = "f", district = "i", .default="d"),
                                  progress = FALSE,
                                  show_col_types = FALSE
         )
+    }
     stats
 }
 
@@ -94,7 +134,7 @@ alarm_japan_doc <- function(pref, year = 2022) {
     slug <- sub("_lh_2022$", "", slug)
     fname <- paste0("doc_", slug, ".md")
 
-    raw <- dv_download_handle(fname, "Documentation", pref)
+    raw <- dv_download_handle_japan(fname, "Documentation", pref)
     if (is.null(raw)) cli::cli_abort("Download failed.")
     tmp_md <- tempfile(slug, fileext = ".md")
     writeBin(raw, tmp_md)
@@ -112,7 +152,7 @@ dv_files_cache = list()
 
 # try to download `fname` from the Japan 47-Prefecture dataverse
 # Provide a human-readable error if the file doesn't exist.
-dv_download_handle <- function(fname, type = "File", pref = "") {
+dv_download_handle_japan <- function(fname, type = "File", pref = "") {
     if (length(dv_files_cache) == 0) {
         full_files <- dataverse::dataset_files(DV_DOI, server = DV_SERVER)
         dv_files_cache[[1]] <- sapply(full_files, function(f) f$dataFile$id)
