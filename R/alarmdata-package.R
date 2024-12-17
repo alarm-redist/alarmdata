@@ -8,3 +8,5 @@
 #' @importFrom utils browseURL
 ## usethis namespace: end
 NULL
+
+DV_SERVER <- "dataverse.harvard.edu"

@@ -49,8 +49,7 @@
 #' @name alarm_50state
 NULL
 
-DV_DOI <- "doi:10.7910/DVN/SLCD3E"
-DV_SERVER <- "dataverse.harvard.edu"
+DV_DOI_50s <- "doi:10.7910/DVN/SLCD3E"
 
 #' @rdname alarm_50state
 #' @export
@@ -205,7 +204,7 @@ dv_files_cache = list()
 # Provide a human-readable error if the file doesn't exist.
 dv_download_handle <- function(fname, type = "File", state = "") {
     if (length(dv_files_cache) == 0) {
-        full_files <- dataverse::dataset_files(DV_DOI, server = DV_SERVER)
+        full_files <- dataverse::dataset_files(DV_DOI_50s, server = DV_SERVER)
         dv_files_cache[[1]] <- sapply(full_files, function(f) f$dataFile$id)
         names(dv_files_cache[[1]]) <- sapply(full_files, function(f) f$label)
     }
@@ -219,7 +218,7 @@ dv_download_handle <- function(fname, type = "File", state = "") {
             if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {
                 tryCatch(
                     {
-                        dataverse::get_dataset(DV_DOI, server = DV_SERVER)
+                        dataverse::get_dataset(DV_DOI_50s, server = DV_SERVER)
                     },
                     error = function(e) {
                         cli::cli_abort("Could not connect to Dataverse.
