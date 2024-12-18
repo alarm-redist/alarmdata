@@ -10,6 +10,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-9382-7346")),
     person("Michael", "Zhao", , "michaelzhao@college.harvard.edu", role="aut",
            comment=c(ORCID = "0000-0001-8435-2078")),
+    person("Sho", "Miyazaki", , "shomiya@stanford.edu", role="aut",
+           comment=c(ORCID = "0009-0009-7838-9005")),
     person("Kosuke", "Imai", , "imai@harvard.edu", role="aut",
            comment = c(ORCID = "0000-0002-2748-1022"))
   )
@@ -21,7 +23,9 @@ Description:
     Kuriwaki, and Imai (2022) <doi:10.7910/DVN/SLCD3E>. The package extends 
     the data introduced in McCartan, Kenny, Simko, Garcia, Wang, Wu, Kuriwaki,
     and Imai (2022) <doi:10.1038/s41597-022-01808-2> to also include states with 
-    only a single district.
+    only a single district. The package also includes the Japanese 2022 
+    redistricting files from the 47-Prefecture Redistricting Simulations of 
+    Miyazaki, Yamada, Yatsuhashi, and Imai (2022) <doi:10.7910/DVN/Z9UKSH>.
 Depends:
     R (>= 3.10)
 Imports:
