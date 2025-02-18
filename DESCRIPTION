@@ -1,8 +1,8 @@
 Package: alarmdata
 Title: Download, Merge, and Process Redistricting Data
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: c(
-    person("Cory", "McCartan", , "corymccartan@nyu.edu", role = c("aut", "cre"),
+    person("Cory", "McCartan", , "mccartan@psu.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6251-669X")),
     person("Christopher T.", "Kenny", , "christopherkenny@fas.harvard.edu", role="aut",
            comment = c(ORCID = "0000-0002-9386-6860")),
@@ -27,7 +27,7 @@ Description:
     redistricting files from the 47-Prefecture Redistricting Simulations of 
     Miyazaki, Yamada, Yatsuhashi, and Imai (2022) <doi:10.7910/DVN/Z9UKSH>.
 Depends:
-    R (>= 3.10)
+    R (>= 4.1.0)
 Imports:
     rlang,
     cli,
