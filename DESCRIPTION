@@ -2,9 +2,9 @@ Package: alarmdata
 Title: Download, Merge, and Process Redistricting Data
 Version: 0.2.4
 Authors@R: c(
-    person("Cory", "McCartan", , "mccartan@psu.edu", role = c("aut", "cre"),
+    person("Cory", "McCartan", , "mccartan@psu.edu", role ="aut",
            comment = c(ORCID = "0000-0002-6251-669X")),
-    person("Christopher T.", "Kenny", , "ctkenny@proton.me", role="aut",
+    person("Christopher T.", "Kenny", , "ctkenny@proton.me", role=c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9386-6860")),
     person("Tyler", "Simko", , "tsimko@g.harvard.edu", role="aut",
            comment = c(ORCID = "0000-0001-9382-7346")),
@@ -56,5 +56,5 @@ BugReports: https://github.com/alarm-redist/alarmdata/issues/
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Language: en-US

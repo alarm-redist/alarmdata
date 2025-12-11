@@ -56,7 +56,7 @@ for 25 prefectures subject to redistricting.
 Our simulations are designed to comply with the that the Council abides by.
 }
 \examples{
-\dontshow{if (Sys.getenv("DATAVERSE_KEY") != '') (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (Sys.getenv("DATAVERSE_KEY") != '') withAutoprint(\{ # examplesIf}
 
 # requires Harvard Dataverse API key
 alarm_japan_map("miyagi")

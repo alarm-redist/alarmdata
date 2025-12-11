@@ -43,7 +43,7 @@ A modified \code{redist_plans} object containing the reference plan. Includes su
 Facilitates comparing an existing (i.e., non-simulated) redistricting plan to a set of simulated plans.
 }
 \examples{
-\dontshow{if (Sys.getenv("DATAVERSE_KEY") != '') (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (Sys.getenv("DATAVERSE_KEY") != '') withAutoprint(\{ # examplesIf}
 # requires Harvard Dataverse API key
 map <- alarm_50state_map("WY")
 pl <- alarm_50state_plans("WY")

@@ -88,7 +88,7 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
 
     if (!isTRUE(stats)) {
         plans <- plans %>%
-            select(draw, district, total_pop, chain)
+            dplyr::select(dplyr::all_of(c('draw', 'district', 'total_pop', 'chain')))
     }
 
     plans
