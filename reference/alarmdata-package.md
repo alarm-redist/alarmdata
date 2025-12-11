@@ -26,13 +26,13 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Cory McCartan <mccartan@psu.edu>
-([ORCID](https://orcid.org/0000-0002-6251-669X))
+**Maintainer**: Christopher T. Kenny <ctkenny@proton.me>
+([ORCID](https://orcid.org/0000-0002-9386-6860))
 
 Authors:
 
-- Christopher T. Kenny <christopherkenny@fas.harvard.edu>
-  ([ORCID](https://orcid.org/0000-0002-9386-6860))
+- Cory McCartan <mccartan@psu.edu>
+  ([ORCID](https://orcid.org/0000-0002-6251-669X))
 
 - Tyler Simko <tsimko@g.harvard.edu>
   ([ORCID](https://orcid.org/0000-0001-9382-7346))

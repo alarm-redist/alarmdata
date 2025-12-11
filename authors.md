@@ -2,10 +2,9 @@
 
 ## Authors
 
-- **Cory McCartan**. Author, maintainer.
-  [](https://orcid.org/0000-0002-6251-669X)
+- **Cory McCartan**. Author. [](https://orcid.org/0000-0002-6251-669X)
 
-- **Christopher T. Kenny**. Author.
+- **Christopher T. Kenny**. Author, maintainer.
   [](https://orcid.org/0000-0002-9386-6860)
 
 - **Tyler Simko**. Author. [](https://orcid.org/0000-0001-9382-7346)
