@@ -1,7 +1,8 @@
 # Additional notes
 
-* This package was archived on CRAN on 2025-12-11 following the erroneous archival of geomander by Brian Ripley.
+* This package was archived on CRAN yesterday.
 * Cory McCartan (https://corymccartan.com/) has lost access to his NYU email account and was the prior maintainer. I (Chris Kenny) am taking  over maintenance of this package. Please let me know if there is a helpful way to confirm the change without access to the prior maintainer's email.
+* The possibly misspelled words are all last names in citations.
 
 # Test environments
 
@@ -14,5 +15,8 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
 
+New submission
+
+Package was archived on CRAN
