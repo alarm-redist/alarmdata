@@ -37,5 +37,5 @@ alarm_cache_size()
 alarm_cache_clear()
 
 alarm_cache_path()
-#> [1] "/tmp/RtmpShbW2p"
+#> [1] "/tmp/Rtmpf1GbCJ"
 ```
