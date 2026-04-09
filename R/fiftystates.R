@@ -66,7 +66,7 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
 
     if (!file.exists(path) || isTRUE(refresh)) {
         if ((toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY") && year == 2020L) ||
-            (toupper(state) %in% c("AK", "DE", "MT", "ND", "SD", "VT", "WY") && year == 2010L)) {
+            (toupper(state) %in% c("AK", "DE", "MT", "ND", "SD", "VT", "WY") && year %in% c(2000L, 2010L))) {
             out <- make_state_map_one(state, year = year)
         } else {
             fname <- paste0(get_slug(state, year = year), "_map.rds")
@@ -190,7 +190,7 @@ alarm_50state_doc <- function(state, year = 2020) {
     slug <- get_slug(state, year = year)
     fname <- paste0(slug, "_doc.html")
 
-    raw <- dv_download_handle(fname, "Documentation", state)
+    raw <- dv_download_handle(fname, "Documentation", state, year)
     if (is.null(raw)) cli::cli_abort("Download failed.")
     tmp_html <- tempfile(slug, fileext = ".html")
     writeBin(raw, tmp_html)
