@@ -49,7 +49,13 @@
 #' @name alarm_50state
 NULL
 
-DV_DOI_50s <- "doi:10.7910/DVN/SLCD3E"
+DV_DOI_50s <- function(year) {
+  if (year == 2000) {
+    "doi:10.7910/DVN/LV7VIX"
+  } else {
+    "doi:10.7910/DVN/SLCD3E"
+  }
+}
 
 #' @rdname alarm_50state
 #' @export
@@ -64,7 +70,7 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
             out <- make_state_map_one(state, year = year)
         } else {
             fname <- paste0(get_slug(state, year = year), "_map.rds")
-            raw <- dv_download_handle(fname, "Map", state)
+            raw <- dv_download_handle(fname, "Map", state, year)
             if (is.null(raw)) cli::cli_abort("Download failed.")
 
             out <- read_rds_mem(raw, fname)
@@ -103,7 +109,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
         } else {
             fname_plans <- paste0(slug, "_plans.rds")
 
-            raw_plans <- dv_download_handle(fname_plans, "Plans", state)
+            raw_plans <- dv_download_handle(fname_plans, "Plans", state, year)
             if (is.null(raw_plans)) cli::cli_abort("Download failed.")
             plans <- read_rds_mem(raw_plans, fname_plans) %>%
                 dplyr::mutate(district = as.integer(.data$district))
@@ -157,7 +163,7 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE) {
         } else {
             slug <- get_slug(state, year = year)
             fname_stats <- paste0(slug, "_stats.tab")
-            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state)
+            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state, year)
             if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
             stats <- readr::read_csv(raw_stats,
@@ -202,9 +208,9 @@ dv_files_cache = list()
 
 # try to download `fname` from the 50-states dataverse
 # Provide a human-readable error if the file doesn't exist.
-dv_download_handle <- function(fname, type = "File", state = "") {
+dv_download_handle <- function(fname, type = "File", state = "", year) {
     if (length(dv_files_cache) == 0) {
-        full_files <- dataverse::dataset_files(DV_DOI_50s, server = DV_SERVER)
+        full_files <- dataverse::dataset_files(DV_DOI_50s(year), server = DV_SERVER)
         dv_files_cache[[1]] <- sapply(full_files, function(f) f$dataFile$id)
         names(dv_files_cache[[1]]) <- sapply(full_files, function(f) f$label)
     }
@@ -218,7 +224,7 @@ dv_download_handle <- function(fname, type = "File", state = "") {
             if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {
                 tryCatch(
                     {
-                        dataverse::get_dataset(DV_DOI_50s, server = DV_SERVER)
+                        dataverse::get_dataset(DV_DOI_50s(year), server = DV_SERVER)
                     },
                     error = function(e) {
                         cli::cli_abort("Could not connect to Dataverse.
