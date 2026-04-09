@@ -20,14 +20,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/alarm-redist/alarmdata/blob/main/DESCRIPTION)
 
-McCartan C, Kenny C, Simko T, Zhao M, Miyazaki S, Imai K (2025).
+McCartan C, Kenny C, Simko T, Zhao M, Miyazaki S, Imai K (2026).
 *alarmdata: Download, Merge, and Process Redistricting Data*. R package
 version 0.2.4, <https://github.com/alarm-redist/alarmdata/>.
 
     @Manual{,
       title = {alarmdata: Download, Merge, and Process Redistricting Data},
       author = {Cory McCartan and Christopher T. Kenny and Tyler Simko and Michael Zhao and Sho Miyazaki and Kosuke Imai},
-      year = {2025},
+      year = {2026},
       note = {R package version 0.2.4},
       url = {https://github.com/alarm-redist/alarmdata/},
     }

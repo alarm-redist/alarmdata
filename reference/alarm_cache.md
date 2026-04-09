@@ -32,10 +32,10 @@ For `alarm_cache_path()`, the path to the cache
 
 ``` r
 alarm_cache_size()
-#> 2.8 Mb
+#> 3.3 Mb
 
 alarm_cache_clear()
 
 alarm_cache_path()
-#> [1] "/tmp/Rtmpf1GbCJ"
+#> [1] "/tmp/Rtmp6doU4q"
 ```
