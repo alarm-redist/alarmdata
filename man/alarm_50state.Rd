@@ -8,7 +8,7 @@
 \alias{alarm_50state_doc}
 \title{Download maps and plans from the 50-State Simulation Project}
 \usage{
-alarm_50state_map(state, year = 2020, refresh = FALSE, callais = FALSE)
+alarm_50state_map(state, year = 2020, refresh = FALSE, no_vra = FALSE)
 
 alarm_50state_plans(
   state,
@@ -16,12 +16,12 @@ alarm_50state_plans(
   year = 2020,
   refresh = FALSE,
   compress = "xz",
-  callais = FALSE
+  no_vra = FALSE
 )
 
-alarm_50state_stats(state, year = 2020, refresh = FALSE, callais = FALSE)
+alarm_50state_stats(state, year = 2020, refresh = FALSE, no_vra = FALSE)
 
-alarm_50state_doc(state, year = 2020, callais = FALSE)
+alarm_50state_doc(state, year = 2020, no_vra = FALSE)
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
@@ -30,8 +30,8 @@ alarm_50state_doc(state, year = 2020, callais = FALSE)
 
 \item{refresh}{If \code{TRUE}, ignore the cache and download again.}
 
-\item{callais}{If \code{TRUE}, download the post-Callais 2020 simulations, in which
-race-based constraints were removed, from the Callais Dataverse
+\item{no_vra}{If \code{TRUE}, download the race-blind 2020 simulations, in which
+the VRA / race-based constraints were removed, from the Callais Dataverse
 (\code{doi:10.7910/DVN/A3SE7Y}). Only available for \code{year = 2020}, and only the
 states that were re-simulated differ from the standard data; any other
 state (including single-district states) falls back to the standard 2020
