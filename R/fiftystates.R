@@ -28,12 +28,7 @@
 #' @param stats If `TRUE` (the default), download summary statistics for each plan.
 #' @param refresh If `TRUE`, ignore the cache and download again.
 #' @param compress The compression level used for caching [redist_plans][redist::redist_plans] objects.
-#' @param no_vra If `TRUE`, download the race-blind 2020 simulations, in which
-#'   the VRA / race-based constraints were removed, from the Callais Dataverse
-#'   (`doi:10.7910/DVN/A3SE7Y`). Only available for `year = 2020`, and only the
-#'   states that were re-simulated differ from the standard data; any other
-#'   state (including single-district states) falls back to the standard 2020
-#'   data. Defaults to `FALSE`.
+#' @param vra If `TRUE` (the default), download the standard simulations. If `FALSE`, download the race-blind simulations if they exist. If they do not, they fall back to the standard data.
 #'
 #' @returns For `alarm_50state_map()`, a [redist_map][redist::redist_map]. For
 #'   `alarm_50state_plans()`, a [redist_plans][redist::redist_plans]. For
@@ -55,9 +50,9 @@
 #' @name alarm_50state
 NULL
 
-DV_DOI_50s <- function(year, no_vra = FALSE) {
-  if (isTRUE(no_vra)) {
-    "doi:10.7910/DVN/A3SE7Y" # Callais Dataverse
+DV_DOI_50s <- function(year, vra = TRUE) {
+  if (!isTRUE(vra)) {
+    "doi:10.7910/DVN/A3SE7Y"
   } else if (year == 2000) {
     "doi:10.7910/DVN/LV7VIX"
   } else {
@@ -65,35 +60,24 @@ DV_DOI_50s <- function(year, no_vra = FALSE) {
   }
 }
 
-# States whose post-Callais 2020 ensembles actually differ from the standard
-# data: their original fifty-states analysis applied a race-based constraint
-# (passed to `redist_smc()`) that the Callais run removes. Only these states
-# exist on the Callais Dataverse; any other state falls back to the standard
-# 2020 data, which is unchanged.
-#
-# Excluded despite a re-run script: CO/MA/MN/VA/WI had no race constraint in the
-# original (re-run only for sampler/convergence reasons), and IL built a `constr`
-# object that was never passed to `redist_smc()` in the original IL_2020 script,
-# so removing it changes nothing.
-NO_VRA_STATES <- c("AL", "AZ", "CA", "FL", "GA", "LA", "MI", "MO", "MS", "NC",
-                    "OH", "RI", "SC", "TX", "WA")
+# states with a separate race-blind ensemble
+RACE_BLIND_STATES <- c("AL", "AZ", "CA", "FL", "GA", "LA", "MI", "MO", "MS", "NC",
+                       "OH", "RI", "SC", "TX", "WA")
 
-# Resolve whether the Callais data should actually be used: only when requested,
-# only for 2020, and only for states that were re-simulated. Otherwise fall back
-# to the standard behavior (download from the main Dataverse or build
-# single-district states locally).
-use_no_vra <- function(state, year, no_vra) {
-  isTRUE(no_vra) && as.integer(year) == 2020L &&
-    censable::match_abb(state) %in% NO_VRA_STATES
+# fall back to the standard data when a race-blind ensemble was requested
+# (`vra = FALSE`) but does not exist
+resolve_vra <- function(state, year, vra) {
+  isTRUE(vra) || !(as.integer(year) == 2020L &&
+    censable::match_abb(state) %in% RACE_BLIND_STATES)
 }
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_map <- function(state, year = 2020, refresh = FALSE, no_vra = FALSE) {
+alarm_50state_map <- function(state, year = 2020, refresh = FALSE, vra = TRUE) {
     requireNamespace('sf', quietly = TRUE)
-    no_vra <- use_no_vra(state, year, no_vra)
-    slug <- get_slug(state, year = year, no_vra = no_vra)
-    path <- stringr::str_glue("{alarm_download_path()}/{slug}_map.rds")
+    vra <- resolve_vra(state, year, vra)
+    slug <- get_slug(state, year = year)
+    path <- cache_file(paste0(slug, "_map.rds"), vra)
 
     if (!file.exists(path) || isTRUE(refresh)) {
         if ((toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY") && year == 2020L) ||
@@ -101,7 +85,7 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE, no_vra = FALS
             out <- make_state_map_one(state, year = year)
         } else {
             fname <- paste0(slug, "_map.rds")
-            raw <- dv_download_handle(fname, "Map", state, year, no_vra = no_vra)
+            raw <- dv_download_handle(fname, "Map", state, year, vra = vra)
             if (is.null(raw)) cli::cli_abort("Download failed.")
 
             out <- read_rds_mem(raw, fname)
@@ -115,11 +99,10 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE, no_vra = FALS
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALSE, compress = "xz", no_vra = FALSE) {
-    no_vra <- use_no_vra(state, year, no_vra)
-    slug <- get_slug(state, year = year, no_vra = no_vra)
-    path <- stringr::str_glue("{alarm_download_path()}/{slug}_plans.rds")
-    path_stats <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
+alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALSE, compress = "xz", vra = TRUE) {
+    vra <- resolve_vra(state, year, vra)
+    slug <- get_slug(state, year = year)
+    path <- cache_file(paste0(slug, "_plans.rds"), vra)
 
     if (!file.exists(path) || isTRUE(refresh)) {
 
@@ -141,7 +124,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
         } else {
             fname_plans <- paste0(slug, "_plans.rds")
 
-            raw_plans <- dv_download_handle(fname_plans, "Plans", state, year, no_vra = no_vra)
+            raw_plans <- dv_download_handle(fname_plans, "Plans", state, year, vra = vra)
             if (is.null(raw_plans)) cli::cli_abort("Download failed.")
             plans <- read_rds_mem(raw_plans, fname_plans) %>%
                 dplyr::mutate(district = as.integer(.data$district))
@@ -154,7 +137,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
 
     if (isTRUE(stats)) {
         # farm out cache for stats to the stats fn
-        d_stats <- alarm_50state_stats(state, year = year, refresh = refresh, no_vra = no_vra)
+        d_stats <- alarm_50state_stats(state, year = year, refresh = refresh, vra = vra)
         # rounding errors will cause bad join
         if ('pop_overlap' %in% colnames(plans) && 'pop_overlap' %in% colnames(d_stats)) {
             d_stats$pop_overlap <- NULL
@@ -168,10 +151,10 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_stats <- function(state, year = 2020, refresh = FALSE, no_vra = FALSE) {
-    no_vra <- use_no_vra(state, year, no_vra)
-    slug <- get_slug(state, year = year, no_vra = no_vra)
-    path <- stringr::str_glue("{alarm_download_path()}/{slug}_stats.csv")
+alarm_50state_stats <- function(state, year = 2020, refresh = FALSE, vra = TRUE) {
+    vra <- resolve_vra(state, year, vra)
+    slug <- get_slug(state, year = year)
+    path <- cache_file(paste0(slug, "_stats.csv"), vra)
 
     if (!file.exists(path) || isTRUE(refresh)) {
 
@@ -194,9 +177,8 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE, no_vra = FA
                 dplyr::as_tibble()
             readr::write_csv(stats, file = path)
         } else {
-            slug <- get_slug(state, year = year, no_vra = no_vra)
             fname_stats <- paste0(slug, "_stats.tab")
-            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state, year, no_vra = no_vra)
+            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state, year, vra = vra)
             if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
             stats <- readr::read_csv(raw_stats,
@@ -219,12 +201,12 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE, no_vra = FA
 
 #' @rdname alarm_50state
 #' @export
-alarm_50state_doc <- function(state, year = 2020, no_vra = FALSE) {
-    no_vra <- use_no_vra(state, year, no_vra)
-    slug <- get_slug(state, year = year, no_vra = no_vra)
+alarm_50state_doc <- function(state, year = 2020, vra = TRUE) {
+    vra <- resolve_vra(state, year, vra)
+    slug <- get_slug(state, year = year)
     fname <- paste0(slug, "_doc.html")
 
-    raw <- dv_download_handle(fname, "Documentation", state, year, no_vra = no_vra)
+    raw <- dv_download_handle(fname, "Documentation", state, year, vra = vra)
     if (is.null(raw)) cli::cli_abort("Download failed.")
     tmp_html <- tempfile(slug, fileext = ".html")
     writeBin(raw, tmp_html)
@@ -242,8 +224,8 @@ dv_files_cache = list()
 
 # try to download `fname` from the 50-states dataverse
 # Provide a human-readable error if the file doesn't exist.
-dv_download_handle <- function(fname, type = "File", state = "", year, no_vra = FALSE) {
-    doi <- DV_DOI_50s(year, no_vra = no_vra)
+dv_download_handle <- function(fname, type = "File", state = "", year, vra = TRUE) {
+    doi <- DV_DOI_50s(year, vra = vra)
     if (is.null(dv_files_cache[[doi]])) {
         full_files <- dataverse::dataset_files(doi, server = DV_SERVER)
         ids <- sapply(full_files, function(f) f$dataFile$id)

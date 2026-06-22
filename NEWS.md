@@ -1,10 +1,8 @@
 # alarmdata 0.2.5
 
 * `alarm_50state_map()`, `alarm_50state_plans()`, `alarm_50state_stats()`, and
-  `alarm_50state_doc()` gain a `no_vra` argument to download the race-blind 2020
-  simulations (VRA / race-based constraints removed) from the Callais Dataverse.
-  Only the re-simulated states differ; all other states fall back to the
-  standard 2020 data.
+  `alarm_50state_doc()` gain a `vra` argument (default `TRUE`). Setting
+  `vra = FALSE` downloads simulations with any VRA constraints removed.
 
 # alarmdata 0.2.2
 
