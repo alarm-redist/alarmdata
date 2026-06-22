@@ -1,5 +1,5 @@
 # parse `state` and convert to a slug
-get_slug <- function(state, type = "cd", year = 2020) {
+get_slug <- function(state, type = "cd", year = 2020, callais = FALSE) {
     abbr <- censable::match_abb(state)
     if (length(abbr) == 0)
         cli::cli_abort("State {.val {state}} not found.", call = parent.frame())
@@ -10,7 +10,7 @@ get_slug <- function(state, type = "cd", year = 2020) {
                        call = parent.frame())
     }
 
-    paste0(abbr, "_", type, "_", as.integer(year))
+    paste0(abbr, "_", type, "_", as.integer(year), if (isTRUE(callais)) "_callais" else "")
 }
 
 # read a raw vector as an RDS

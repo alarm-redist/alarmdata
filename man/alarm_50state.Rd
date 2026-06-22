@@ -8,19 +8,20 @@
 \alias{alarm_50state_doc}
 \title{Download maps and plans from the 50-State Simulation Project}
 \usage{
-alarm_50state_map(state, year = 2020, refresh = FALSE)
+alarm_50state_map(state, year = 2020, refresh = FALSE, callais = FALSE)
 
 alarm_50state_plans(
   state,
   stats = TRUE,
   year = 2020,
   refresh = FALSE,
-  compress = "xz"
+  compress = "xz",
+  callais = FALSE
 )
 
-alarm_50state_stats(state, year = 2020, refresh = FALSE)
+alarm_50state_stats(state, year = 2020, refresh = FALSE, callais = FALSE)
 
-alarm_50state_doc(state, year = 2020)
+alarm_50state_doc(state, year = 2020, callais = FALSE)
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
@@ -28,6 +29,13 @@ alarm_50state_doc(state, year = 2020)
 \item{year}{The redistricting cycle to download. Currently only \code{2020} and \code{2010} are available.}
 
 \item{refresh}{If \code{TRUE}, ignore the cache and download again.}
+
+\item{callais}{If \code{TRUE}, download the post-Callais 2020 simulations, in which
+race-based constraints were removed, from the Callais Dataverse
+(\code{doi:10.7910/DVN/A3SE7Y}). Only available for \code{year = 2020}, and only the
+states that were re-simulated differ from the standard data; any other
+state (including single-district states) falls back to the standard 2020
+data. Defaults to \code{FALSE}.}
 
 \item{stats}{If \code{TRUE} (the default), download summary statistics for each plan.}
 

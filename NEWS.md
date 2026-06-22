@@ -1,3 +1,11 @@
+# alarmdata 0.2.5
+
+* `alarm_50state_map()`, `alarm_50state_plans()`, `alarm_50state_stats()`, and
+  `alarm_50state_doc()` gain a `callais` argument to download the post-Callais
+  2020 simulations (race-based constraints removed) from the Callais Dataverse.
+  Only the re-simulated states differ; all other states fall back to the
+  standard 2020 data.
+
 # alarmdata 0.2.2
 
 * Update maintainer
