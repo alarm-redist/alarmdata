@@ -15,12 +15,13 @@ alarm_50state_plans(
   stats = TRUE,
   year = 2020,
   refresh = FALSE,
-  compress = "xz"
+  compress = "xz",
+  vra = TRUE
 )
 
-alarm_50state_stats(state, year = 2020, refresh = FALSE)
+alarm_50state_stats(state, year = 2020, refresh = FALSE, vra = TRUE)
 
-alarm_50state_doc(state, year = 2020)
+alarm_50state_doc(state, year = 2020, vra = TRUE)
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
@@ -32,6 +33,8 @@ alarm_50state_doc(state, year = 2020)
 \item{stats}{If \code{TRUE} (the default), download summary statistics for each plan.}
 
 \item{compress}{The compression level used for caching \link[redist:redist_plans]{redist_plans} objects.}
+
+\item{vra}{If \code{TRUE} (the default), download the standard simulations. If \code{FALSE}, download the race-blind simulations if they exist. If they do not, they fall back to the standard data. The map is identical either way, so \code{alarm_50state_map()} has no \code{vra} argument.}
 }
 \value{
 For \code{alarm_50state_map()}, a \link[redist:redist_map]{redist_map}. For

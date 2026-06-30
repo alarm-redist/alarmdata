@@ -28,6 +28,7 @@ Authors:
   \item Tyler Simko \email{tsimko@g.harvard.edu} (\href{https://orcid.org/0000-0001-9382-7346}{ORCID})
   \item Michael Zhao \email{michaelzhao@college.harvard.edu} (\href{https://orcid.org/0000-0001-8435-2078}{ORCID})
   \item Sho Miyazaki \email{shomiya@stanford.edu} (\href{https://orcid.org/0009-0009-7838-9005}{ORCID})
+  \item Brian Zhou \email{hello@zhoubrian.com} (\href{https://orcid.org/0000-0002-0957-5965}{ORCID})
   \item Kosuke Imai \email{imai@harvard.edu} (\href{https://orcid.org/0000-0002-2748-1022}{ORCID})
 }
 

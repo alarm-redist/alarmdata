@@ -1,6 +1,6 @@
 Package: alarmdata
 Title: Download, Merge, and Process Redistricting Data
-Version: 0.2.4
+Version: 0.2.5
 Authors@R: c(
     person("Cory", "McCartan", , "mccartan@psu.edu", role ="aut",
            comment = c(ORCID = "0000-0002-6251-669X")),
@@ -12,6 +12,8 @@ Authors@R: c(
            comment=c(ORCID = "0000-0001-8435-2078")),
     person("Sho", "Miyazaki", , "shomiya@stanford.edu", role="aut",
            comment=c(ORCID = "0009-0009-7838-9005")),
+    person("Brian", "Zhou", , "hello@zhoubrian.com", role="aut",
+           comment=c(ORCID = "0000-0002-0957-5965")),
     person("Kosuke", "Imai", , "imai@harvard.edu", role="aut",
            comment = c(ORCID = "0000-0002-2748-1022"))
   )
