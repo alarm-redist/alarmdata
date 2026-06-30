@@ -11,3 +11,11 @@ alarm_download_path <- function() {
         tempdir()
     }
 }
+
+# Cache a file under a subdirectory named for its Dataverse dataset (the
+# identifier from the DOI), so files from different datasets never collide.
+cache_file <- function(name, doi) {
+    dir <- file.path(alarm_download_path(), sub("^.*/", "", doi))
+    if (!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+    file.path(dir, name)
+}
