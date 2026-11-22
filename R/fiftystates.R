@@ -90,11 +90,12 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
     # the map is identical across the standard and race-blind ensembles
     doi <- DV_DOI_50s(year)
     slug <- get_slug(state, year = year)
+    state <- censable::match_abb(state)
     path <- paste0(alarm_download_path(doi), "/", slug, "_map.rds")
 
     if (!file.exists(path) || isTRUE(refresh)) {
         if ((toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY") && year == 2020L) ||
-            (toupper(state) %in% c("AK", "DE", "MT", "ND", "SD", "VT", "WY") && year %in% c(2000L, 2010L))) {
+            (toupper(state) %in% c("AK", "DE", "MT", "ND", "SD", "VT", "WY") && year %in% c(1990L, 2000L, 2010L))) {
             out <- make_state_map_one(state, year = year)
         } else {
             fname <- paste0(slug, "_map.rds")
@@ -116,6 +117,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
     vra <- resolve_vra(state, year, vra)
     doi <- DV_DOI_50s(year, vra)
     slug <- get_slug(state, year = year)
+    state <- censable::match_abb(state)
     path <- paste0(alarm_download_path(doi), "/", slug, "_plans.rds")
 
     if (!file.exists(path) || isTRUE(refresh)) {
@@ -134,7 +136,6 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
                 plans <- plans |>
                     dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
             }
-            readr::write_csv(plans, file = path)
         } else {
             fname_plans <- paste0(slug, "_plans.rds")
 
