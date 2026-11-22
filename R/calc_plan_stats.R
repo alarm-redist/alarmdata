@@ -12,7 +12,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         )
 
 
-    if (calc_polsby == TRUE) {
+    if (calc_polsby) {
         state <- censable::match_abb(map$state[1])
         if (length(state) != 1) {
             cli_abort(c("Column {.field state} of {.arg map} could not be matched to a single state.",
@@ -76,7 +76,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
                 district = .data$district,
                 e_dvs = .data$dem,
                 pr_dem = .data$dem > 0.5,
-                e_dem = sum(.data$dem > 0.5, na.rm = T),
+                e_dem = sum(.data$dem > 0.5, na.rm = TRUE),
                 pbias = .data$pbias[1],
                 egap = .data$egap[1]
             )

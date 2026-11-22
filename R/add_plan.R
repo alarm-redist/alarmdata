@@ -30,7 +30,7 @@
 #' url <- paste0("https://github.com/PlanScore/Redistrict2020/raw/main/files/",
 #'   "NM-2021-10/Congressional_Concept_A.zip")
 #' tf <- tempfile(fileext = ".zip")
-#' utils::download.file(url, tf)
+#' utils::download.file(url, tf, mode = "wb")
 #' utils::unzip(tf, exdir = dirname(tf))
 #' baf <- readr::read_csv(file = paste0(dirname(tf), "/Congressional Concept A.csv"),
 #'                        col_types = "ci")
