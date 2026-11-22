@@ -5,14 +5,14 @@ make_state_map_one <- function(state, year = 2020L, geometry = TRUE, epsg = alar
 
         st_name <- ifelse(year == 2020, 'STUSPS', 'STUSPS10')
         if (geometry) {
-            add_geo <- tinytiger::tt_states(year = year) %>%
-                dplyr::filter(.data[[st_name]] == .env$state) %>%
-                sf::st_transform(epsg) %>%
+            add_geo <- tinytiger::tt_states(year = year) |>
+                dplyr::filter(.data[[st_name]] == .env$state) |>
+                sf::st_transform(epsg) |>
                 sf::st_geometry()
         } else {
             add_geo <- sf::st_sfc(sf::st_polygon())
         }
-        nd <- nd %>%
+        nd <- nd |>
             dplyr::summarise(
                 dplyr::across(tidyselect::starts_with("pop"), sum),
                 dplyr::across(tidyselect::starts_with("vap"), sum),
@@ -28,18 +28,18 @@ make_state_map_one <- function(state, year = 2020L, geometry = TRUE, epsg = alar
         id_nrv <- stringr::str_detect(colnames(nd), "arv_")
         id_ndv <- stringr::str_detect(colnames(nd), "adv_")
 
-        nd <- nd %>%
+        nd <- nd |>
             dplyr::mutate(nrv = rowMeans(as.data.frame(nd)[,id_nrv]),
                           ndv = rowMeans(as.data.frame(nd)[,id_ndv]),
                           nrv = round(.data$nrv, 1),
-                          ndv = round(.data$ndv, 1)) %>%
+                          ndv = round(.data$ndv, 1)) |>
             dplyr::relocate(geometry, .after = .data$ndv)
 
-        nd <- nd %>%
+        nd <- nd |>
             dplyr::mutate(cd_2010 = 1L, .before = dplyr::everything())
 
         map <- suppressWarnings(redist::redist_map(nd, existing_plan = "cd_2010", pop_tol = 0.005, adj = list(integer())))
-        map <- map %>%
+        map <- map |>
             dplyr::mutate(
                 GEOID = censable::match_fips(.env$state),
                 state = as.character(.env$state), .before = dplyr::everything()

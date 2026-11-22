@@ -131,7 +131,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
         if (toupper(state) %in% names(single_states_polsby)) {
             plans <- make_state_plans_one(state, year = year, stats = stats)
             if (stats) {
-                plans <- plans %>%
+                plans <- plans |>
                     dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)])
             }
             readr::write_csv(plans, file = path)
@@ -140,7 +140,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
 
             raw_plans <- dv_download_handle(fname_plans, "Plans", state, doi)
             if (is.null(raw_plans)) cli::cli_abort("Download failed.")
-            plans <- read_rds_mem(raw_plans, fname_plans) %>%
+            plans <- read_rds_mem(raw_plans, fname_plans) |>
                 dplyr::mutate(district = as.integer(.data$district))
         }
 
@@ -187,8 +187,8 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE, vra = TRUE)
             single_states_polsby <- single_states_polsby[-4]
         }
         if (state %in% names(single_states_polsby)) {
-            stats <- make_state_plans_one(state, year = year, geometry = FALSE, stats = TRUE) %>%
-                dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) %>%
+            stats <- make_state_plans_one(state, year = year, geometry = FALSE, stats = TRUE) |>
+                dplyr::mutate(comp_polsby = single_states_polsby[toupper(state)]) |>
                 dplyr::as_tibble()
             readr::write_csv(stats, file = path)
         } else {

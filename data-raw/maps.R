@@ -6,13 +6,13 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
     nd <- geomander::get_alarm(state = state, geometry = geometry, epsg = epsg)
 
     if (isTRUE(geometry)) {
-        obj_geom = sf::st_union(nd$geometry) %>%
+        obj_geom = sf::st_union(nd$geometry) |>
             rmapshaper::ms_simplify(keep_shapes=TRUE)
     } else {
         obj_geom = sf::st_sfc(sf::st_polygon())
     }
 
-    nd <- nd %>%
+    nd <- nd |>
         dplyr::summarise(dplyr::across(tidyselect::starts_with("pop"), sum),
                          dplyr::across(tidyselect::starts_with("vap"), sum),
                          dplyr::across(tidyselect::matches("_(dem|rep)_"), sum),
@@ -26,16 +26,16 @@ make_state_map_one <- function(state, geometry = TRUE, epsg = alarm_epsg(state))
     id_nrv <- stringr::str_detect(colnames(nd), "arv_")
     id_ndv <- stringr::str_detect(colnames(nd), "adv_")
 
-    nd <- nd %>%
+    nd <- nd |>
         dplyr::mutate(
             nrv = rowMeans(as.data.frame(nd)[, id_nrv]),
             ndv = rowMeans(as.data.frame(nd)[, id_ndv]),
             nrv = round(.data$nrv, 1),
             ndv = round(.data$ndv, 1)
-        ) %>%
+        ) |>
         dplyr::relocate(geometry, .after = .data$ndv)
 
-    nd <- nd %>%
+    nd <- nd |>
         dplyr::mutate(cd_2020 = 1L, .before = dplyr::everything())
 
     map <- suppressWarnings(redist::redist_map(nd, existing_plan = "cd_2020", pop_tol = 0.005, adj = list(integer())))

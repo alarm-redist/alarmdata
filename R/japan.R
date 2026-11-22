@@ -77,7 +77,7 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
         raw_plans <- dv_download_handle_japan(fname_plans, "Plans", pref)
         if (is.null(raw_plans)) cli::cli_abort("Download failed.")
 
-        plans <- read_rds_mem(raw_plans, fname_plans) %>%
+        plans <- read_rds_mem(raw_plans, fname_plans) |>
             dplyr::mutate(district = as.integer(.data$district))
 
         readr::write_rds(plans, file = path, compress = compress)
@@ -86,7 +86,7 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
     }
 
     if (!isTRUE(stats)) {
-        plans <- plans %>%
+        plans <- plans |>
             dplyr::select(dplyr::all_of(c('draw', 'district', 'total_pop', 'chain')))
     }
 

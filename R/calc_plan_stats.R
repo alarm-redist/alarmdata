@@ -1,6 +1,6 @@
 calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
 
-    plans <- plans %>%
+    plans <- plans |>
         dplyr::mutate(
             total_vap = redist::tally_var(map, .data$vap),
             plan_dev =  redist::plan_parity(map),
@@ -21,7 +21,7 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         single_states_polsby <- c("AK" = 0.06574469, "DE" = 0.4595251, "ND" = 0.5142261,
                                   "SD" = 0.5576591, "VT" = 0.3692381, "WY" = 0.7721791)
         if (state %in% names(single_states_polsby)) {
-            plans <- plans %>% dplyr::mutate(comp_polsby = single_states_polsby[state])
+            plans <- plans |> dplyr::mutate(comp_polsby = single_states_polsby[state])
         } else {
             if (state %in% c("CA", "HI", "OR")) {
                 shp <- tinytiger::tt_tracts(state = censable::match_fips(state))
@@ -29,13 +29,13 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
                 shp <- tinytiger::tt_voting_districts(state = censable::match_fips(state))
             }
 
-            map <- map %>%
-                sf::st_drop_geometry() %>%
-                dplyr::left_join(y = shp, by = c("GEOID" = "GEOID20")) %>%
-                sf::st_as_sf() %>%
+            map <- map |>
+                sf::st_drop_geometry() |>
+                dplyr::left_join(y = shp, by = c("GEOID" = "GEOID20")) |>
+                sf::st_as_sf() |>
                 sf::st_transform(crs = alarm_epsg(state))
 
-            plans <- plans %>%
+            plans <- plans |>
                 dplyr::mutate(comp_polsby = redistmetrics::comp_polsby(plans = redist::pl(), map))
         }
     }
@@ -50,9 +50,9 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
 
     }
 
-    elecs <- dplyr::select(dplyr::as_tibble(map), dplyr::contains("_dem_")) %>%
-        names() %>%
-        stringr::str_sub(1, 6) %>%
+    elecs <- dplyr::select(dplyr::as_tibble(map), dplyr::contains("_dem_")) |>
+        names() |>
+        stringr::str_sub(1, 6) |>
         unique()
 
     elect_tb <- lapply(elecs, function(el) {
@@ -63,14 +63,14 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
         dvote <- dplyr::pull(vote_d, 1)
         rvote <- dplyr::pull(vote_d, 2)
 
-        plans %>%
+        plans |>
             dplyr::mutate(
                 dem = redist::group_frac(map, dvote, dvote + rvote),
                 egap = redistmetrics::part_egap(plans = redist::pl(), shp = map, rvote = rvote, dvote = dvote),
                 pbias = redistmetrics::part_bias(plans = redist::pl(), shp = map, rvote = rvote, dvote = dvote)
-            ) %>%
-            dplyr::as_tibble() %>%
-            dplyr::group_by(.data$draw) %>%
+            ) |>
+            dplyr::as_tibble() |>
+            dplyr::group_by(.data$draw) |>
             dplyr::transmute(
                 draw = .data$draw,
                 district = .data$district,
@@ -83,8 +83,8 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
     }) |>
         do.call(what = dplyr::bind_rows)
 
-    elect_tb <- elect_tb %>%
-        dplyr::group_by(.data$draw, .data$district) %>%
+    elect_tb <- elect_tb |>
+        dplyr::group_by(.data$draw, .data$district) |>
         dplyr::summarize(dplyr::across(dplyr::everything(), mean))
     plans <- dplyr::left_join(plans, elect_tb, by = c("draw", "district"))
 
@@ -103,11 +103,11 @@ calc_plan_stats <- function(plans, map, calc_polsby = FALSE, ...) {
     }
 
     if (!("comp_polsby" %in% names(plans))) {
-        plans <- plans %>%
+        plans <- plans |>
             dplyr::mutate(comp_polsby = NA_real_)
     }
 
-    plans <- plans %>%
+    plans <- plans |>
         dplyr::relocate('comp_polsby', .after = 'comp_edge')
 
     plans
