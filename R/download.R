@@ -1,13 +1,21 @@
 #' Figure out where to download things
 #'
 #' @noRd
-alarm_download_path <- function() {
+alarm_download_path <- function(doi = NULL) {
     user_cache <- getOption("alarm.cache_dir")
     if (!is.null(user_cache)) {
-        user_cache
+        path <- user_cache
     } else if (getOption("alarm.use_cache", FALSE)) {
-        rappdirs::user_cache_dir("alarm")
+        path <- rappdirs::user_cache_dir("alarm")
     } else {
-        tempdir()
+        path <- tempdir()
     }
+
+    if (!is.null(doi)) {
+        path <- paste0(path, "/", sub("^.*/", "", doi))
+        if (!dir.exists(path)) {
+            dir.create(path, recursive = TRUE)
+        }
+    }
+    path
 }

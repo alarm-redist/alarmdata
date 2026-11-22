@@ -1,3 +1,9 @@
+# alarmdata 0.2.5
+
+* `alarm_50state_plans()`, `alarm_50state_stats()`, and `alarm_50state_doc()`
+  gain a `vra` argument, which is supported for 2020 congressional districts.
+  Setting `vra = FALSE` downloads simulations without racial considerations.
+
 # alarmdata 0.2.2
 
 * Update maintainer

@@ -15,12 +15,13 @@ alarm_50state_plans(
   stats = TRUE,
   year = 2020,
   refresh = FALSE,
-  compress = "xz"
+  compress = "xz",
+  vra = TRUE
 )
 
-alarm_50state_stats(state, year = 2020, refresh = FALSE)
+alarm_50state_stats(state, year = 2020, refresh = FALSE, vra = TRUE)
 
-alarm_50state_doc(state, year = 2020)
+alarm_50state_doc(state, year = 2020, vra = TRUE)
 }
 \arguments{
 \item{state}{A state name, abbreviation, FIPS code, or ANSI code.}
@@ -32,13 +33,16 @@ alarm_50state_doc(state, year = 2020)
 \item{stats}{If \code{TRUE} (the default), download summary statistics for each plan.}
 
 \item{compress}{The compression level used for caching \link[redist:redist_plans]{redist_plans} objects.}
+
+\item{vra}{If \code{FALSE}, download simulations without VRA constraints for 2020
+congressional districts. Defaults to \code{TRUE} for VRA-aware simulations.}
 }
 \value{
 For \code{alarm_50state_map()}, a \link[redist:redist_map]{redist_map}. For
 \code{alarm_50state_plans()}, a \link[redist:redist_plans]{redist_plans}. For
 \code{alarm_50state_doc()}, invisibly returns the path to the HTML documentation,
 and also loads an HTML file into the viewer or web browser.
-For \code{alarm_50state_stats()}, a \link[dplyr:reexports]{tibble}.
+For \code{alarm_50state_stats()}, a \link[dplyr:tibble]{tibble}.
 }
 \description{
 These functions will download \link[redist:redist_map]{redist_map} and
