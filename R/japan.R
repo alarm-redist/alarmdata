@@ -47,7 +47,7 @@ alarm_japan_map <- function(pref, year = 2022, refresh = FALSE) {
     requireNamespace('sf', quietly = TRUE)
     slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
-    path <- cache_file(paste0(slug, "_map.rds"), DV_DOI_47p)
+    path <- paste0(alarm_download_path(DV_DOI_47p), "/", slug, "_map.rds")
     # Condition to refresh or if file doesn't exist
     if (!file.exists(path) || isTRUE(refresh)) {
 
@@ -69,7 +69,7 @@ alarm_japan_map <- function(pref, year = 2022, refresh = FALSE) {
 alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, compress = "xz") {
     slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
-    path <- cache_file(paste0(slug, "_plans.rds"), DV_DOI_47p)
+    path <- paste0(alarm_download_path(DV_DOI_47p), "/", slug, "_plans.rds")
     if (!file.exists(path) || isTRUE(refresh)) {
 
         # Download and process plans
@@ -97,7 +97,7 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
 alarm_japan_stats <- function(pref, year = 2022, refresh = FALSE) {
     slug <- get_slug_japan(pref, year = year)
     slug <- sub("^0", "", slug)
-    path <- cache_file(paste0(slug, "_stats.csv"), DV_DOI_47p)
+    path <- paste0(alarm_download_path(DV_DOI_47p), "/", slug, "_stats.csv")
 
     if (!file.exists(path) || isTRUE(refresh)) {
 

@@ -38,7 +38,7 @@ For \code{alarm_japan_map()}, a \link[redist:redist_map]{redist_map}. For
 \code{alarm_japan_plans()}, a \link[redist:redist_plans]{redist_plans}. For
 \code{alarm_japan_doc()}, invisibly returns the path to the HTML documentation,
 and also loads an HTML file into the viewer or web browser.
-For \code{alarm_japan_stats()}, a \link[dplyr:reexports]{tibble}.
+For \code{alarm_japan_stats()}, a \link[dplyr:tibble]{tibble}.
 }
 \description{
 These functions will download \link[redist:redist_map]{redist_map} and

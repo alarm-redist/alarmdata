@@ -28,7 +28,8 @@
 #' @param stats If `TRUE` (the default), download summary statistics for each plan.
 #' @param refresh If `TRUE`, ignore the cache and download again.
 #' @param compress The compression level used for caching [redist_plans][redist::redist_plans] objects.
-#' @param vra If `TRUE` (the default), download the standard simulations. If `FALSE`, download the race-blind simulations if they exist. If they do not, they fall back to the standard data. The map is identical either way, so `alarm_50state_map()` has no `vra` argument.
+#' @param vra If `FALSE`, download simulations without VRA constraints for 2020
+#'   congressional districts. Defaults to `TRUE` for VRA-aware simulations.
 #'
 #' @returns For `alarm_50state_map()`, a [redist_map][redist::redist_map]. For
 #'   `alarm_50state_plans()`, a [redist_plans][redist::redist_plans]. For
@@ -79,7 +80,7 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
     # the map is identical across the standard and race-blind ensembles
     doi <- DV_DOI_50s(year)
     slug <- get_slug(state, year = year)
-    path <- cache_file(paste0(slug, "_map.rds"), doi)
+    path <- paste0(alarm_download_path(doi), "/", slug, "_map.rds")
 
     if (!file.exists(path) || isTRUE(refresh)) {
         if ((toupper(state) %in% c("AK", "DE", "ND", "SD", "VT", "WY") && year == 2020L) ||
@@ -105,7 +106,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
     vra <- resolve_vra(state, year, vra)
     doi <- DV_DOI_50s(year, vra)
     slug <- get_slug(state, year = year)
-    path <- cache_file(paste0(slug, "_plans.rds"), doi)
+    path <- paste0(alarm_download_path(doi), "/", slug, "_plans.rds")
 
     if (!file.exists(path) || isTRUE(refresh)) {
 
@@ -158,7 +159,7 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE, vra = TRUE)
     vra <- resolve_vra(state, year, vra)
     doi <- DV_DOI_50s(year, vra)
     slug <- get_slug(state, year = year)
-    path <- cache_file(paste0(slug, "_stats.csv"), doi)
+    path <- paste0(alarm_download_path(doi), "/", slug, "_stats.csv")
 
     if (!file.exists(path) || isTRUE(refresh)) {
 
