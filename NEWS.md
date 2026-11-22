@@ -1,9 +1,8 @@
 # alarmdata 0.2.5
 
-* `alarm_50state_map()`, `alarm_50state_plans()`, `alarm_50state_stats()`, and
-  `alarm_50state_doc()` gain a `vra` argument (default `TRUE`). Setting
-  `vra = FALSE` downloads simulations with any VRA constraints removed. Race-blind
-  ensembles currently exist only for the 2020 cycle; for other years and states with no constraints to remove, `vra = FALSE` falls back to the standard simulations.
+* `alarm_50state_plans()`, `alarm_50state_stats()`, and `alarm_50state_doc()`
+  gain a `vra` argument, which is supported for 2020 congressional districts.
+  Setting `vra = FALSE` downloads simulations without racial considerations.
 
 # alarmdata 0.2.2
 
