@@ -57,20 +57,28 @@ DV_DOI_50s <- function(year, vra = TRUE) {
   } else if (year == 2010) {
     "doi:10.7910/DVN/SLCD3E"
   } else {
-    # 2020 is the only cycle with a separate race-blind ensemble
-    if (isTRUE(vra)) "doi:10.7910/DVN/SLCD3E" else "doi:10.7910/DVN/A3SE7Y"
+    if (isTRUE(vra)) {
+      "doi:10.7910/DVN/SLCD3E"
+    } else {
+      "doi:10.7910/DVN/A3SE7Y"
+    }
   }
 }
 
-# fall back to the standard data when a race-blind ensemble was requested
-# (`vra = FALSE`) but does not exist
-resolve_vra <- function(state, year, vra) {
-  # states with a separate race-blind ensemble (2020 only)
-  race_blind_states <- c("AL", "AZ", "CA", "FL", "GA", "LA", "MI", "MO", "MS",
-                         "NC", "OH", "RI", "SC", "TX", "WA")
-  available <- as.integer(year) == 2020L &&
-    censable::match_abb(state) %in% race_blind_states
-  isTRUE(vra) || !available
+resolve_vra <- function(state, year, vra, type = "cd") {
+  if (isTRUE(vra)) {
+    return(TRUE)
+  }
+
+  race_blind_states <- list(
+    cd = list(
+      `2020` = c("AL", "AZ", "CA", "FL", "GA", "LA", "MI", "MO",
+                 "MS", "NC", "OH", "RI", "SC", "TX", "WA")
+    )
+  )
+
+  states <- race_blind_states[[type]][[as.character(year)]]
+  !(censable::match_abb(state) %in% states)
 }
 
 #' @rdname alarm_50state
