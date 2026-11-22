@@ -24,7 +24,7 @@
 #' and redistricting criteria.
 #'
 #' @template state
-#' @param year The redistricting cycle to download. Currently only `2020` and `2010` are available.
+#' @param year The redistricting cycle to download: `1990`, `2000`, `2010`, or `2020`.
 #' @param stats If `TRUE` (the default), download summary statistics for each plan.
 #' @param refresh If `TRUE`, ignore the cache and download again.
 #' @param compress The compression level used for caching [redist_plans][redist::redist_plans] objects.
@@ -52,7 +52,9 @@
 NULL
 
 DV_DOI_50s <- function(year, vra = TRUE) {
-  if (year == 2000) {
+  if (year == 1990) {
+    "doi:10.7910/DVN/ETICVW"
+  } else if (year == 2000) {
     "doi:10.7910/DVN/LV7VIX"
   } else if (year == 2010) {
     "doi:10.7910/DVN/SLCD3E"
