@@ -13,3 +13,8 @@ test_that("50states_map works", {
     x <- alarm_50state_map('WY')
     expect_s3_class(x, 'data.frame')
 })
+
+test_that("Dataverse cache works", {
+    x <- dv_file_ids(DV_DOI_50s(2020))
+    expect_identical(dv_files_cache[[DV_DOI_50s(2020)]], x)
+})

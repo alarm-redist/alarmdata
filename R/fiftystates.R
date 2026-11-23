@@ -99,7 +99,7 @@ alarm_50state_map <- function(state, year = 2020, refresh = FALSE) {
             out <- make_state_map_one(state, year = year)
         } else {
             fname <- paste0(slug, "_map.rds")
-            raw <- dv_download_handle(fname, "Map", state, doi)
+            raw <- dv_download_handle(fname, "Map", state, doi, refresh = refresh)
             if (is.null(raw)) cli::cli_abort("Download failed.")
 
             out <- read_rds_mem(raw, fname)
@@ -139,7 +139,7 @@ alarm_50state_plans <- function(state, stats = TRUE, year = 2020, refresh = FALS
         } else {
             fname_plans <- paste0(slug, "_plans.rds")
 
-            raw_plans <- dv_download_handle(fname_plans, "Plans", state, doi)
+            raw_plans <- dv_download_handle(fname_plans, "Plans", state, doi, refresh = refresh)
             if (is.null(raw_plans)) cli::cli_abort("Download failed.")
             plans <- read_rds_mem(raw_plans, fname_plans) |>
                 dplyr::mutate(district = as.integer(.data$district))
@@ -194,7 +194,7 @@ alarm_50state_stats <- function(state, year = 2020, refresh = FALSE, vra = TRUE)
             readr::write_csv(stats, file = path)
         } else {
             fname_stats <- paste0(slug, "_stats.tab")
-            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state, doi)
+            raw_stats <- dv_download_handle(fname_stats, "Plan statistics", state, doi, refresh = refresh)
             if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
             stats <- readr::read_csv(raw_stats,
@@ -237,22 +237,15 @@ alarm_50state_doc <- function(state, year = 2020, vra = TRUE) {
     invisible(tmp_html)
 }
 
-dv_files_cache = list()
-
 # try to download `fname` from the 50-states dataverse
 # Provide a human-readable error if the file doesn't exist.
-dv_download_handle <- function(fname, type = "File", state = "", doi) {
-    if (is.null(dv_files_cache[[doi]])) {
-        full_files <- dataverse::dataset_files(doi, server = DV_SERVER)
-        ids <- sapply(full_files, function(f) f$dataFile$id)
-        names(ids) <- sapply(full_files, function(f) f$label)
-        dv_files_cache[[doi]] <- ids
-    }
+dv_download_handle <- function(fname, type = "File", state = "", doi, refresh = FALSE) {
+    ids <- dv_file_ids(doi, refresh = refresh)
 
     raw <- NULL
     tryCatch(
         {
-            raw <- dataverse::get_file_by_id(dv_files_cache[[doi]][fname], server = DV_SERVER)
+            raw <- dataverse::get_file_by_id(ids[fname], server = DV_SERVER)
         },
         error = function(e) {
             if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {

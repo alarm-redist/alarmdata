@@ -53,7 +53,7 @@ alarm_japan_map <- function(pref, year = 2022, refresh = FALSE) {
 
         # Download and save the map
         fname <- paste0(slug, "_map.rds")
-        raw <- dv_download_handle_japan(fname, "Map", pref)
+        raw <- dv_download_handle_japan(fname, "Map", pref, refresh = refresh)
         if (is.null(raw)) cli::cli_abort("Download failed.")
 
         out <- read_rds_mem(raw, fname)
@@ -74,7 +74,7 @@ alarm_japan_plans <- function(pref, stats = TRUE, year = 2022, refresh = FALSE, 
 
         # Download and process plans
         fname_plans <- paste0(slug, "_plans.rds")
-        raw_plans <- dv_download_handle_japan(fname_plans, "Plans", pref)
+        raw_plans <- dv_download_handle_japan(fname_plans, "Plans", pref, refresh = refresh)
         if (is.null(raw_plans)) cli::cli_abort("Download failed.")
 
         plans <- read_rds_mem(raw_plans, fname_plans) |>
@@ -102,7 +102,7 @@ alarm_japan_stats <- function(pref, year = 2022, refresh = FALSE) {
     if (!file.exists(path) || isTRUE(refresh)) {
 
         fname_stats <- paste0(slug, "_stats.tab")
-        raw_stats <- dv_download_handle_japan(fname_stats, "Plan statistics", pref)
+        raw_stats <- dv_download_handle_japan(fname_stats, "Plan statistics", pref, refresh = refresh)
         if (is.null(raw_stats)) cli::cli_abort("Download failed.")
 
         stats <- readr::read_csv(raw_stats,
@@ -144,21 +144,15 @@ alarm_japan_doc <- function(pref, year = 2022) {
     invisible(tmp_md)
 }
 
-dv_files_cache = list()
-
 # try to download `fname` from the Japan 47-Prefecture dataverse
 # Provide a human-readable error if the file doesn't exist.
-dv_download_handle_japan <- function(fname, type = "File", pref = "") {
-    if (length(dv_files_cache) == 0) {
-        full_files <- dataverse::dataset_files(DV_DOI_47p, server = DV_SERVER)
-        dv_files_cache[[1]] <- sapply(full_files, function(f) f$dataFile$id)
-        names(dv_files_cache[[1]]) <- sapply(full_files, function(f) f$label)
-    }
+dv_download_handle_japan <- function(fname, type = "File", pref = "", refresh = FALSE) {
+    ids <- dv_file_ids(DV_DOI_47p, refresh = refresh)
 
     raw <- NULL
     tryCatch(
         {
-            raw <- dataverse::get_file_by_id(dv_files_cache[[1]][fname], server = DV_SERVER)
+            raw <- dataverse::get_file_by_id(ids[fname], server = DV_SERVER)
         },
         error = function(e) {
             if (stringr::str_detect(e$message, "[Nn]ot [Ff]ound")) {
